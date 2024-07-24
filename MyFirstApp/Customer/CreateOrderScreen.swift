@@ -94,7 +94,7 @@ struct CreateOrderScreen: View {
 }
 
 #Preview {
-    CreateOrderScreen()/*.modelContainer(for: OrderModel.self, inMemory: true)*/ //needs to be added to insert the modelContext, making it possible to CRUD state
+    CreateOrderScreen().modelContainer(for: OrderModel.self, inMemory: true) //needs to be added to insert the modelContext, making it possible to CRUD state
     //https://developer.apple.com/tutorials/develop-in-swift/save-data
 }
 

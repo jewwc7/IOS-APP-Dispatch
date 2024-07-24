@@ -14,12 +14,7 @@ struct MyFirstAppApp: App {
     
     init() {
         do {
-//            let config1 = ModelConfiguration(for: Recipe.self)
-//                        let config2 = ModelConfiguration(for: Comment.self, isStoredInMemoryOnly: true)
-//
-//                        container = try ModelContainer(for: Recipe.self, Comment.self, configurations: config1, config2)
-            modelContainer = try ModelContainer(for: AppModel.self)
-
+            modelContainer = try ModelContainer(for: OrderModel.self)
         } catch {
             print(error)
             fatalError("Could not initialize ModelContainer")

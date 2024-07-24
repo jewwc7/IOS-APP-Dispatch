@@ -9,7 +9,11 @@ import SwiftUI
 import SwiftData
 
 
-
+enum AppRoute: Hashable {
+  case screenOne
+  case screenTwo
+  case screenThree
+}
 
 final class AppState: ObservableObject {
   @Published var path = NavigationPath()
@@ -20,23 +24,24 @@ final class AppState: ObservableObject {
 }
 
 struct ContentView: View {
-//    @StateObject private var appState = AppState()
-     @Query private var appState: AppModel
+    @StateObject private var appState = AppState()
+    @Query private var orderModelOrders: [OrderModel]
     @Environment(\.modelContext) private var context //how to CRUD state
     
     var body: some View {
-        NavigationStack() { //If wanting to navigate this has to wrap the entire component
+        NavigationStack(path: $appState.path) { //If wanting to navigate this has to wrap the entire component
             VStack {
                 
                 // this is how to align horizontally
                 FirstPage()
             }.navigationViewStyle(.stack)
-                .navigationDestination(for: AppModel.self) { appModel in
-                    switch appModel.path {
+                .navigationDestination(for: AppRoute.self) { appRoute in
+                    
+                    switch appRoute {
                     case .screenOne:
-                        FirstPage()
-                    case .screenTwo:
                         AvailableOrderScreen()
+                    case .screenTwo:
+                        CustomerMainScreen()
                     case .screenThree:
                         CustomerMainScreen()
                     }
@@ -51,7 +56,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-//        .modelContainer(for: OrderModel.self, inMemory: true)
+        .modelContainer(for: OrderModel.self, inMemory: true)
         //add this to access state and persist making it possible to CRUD state
        // https://developer.apple.com/tutorials/develop-in-swift/save-data
 }

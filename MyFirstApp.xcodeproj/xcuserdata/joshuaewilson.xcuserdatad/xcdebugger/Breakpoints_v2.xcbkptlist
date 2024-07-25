@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "169D6A96-DA5E-4011-BA97-2A240F442540"
+            uuid = "9BF6A1BC-57A2-49C8-90DA-731165A67AE1"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MyFirstApp/Customer/CreateOrderScreen.swift"
+            filePath = "MyFirstApp/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "11"
-            endingLineNumber = "11"
-            landmarkName = "CreateOrderScreen"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "ContentView"
             landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>

@@ -23,6 +23,9 @@
 		05E125F82BFD5966009F2415 /* ViewOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125F72BFD5966009F2415 /* ViewOrder.swift */; };
 		05E125FB2C51A84C009F2415 /* FirstPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125FA2C51A84C009F2415 /* FirstPage.swift */; };
 		05E125FD2C51AA14009F2415 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125FC2C51AA14009F2415 /* AppState.swift */; };
+		05E125FF2C52EE04009F2415 /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125FE2C52EE04009F2415 /* Customer.swift */; };
+		05E126012C52F54E009F2415 /* CustomerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126002C52F54E009F2415 /* CustomerList.swift */; };
+		05E126042C530277009F2415 /* components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126032C530276009F2415 /* components.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +66,9 @@
 		05E125F72BFD5966009F2415 /* ViewOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewOrder.swift; sourceTree = "<group>"; };
 		05E125FA2C51A84C009F2415 /* FirstPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPage.swift; sourceTree = "<group>"; };
 		05E125FC2C51AA14009F2415 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		05E125FE2C52EE04009F2415 /* Customer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customer.swift; sourceTree = "<group>"; };
+		05E126002C52F54E009F2415 /* CustomerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerList.swift; sourceTree = "<group>"; };
+		05E126032C530276009F2415 /* components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = components.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +119,7 @@
 		0551878C2BE98BEC00BA0A8A /* MyFirstApp */ = {
 			isa = PBXGroup;
 			children = (
+				05E126022C53024A009F2415 /* Designs */,
 				05E125F92C51A825009F2415 /* Shared */,
 				05632E552BFC02F000BBDD89 /* Models */,
 				05632E522BFBF21A00BBDD89 /* Customer */,
@@ -180,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				05632E532BFBF2A800BBDD89 /* CreateOrderScreen.swift */,
+				05E126002C52F54E009F2415 /* CustomerList.swift */,
 				05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */,
 				05E125F52BFD5047009F2415 /* MyCreatedOrders.swift */,
 				05E125F72BFD5966009F2415 /* ViewOrder.swift */,
@@ -191,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				05632E562BFC034000BBDD89 /* Order.swift */,
+				05E125FE2C52EE04009F2415 /* Customer.swift */,
 				05E125FC2C51AA14009F2415 /* AppState.swift */,
 			);
 			path = Models;
@@ -202,6 +211,14 @@
 				05E125FA2C51A84C009F2415 /* FirstPage.swift */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		05E126022C53024A009F2415 /* Designs */ = {
+			isa = PBXGroup;
+			children = (
+				05E126032C530276009F2415 /* components.swift */,
+			);
+			path = Designs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -337,9 +354,12 @@
 				05E125F82BFD5966009F2415 /* ViewOrder.swift in Sources */,
 				05E125FB2C51A84C009F2415 /* FirstPage.swift in Sources */,
 				05632E572BFC034000BBDD89 /* Order.swift in Sources */,
+				05E125FF2C52EE04009F2415 /* Customer.swift in Sources */,
 				05632E542BFBF2A800BBDD89 /* CreateOrderScreen.swift in Sources */,
 				055187BC2BEC1CFD00BA0A8A /* AvailableOrderScreen.swift in Sources */,
 				055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */,
+				05E126042C530277009F2415 /* components.swift in Sources */,
+				05E126012C52F54E009F2415 /* CustomerList.swift in Sources */,
 				05E125FD2C51AA14009F2415 /* AppState.swift in Sources */,
 				05E125F42BFD48B9009F2415 /* CustomerMainScreen.swift in Sources */,
 				05E125F62BFD5047009F2415 /* MyCreatedOrders.swift in Sources */,

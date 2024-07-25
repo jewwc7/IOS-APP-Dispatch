@@ -50,6 +50,7 @@ struct AvailableOrderScreen: View {
                 Text("Orders")
                     .font(.title)
                     .fontWeight(.semibold).frame(maxWidth: .infinity, alignment: .leading)
+            
        
             
             ScrollView {

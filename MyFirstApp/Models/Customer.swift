@@ -15,22 +15,30 @@ enum OrderAction {
     case place
     case cancel
 }
+
+
+//when adding a new one I need to add default values
+// these are run in migrations,
+// will get error if default values missing https://forums.developer.apple.com/forums/thread/746577
 @Model
 class Customer {
     // Properties
     var id: String?
     var name: String
     var numberOfOrdersPlaced: Int
-
+    var isLoggedIn: Bool
+    
     
     // Initializer
     init(
-            name: String
+        name: String = ""
+        
     ) {
-           self.id = UUID().uuidString
-           self.name = name
-           self.numberOfOrdersPlaced = 0
-       }
+        self.id = UUID().uuidString
+        self.name = name
+        self.numberOfOrdersPlaced = 0
+        self.isLoggedIn = false
+    }
     
     
     func handleOrderAction(action:OrderAction){
@@ -40,9 +48,7 @@ class Customer {
             self.placeOrder()
         case OrderAction.cancel:
             self.cancelOrder()
-        default:
-            print("no action passed to handleOrderAction")
-            return
+            
         }
     }
     
@@ -55,7 +61,20 @@ class Customer {
         print(self.name, "canceled an order")
         self.numberOfOrdersPlaced += 1
     }
+    func login()-> Result{
+        do {
+            print("logging in", self.modelContext)
+            try self.modelContext?.save()
+            return .success
+        }
+        
+        catch {
+            print(error)
+            print("Could not login \(self.name)")
+            return .failure
+            
+        }
+        
+    }}
     
-}
-
-
+    

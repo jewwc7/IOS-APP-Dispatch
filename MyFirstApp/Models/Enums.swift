@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+
+enum Result {
+    case success
+    case failure
+    case noResult
+}

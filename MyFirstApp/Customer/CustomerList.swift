@@ -9,48 +9,151 @@ import Foundation
 import SwiftUI
 import SwiftData
 
+enum ActionState: Int {
+    case loggedOut = 0
+    case loggedIn = 1
+}
+
 struct CustomerList: View {
     @Environment(\.modelContext) private var context //how to CRUD state
     @Query private var customers: [Customer]
+    @State private var isPopupPresented: Bool = false
+    @State var shouldNavigate: Bool = false
+    @StateObject private var stateManager = AppStateModel()
+    @State private var loggedInCustomer: Customer? = nil
     
     var body: some View {
-   // #TODo: Add popup Create ->Pop Up=> enter needed info -> save
+        // #TODo: Add popup Create ->Pop Up=> enter needed info -> save. THink portion below has this as well as edit feature
+        //# TODO: create sample data for customers, follow apple guide portion I am in
+   
+        
         NavigationStack {
             List {
                 ForEach(customers,  id: \.id){ customer in
-                    
-                    NavigationLink(destination: CustomerMainScreen()) {
+                    NavigationLink(destination:  CustomerMainScreen()) {
                         Text(customer.name)
-                    }
+
+                    }.onTapGesture{
+                        print("here") //trying to run this when on the next screen, where I left off
+                        //how to unwrap values safely, can be nil or string, but logInCUstomer only excepts a string
+                        let id = customer.id
+                        
+                        if let id {
+                            logAllOut()
+                            loggedInCustomer = customer
+                            print(stateManager.loggedInCustomer)
+                            let result = loggedInCustomer?.login()
+                            stateManager.loggedInCustomer = loggedInCustomer
+                            print(stateManager.loggedInCustomer, result)
+                            if(result == .success){
+                                shouldNavigate = true
+                            }
+                        }
+                         
+                      }
                     
-                }.onDelete(perform: deleteCustomer)
-                
-            }.navigationTitle("Customer List").listStyle(.insetGrouped)
+                }
+                  }.navigationTitle("Customer List")
+                .toolbar {
+//                    ToolbarItem(placement: .navigationBarTrailing) {
+//                        EditButton()
+//                    } // TODO: Add ability to edit customer
+                    ToolbarItem {
+                        Button(action: create) {
+                            Label("Create", systemImage: "plus")
+                        }
+                    }
+                }
+        }.sheet(isPresented: $isPopupPresented) {
+            // Your popup view here
+            PopupView(isPopupPresented: $isPopupPresented)
         }
-        MyButton(title: "Create Customer", onPress: create, backgroundColor: Color.blue, image:"checkmark", frame: (Frame(height: 40))).frame(maxWidth: .infinity)
     }
     
     func create(){
-        let newCustomer = Customer(name:"John Doe")
-        context.insert(newCustomer)
-        do {
-            try context.save()
-        } catch {
-            print("Error creating customer: \(newCustomer)")
+        isPopupPresented = true
+    }
+    func logAllOut() {
+        print("log out  CustomerListViewModel dd")
+        customers.forEach { customer in
+            customer.isLoggedIn = false
         }
     }
+
+//    private func logInCustomer(id:String){
+//   
+//       // print("loggin in")
+//        viewModel.logAllOut() //why aren;t these two being called?
+//        
+//        //should save the context after logIn, probably will do that in the viewModel.
+//        shouldNavigate = true
+//        //
+//       
+////        if let loggedInCustomer = loggedInCustomers.first {
+////                 loggedInCustomer.isLoggedIn = false
+////                 saveContext()
+////             }
+//    }
+    
     private func deleteCustomer(offsets: IndexSet) {
-        print(1324)
-         withAnimation {
-             for index in offsets {
-                 print(customers[index])
-                 context.delete(customers[index])
-             }
-         }
-     }
+        withAnimation {
+            for index in offsets {
+               // print(customers[index])
+                context.delete(customers[index])
+            }
+        }
+    }
     
 }
 
+struct PopupView: View {
+    // adding the @Binding with var is how you add mandtory props
+    @Binding var isPopupPresented: Bool
+    @Environment(\.modelContext) private var context //how to CRUD state
+    @Query private var customers: [Customer]
+    
+    @State private var nameInput: String = ""
+    
+    var body: some View {
+        VStack {
+            VStack(alignment: .leading) {
+                    Text("Name")
+                        .font(.headline)
+                        .padding(.bottom, 2)
+                    
+                    TextField("Name", text: $nameInput)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                    
+                }
+                .padding()
+            Button(action: create) {
+                Label("Create", systemImage: "plus")
+            }.padding()
+   
+            Button(action: {
+                // Dismiss the sheet
+                isPopupPresented = false
+            }) {
+                Label("Cancel", systemImage: "minus")
+            }
+        }
+    }
+    
+    private func create(){
+        if nameInput == "" {
+            return
+        }
+        let newCustomer = Customer(name:nameInput)
+        context.insert(newCustomer)
+        do {
+            try context.save()
+            isPopupPresented = false
+        } catch {
+            print("Error creating customer: \(newCustomer.name)")
+        }
+    }
+}
 
 
 

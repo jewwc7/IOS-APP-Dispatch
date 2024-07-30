@@ -26,6 +26,7 @@
 		05E125FF2C52EE04009F2415 /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125FE2C52EE04009F2415 /* Customer.swift */; };
 		05E126012C52F54E009F2415 /* CustomerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126002C52F54E009F2415 /* CustomerList.swift */; };
 		05E126042C530277009F2415 /* components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126032C530276009F2415 /* components.swift */; };
+		05E1260B2C585534009F2415 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1260A2C585534009F2415 /* Enums.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		05E125FE2C52EE04009F2415 /* Customer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customer.swift; sourceTree = "<group>"; };
 		05E126002C52F54E009F2415 /* CustomerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerList.swift; sourceTree = "<group>"; };
 		05E126032C530276009F2415 /* components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = components.swift; sourceTree = "<group>"; };
+		05E1260A2C585534009F2415 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +203,7 @@
 				05632E562BFC034000BBDD89 /* Order.swift */,
 				05E125FE2C52EE04009F2415 /* Customer.swift */,
 				05E125FC2C51AA14009F2415 /* AppState.swift */,
+				05E1260A2C585534009F2415 /* Enums.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 				05E125F42BFD48B9009F2415 /* CustomerMainScreen.swift in Sources */,
 				05E125F62BFD5047009F2415 /* MyCreatedOrders.swift in Sources */,
 				0551878E2BE98BEC00BA0A8A /* MyFirstAppApp.swift in Sources */,
+				05E1260B2C585534009F2415 /* Enums.swift in Sources */,
 				055187C02BEC306A00BA0A8A /* MyButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

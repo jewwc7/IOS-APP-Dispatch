@@ -12,10 +12,17 @@ struct CustomerMainScreen: View {
         ListOptions(title: "Create Order", destination: CreateOrderScreen()),
         ListOptions(title: "My Created Orders", destination: MyCreatedOrders())
     ]
+    @StateObject private var stateManager = AppStateModel()
+    //check for .loggedInCustomer
+    //if not there, display loading spinner, else display list
     
     var body: some View {
-
-        NavigationStack {
+        if stateManager.loggedInCustomer == nil {
+            Text("Loading").onAppear(perform: {
+                print(stateManager.loggedInCustomer)
+            })
+        }else {
+            NavigationStack {
                 List {
                     ForEach(list){ item in
                         NavigationLink(destination: AnyView(item.destination)) { //AnyView is dicouraged, but i'll figure that out late
@@ -27,6 +34,8 @@ struct CustomerMainScreen: View {
                 }
             }
         }
+        
+    }
     
     
 }

@@ -14,6 +14,18 @@ enum ActionState: Int {
     case loggedIn = 1
 }
 
+struct CustomerListConfig  {
+    // VID: 4:20-6:06 https://developer.apple.com/videos/play/wwdc2020/10040/
+    // VID: 7:00 = 8:00 explains binding perfectly, allows write access when you pass the prop down the hiearchy. Changes in for this prop in the child view also changes the prop in parent view @Binding var
+     var shouldNavigate: Bool = false
+     var isPopupPresented: Bool = false
+     var loggedInCustomer: Customer? = nil
+    
+    mutating func presentCreate(){
+        return self.isPopupPresented = true
+    }
+
+}
 struct CustomerList: View {
     @Environment(\.modelContext) private var context //how to CRUD state
     @Query private var customers: [Customer]
@@ -21,6 +33,8 @@ struct CustomerList: View {
     @State var shouldNavigate: Bool = false
     @StateObject private var stateManager = AppStateModel()
     @State private var loggedInCustomer: Customer? = nil
+    @State private var customerListConfig = CustomerListConfig()
+  
     
     var body: some View {
         // #TODo: Add popup Create ->Pop Up=> enter needed info -> save. THink portion below has this as well as edit feature
@@ -30,27 +44,18 @@ struct CustomerList: View {
         NavigationStack {
             List {
                 ForEach(customers,  id: \.id){ customer in
-                    NavigationLink(destination:  CustomerMainScreen()) {
-                        Text(customer.name)
-
-                    }.onTapGesture{
-                        print("here") //trying to run this when on the next screen, where I left off
-                        //how to unwrap values safely, can be nil or string, but logInCUstomer only excepts a string
-                        let id = customer.id
-                        
-                        if let id {
-                            logAllOut()
-                            loggedInCustomer = customer
-                            print(stateManager.loggedInCustomer)
-                            let result = loggedInCustomer?.login()
-                            stateManager.loggedInCustomer = loggedInCustomer
-                            print(stateManager.loggedInCustomer, result)
-                            if(result == .success){
-                                shouldNavigate = true
-                            }
+                    CustomNavigationLink(destination: CustomerMainScreen(loggedInCustomer: $loggedInCustomer), title: customer.name) {
+                        print("yooo")
+                        logAllOut()
+                        loggedInCustomer = customer
+                        print(stateManager.loggedInCustomer)
+                        let result = loggedInCustomer?.login()
+                        stateManager.loggedInCustomer = loggedInCustomer
+                        print(stateManager.loggedInCustomer, result)
+                        if(result == .success){
+                            shouldNavigate = true
                         }
-                         
-                      }
+                    }
                     
                 }
                   }.navigationTitle("Customer List")
@@ -77,6 +82,17 @@ struct CustomerList: View {
         print("log out  CustomerListViewModel dd")
         customers.forEach { customer in
             customer.isLoggedIn = false
+        }
+    }
+    func logIn(customer: Customer){
+        logAllOut()
+        loggedInCustomer = customer
+        print(stateManager.loggedInCustomer)
+        let result = loggedInCustomer?.login()
+        stateManager.loggedInCustomer = loggedInCustomer
+        print(stateManager.loggedInCustomer, result)
+        if(result == .success){
+            shouldNavigate = true
         }
     }
 
@@ -107,11 +123,10 @@ struct CustomerList: View {
 }
 
 struct PopupView: View {
-    // adding the @Binding with var is how you add mandtory props
+    // adding the @Binding with var is how you add mandtory props, llok @CustomerListConfig comments
     @Binding var isPopupPresented: Bool
     @Environment(\.modelContext) private var context //how to CRUD state
-    @Query private var customers: [Customer]
-    
+
     @State private var nameInput: String = ""
     
     var body: some View {

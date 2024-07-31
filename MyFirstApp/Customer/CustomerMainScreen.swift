@@ -12,17 +12,15 @@ struct CustomerMainScreen: View {
         ListOptions(title: "Create Order", destination: CreateOrderScreen()),
         ListOptions(title: "My Created Orders", destination: MyCreatedOrders())
     ]
-    @StateObject private var stateManager = AppStateModel()
+    @Binding var loggedInCustomer: Customer?
     //check for .loggedInCustomer
     //if not there, display loading spinner, else display list
     
     var body: some View {
-        if stateManager.loggedInCustomer == nil {
-            Text("Loading").onAppear(perform: {
-                print(stateManager.loggedInCustomer)
-            })
-        }else {
+        //how to unwrap values safely, in ui.
+        if let loggedInCustomer  {
             NavigationStack {
+                Spacer()
                 List {
                     ForEach(list){ item in
                         NavigationLink(destination: AnyView(item.destination)) { //AnyView is dicouraged, but i'll figure that out late
@@ -30,9 +28,15 @@ struct CustomerMainScreen: View {
                             Text(item.title)
                         }
                         
-                    }.navigationTitle("Customer Home").listStyle(.insetGrouped)
+                    }.navigationTitle("Hi \(loggedInCustomer.name)").listStyle(.insetGrouped)
                 }
             }
+            
+            
+        }else {
+            Text("Loading").onAppear(perform: {
+                print("No logged in customer")
+            })
         }
         
     }
@@ -40,9 +44,11 @@ struct CustomerMainScreen: View {
     
 }
 
-#Preview {
-    CustomerMainScreen()
-}
+
+//#Preview {
+//   var me =  Customer(name: "Preview Customer")
+//    CustomerMainScreen(loggedInCustomer: $me)
+//}
 
 struct ListOptions:Identifiable {
     var id = UUID() //needs to be added to make it conform to Identifiable

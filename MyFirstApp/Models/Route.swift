@@ -29,21 +29,24 @@ enum RouteStatus {
 //when adding a new one I need to add default values
 // these are run in migrations,
 // will get error if default values missing https://forums.developer.apple.com/forums/thread/746577
+//Not in use
 @Model
 class Route {
     // Properties
     var id: String?
 //    var orders: [Order]
     var status: String?//RouteStatus
-    
+    var driver = Driver()
+    var orders = [Order]()
     
     // Initializer
     init(
-       // orders: [Order] = []
+      orders: [Order] = []
     ) {
         self.id = UUID().uuidString
     //    self.orders = []
         self.status = "Inactive"//RouteStatus.inactive
+        self.orders = orders
     }
     
     

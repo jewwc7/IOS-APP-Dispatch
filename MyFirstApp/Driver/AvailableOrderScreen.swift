@@ -13,9 +13,13 @@ import SwiftData
 struct AvailableOrderScreen: View {
     @State private var isLoggedOn = true
     @State private var numberOfOrdersInCart = 0
+    
+    @Environment(\.modelContext) private var context //how to CRUD state
     @Query private var ordersFromModel: [Order]
     
     var body: some View {
+        let unclaimedOrders = ordersFromModel.filter { $0.status == OrderStatus.open }
+        
         VStack{
             HStack(alignment: .center) {
                 ZStack {
@@ -60,7 +64,7 @@ struct AvailableOrderScreen: View {
                 VStack {
                     // ForEach needs to identify its contents in order to perform layout, successfully delegate gestures to child views and other tasks.
                     // https://stackoverflow.com/questions/69393430/referencing-initializer-init-content-on-foreach-requires-that-planet-c
-                    ForEach(ordersFromModel, id: \.orderId) { order in
+                    ForEach(unclaimedOrders, id: \.orderId) { order in
                         OrderCard(order:order, onAccept: addOrderToCart, onDecline: removeOrderFromCart) // This is the view returned for each item in the array
                     }
                 }
@@ -77,7 +81,7 @@ struct AvailableOrderScreen: View {
         }
         
     }
-    
+ 
     func removeOrderFromCart(){
         withAnimation {
             numberOfOrdersInCart = numberOfOrdersInCart - 1

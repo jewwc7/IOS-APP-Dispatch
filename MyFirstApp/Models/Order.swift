@@ -8,7 +8,14 @@
 import SwiftData
 import Foundation
 import CoreData
-//NSObject, NSFetchRequestResult, Identifiable
+
+//To resolve the issue, you need to ensure that OrderStatus conforms to PersistentModel. In SwiftData (and other similar frameworks like Core Data), enums that are used as properties of persistent models typically need to be marked as conforming to Codable so that they can be serialized and deserialized properly.
+enum OrderStatus: String, Codable  { //
+    case claimed
+    case open
+    case canceled
+}
+
 @Model
 class Order {
     // Properties
@@ -28,6 +35,7 @@ class Order {
     var due_at: Date
     var startedAt: Date? = nil
     var customer: Customer? = nil
+    var status:OrderStatus
     // Initializer
     init(
             orderNumber: String?,
@@ -56,6 +64,7 @@ class Order {
            self.due_at = due_at//add time to this date
            self.startedAt = nil
            self.customer = customer
+           self.status = OrderStatus.open
        }
     
     // Method

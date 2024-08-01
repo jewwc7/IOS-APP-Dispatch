@@ -25,7 +25,6 @@ struct CustomNavigationLink< Destination: View>: View {
     
     var body: some View {
         NavigationStack {
-            Navigation
             NavigationLink(title) {
                 destination
             }.simultaneousGesture(TapGesture().onEnded{

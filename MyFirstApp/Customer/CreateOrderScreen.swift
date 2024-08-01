@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct CreateOrderScreen: View {
-    @Query private var orderModelOrders: [OrderModel]
+    @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context //how to CRUD state
     
     let inputHeight = 40.0
@@ -71,7 +71,7 @@ struct CreateOrderScreen: View {
       }
     func create(){
         print(context)
-        let newOrder = OrderModel( orderNumber: orderNumber, pickupLocation: pickupLocation, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg:dropoffCompanyOrOrg, pay: 100)
+        let newOrder = Order( orderNumber: orderNumber, pickupLocation: pickupLocation, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg:dropoffCompanyOrOrg, pay: 100)
        
         context.insert(newOrder)
         do {
@@ -94,7 +94,7 @@ struct CreateOrderScreen: View {
 }
 
 #Preview {
-    CreateOrderScreen().modelContainer(for: OrderModel.self, inMemory: true) //needs to be added to insert the modelContext, making it possible to CRUD state
+    CreateOrderScreen().modelContainer(for: Order.self, inMemory: true) //needs to be added to insert the modelContext, making it possible to CRUD state
     //https://developer.apple.com/tutorials/develop-in-swift/save-data
 }
 

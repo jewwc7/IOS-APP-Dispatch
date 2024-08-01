@@ -28,6 +28,8 @@
 		05E126042C530277009F2415 /* components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126032C530276009F2415 /* components.swift */; };
 		05E1260B2C585534009F2415 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1260A2C585534009F2415 /* Enums.swift */; };
 		05E1260D2C5AA3C5009F2415 /* CustomNavigationLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1260C2C5AA3C5009F2415 /* CustomNavigationLink.swift */; };
+		05E126112C5AE954009F2415 /* DataFlowVids.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126102C5AE954009F2415 /* DataFlowVids.swift */; };
+		05E126132C5AF182009F2415 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126122C5AF182009F2415 /* Route.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +75,8 @@
 		05E126032C530276009F2415 /* components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = components.swift; sourceTree = "<group>"; };
 		05E1260A2C585534009F2415 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		05E1260C2C5AA3C5009F2415 /* CustomNavigationLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationLink.swift; sourceTree = "<group>"; };
+		05E126102C5AE954009F2415 /* DataFlowVids.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFlowVids.swift; sourceTree = "<group>"; };
+		05E126122C5AF182009F2415 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +107,7 @@
 		055187812BE98BEC00BA0A8A = {
 			isa = PBXGroup;
 			children = (
+				05E126102C5AE954009F2415 /* DataFlowVids.swift */,
 				0551878C2BE98BEC00BA0A8A /* MyFirstApp */,
 				0551879E2BE98BED00BA0A8A /* MyFirstAppTests */,
 				055187A82BE98BED00BA0A8A /* MyFirstAppUITests */,
@@ -205,6 +210,7 @@
 			children = (
 				05632E562BFC034000BBDD89 /* Order.swift */,
 				05E125FE2C52EE04009F2415 /* Customer.swift */,
+				05E126122C5AF182009F2415 /* Route.swift */,
 				05E125FC2C51AA14009F2415 /* AppState.swift */,
 				05E1260A2C585534009F2415 /* Enums.swift */,
 			);
@@ -363,8 +369,10 @@
 				05E125FF2C52EE04009F2415 /* Customer.swift in Sources */,
 				05632E542BFBF2A800BBDD89 /* CreateOrderScreen.swift in Sources */,
 				055187BC2BEC1CFD00BA0A8A /* AvailableOrderScreen.swift in Sources */,
+				05E126112C5AE954009F2415 /* DataFlowVids.swift in Sources */,
 				055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */,
 				05E126042C530277009F2415 /* components.swift in Sources */,
+				05E126132C5AF182009F2415 /* Route.swift in Sources */,
 				05E126012C52F54E009F2415 /* CustomerList.swift in Sources */,
 				05E125FD2C51AA14009F2415 /* AppState.swift in Sources */,
 				05E125F42BFD48B9009F2415 /* CustomerMainScreen.swift in Sources */,

@@ -15,7 +15,7 @@ struct MyFirstAppApp: App {
     init() {
         do {
             //TODO: add memory stuff https://www.hackingwithswift.com/quick-start/swiftdata/how-to-add-multiple-configurations-to-a-modelcontainer
-            modelContainer = try ModelContainer(for: OrderModel.self, Customer.self)
+            modelContainer = try ModelContainer(for: Order.self, Customer.self)
         } catch {
             print(error)
             fatalError("Could not initialize ModelContainer")

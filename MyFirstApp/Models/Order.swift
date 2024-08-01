@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 //NSObject, NSFetchRequestResult, Identifiable
 @Model
-class OrderModel {
+class Order {
     // Properties
     var orderId: String
     var orderNumber: String?
@@ -25,7 +25,8 @@ class OrderModel {
     var dropoffContactName: String
     var dropoffCompanyOrOrg: String
     var pay: Int
-    
+    var due_at: Date
+    var startedAt: Date? = nil
     // Initializer
     init(
             orderNumber: String?,
@@ -37,7 +38,8 @@ class OrderModel {
             dropoffPhoneNumber: String,
             dropoffContactName: String,
             dropoffCompanyOrOrg: String,
-            pay: Int) {
+            pay: Int,
+            due_at: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()) { //7 days from now or right now
            self.orderId = UUID().uuidString
            self.orderNumber = orderNumber
            self.pickupLocation = pickupLocation
@@ -49,11 +51,17 @@ class OrderModel {
            self.dropoffContactName = dropoffContactName
            self.dropoffCompanyOrOrg = dropoffCompanyOrOrg
            self.pay = pay
+           self.due_at = due_at//add time to this date
+           self.startedAt = nil
        }
     
     // Method
     func introduce() {
         print("Hello, my name is \(orderId) and I am being picked up from \(pickupLocation)  and am to be dropped off at \(dropoffLocation) for a cost of $\(pay).")
+    }
+    
+    func late()->Bool{
+        return self.due_at > Date()
     }
     
 }

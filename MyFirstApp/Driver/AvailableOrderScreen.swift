@@ -13,7 +13,7 @@ import SwiftData
 struct AvailableOrderScreen: View {
     @State private var isLoggedOn = true
     @State private var numberOfOrdersInCart = 0
-    @Query private var ordersFromModel: [OrderModel]
+    @Query private var ordersFromModel: [Order]
     
     var body: some View {
         VStack{
@@ -87,39 +87,13 @@ struct AvailableOrderScreen: View {
     
 }
 
-
-class Order {
-    // Properties
-    var orderId: String
-    var pickupAddress: String
-    var dropoffAddress: String
-    var pay: Int
-    
-    // Initializer
-    init(orderId: String, pickupAddress: String, dropoffAddress: String, pay: Int) {
-        self.orderId = orderId
-        self.pickupAddress = pickupAddress
-        self.dropoffAddress = dropoffAddress
-        self.pay = pay
-        
-    }
-    
-    // Method
-    func introduce() {
-        print("Hello, my name is \(orderId) and I am going to \(dropoffAddress) and cost $\(pay).")
-    }
-}
-
-func createRandomId()-> String {
-    String(Int.random(in: 1...10000))
-}
 #Preview {
     AvailableOrderScreen()
 }
 
 
 struct OrderCard: View {
-    var order: OrderModel
+    var order: Order
     var onAccept:(() -> Void)? //how to make functions optional
     var onDecline:(() -> Void)?
     var body: some View {

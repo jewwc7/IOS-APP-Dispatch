@@ -9,29 +9,26 @@ import Foundation
 import SwiftUI
 import SwiftData
 
-enum ActionState: Int {
-    case loggedOut = 0
-    case loggedIn = 1
-}
 
-struct CustomerListConfig  {
-    // VID: 4:20-6:06 https://developer.apple.com/videos/play/wwdc2020/10040/
-    // VID: 7:00 = 8:00 explains binding perfectly, allows write access when you pass the prop down the hiearchy. Changes in for this prop in the child view also changes the prop in parent view @Binding var
-     var shouldNavigate: Bool = false
-     var isPopupPresented: Bool = false
-     var loggedInCustomer: Customer? = nil
-    
-    mutating func presentCreate(){
-        return self.isPopupPresented = true
-    }
-
-}
+//
+//struct CustomerListConfig  {
+//    // VID: 4:20-6:06 https://developer.apple.com/videos/play/wwdc2020/10040/
+//    // VID: 7:00 = 8:00 explains binding perfectly, allows write access when you pass the prop down the hiearchy. Changes in for this prop in the child view also changes the prop in parent view @Binding var
+//     var shouldNavigate: Bool = false
+//     var isPopupPresented: Bool = false
+//     var loggedInCustomer: Customer? = nil
+//    
+////    mutating func presentCreate(){
+////        return self.isPopupPresented = true
+////    }
+//
+//}
 struct CustomerList: View {
     @Environment(\.modelContext) private var context //how to CRUD state
     @Query private var customers: [Customer]
     @State private var isPopupPresented: Bool = false
     @State var shouldNavigate: Bool = false
-    @State private var customerListConfig = CustomerListConfig()
+ //   @State private var customerListConfig = CustomerListConfig()
     @EnvironmentObject var appState: AppStateModel
     
     var body: some View {
@@ -44,7 +41,7 @@ struct CustomerList: View {
                 ForEach(customers,  id: \.id){ customer in
                     @State var loggedInCustomer: Customer = customer // just to bind it
                     
-                    CustomNavigationLink(destination: CustomerMainScreen(loggedInCustomer: $loggedInCustomer), title: customer.name) {
+                    CustomNavigationLink(destination: CustomerMainScreen(), title: customer.name) {
                         print("yooo")
                         logIn(customer: customer)
                     }
@@ -147,7 +144,7 @@ struct PopupView: View {
 
 
 #Preview {
-    CustomerList().modelContainer(for: Customer.self, inMemory: true)
+    CustomerList().modelContainer(for: Customer.self, inMemory: true).environmentObject(AppStateModel())
 }
 
 // why does this screen show up as a little blue icon when swiping to it from main app?

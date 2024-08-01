@@ -13,17 +13,11 @@ struct CustomerMainScreen: View {
         ListOptions(title: "Create Order", destination: CreateOrderScreen()),
         ListOptions(title: "My Created Orders", destination: MyCreatedOrders())
     ]
-    @Binding var loggedInCustomer: Customer
-    @Environment(\.modelContext) private var context //how to CRUD state
-    @Query private var customers: [Customer]
     @EnvironmentObject var appState: AppStateModel
    
-    //check for .loggedInCustomer
-    //if not there, display loading spinner, else display list
-    
     var body: some View {
         //how to unwrap values safely, in ui.
-        if appState.loggedInCustomer != nil  {
+        if let loggedInCustomer = appState.loggedInCustomer  {
             NavigationStack {
                 Spacer()
                 List {
@@ -39,7 +33,7 @@ struct CustomerMainScreen: View {
             
             
         }else {
-            Text("Loading").onAppear(perform: {
+            Text("No logged in customer").onAppear(perform: {
                 print("No logged in customer")
             })
         }
@@ -49,12 +43,7 @@ struct CustomerMainScreen: View {
     
 }
 
-
-//#Preview {
-//   var me =  Customer(name: "Preview Customer")
-//    CustomerMainScreen(loggedInCustomer: $me)
-//}
-
+//
 struct ListOptions:Identifiable {
     var id = UUID() //needs to be added to make it conform to Identifiable
     var title: String

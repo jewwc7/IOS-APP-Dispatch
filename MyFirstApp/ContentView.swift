@@ -11,6 +11,8 @@ import SwiftData
 struct ContentView: View {
     @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context //how to CRUD state
+    @StateObject private var appState = AppStateModel() // this is
+    
     let modelContainer: ModelContainer
     
     init() {
@@ -53,7 +55,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: [Order.self, Customer.self], inMemory: true)
+        .modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateModel())
         //add this to access state and persist making it possible to CRUD state
        // https://developer.apple.com/tutorials/develop-in-swift/save-data
 }

@@ -11,6 +11,7 @@ import SwiftData
 @main
 struct MyFirstAppApp: App {
     let modelContainer: ModelContainer
+    @StateObject private var appState = AppStateModel() // this is
     
     init() {
         do {
@@ -26,6 +27,7 @@ struct MyFirstAppApp: App {
         WindowGroup {
             ContentView()
                 .modelContainer(modelContainer)
+                .environmentObject(appState) //this is how I keep Observables persisted thought all view
             //add this to access state and persist
            // https://developer.apple.com/tutorials/develop-in-swift/save-data
         }

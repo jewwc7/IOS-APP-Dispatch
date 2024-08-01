@@ -63,7 +63,8 @@ class Customer {
     }
     func login()-> Result{
         do {
-            print("logging in", self.modelContext)
+            self.isLoggedIn = true
+            print("logging in", self.isLoggedIn)
             try self.modelContext?.save()
             return .success
         }

@@ -7,7 +7,9 @@
 
 import SwiftUI
 import SwiftData
-
+//WHere I left - state works, just continue on
+//Go back to customer login and login the customer using state, setting logged in to true
+//When creating an Order add a customerID relationship? 
 
 let order = Order( orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100)
 

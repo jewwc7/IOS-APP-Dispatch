@@ -31,10 +31,8 @@ struct CustomerList: View {
     @Query private var customers: [Customer]
     @State private var isPopupPresented: Bool = false
     @State var shouldNavigate: Bool = false
-    @StateObject private var stateManager = AppStateModel()
-    @State private var loggedInCustomer: Customer? = nil
     @State private var customerListConfig = CustomerListConfig()
-  
+    @EnvironmentObject var appState: AppStateModel
     
     var body: some View {
         // #TODo: Add popup Create ->Pop Up=> enter needed info -> save. THink portion below has this as well as edit feature
@@ -44,17 +42,11 @@ struct CustomerList: View {
         NavigationStack {
             List {
                 ForEach(customers,  id: \.id){ customer in
+                    @State var loggedInCustomer: Customer = customer // just to bind it
+                    
                     CustomNavigationLink(destination: CustomerMainScreen(loggedInCustomer: $loggedInCustomer), title: customer.name) {
                         print("yooo")
-                        logAllOut()
-                        loggedInCustomer = customer
-                        print(stateManager.loggedInCustomer)
-                        let result = loggedInCustomer?.login()
-                        stateManager.loggedInCustomer = loggedInCustomer
-                        print(stateManager.loggedInCustomer, result)
-                        if(result == .success){
-                            shouldNavigate = true
-                        }
+                        logIn(customer: customer)
                     }
                     
                 }
@@ -79,37 +71,19 @@ struct CustomerList: View {
         isPopupPresented = true
     }
     func logAllOut() {
-        print("log out  CustomerListViewModel dd")
+        print("loggin out all customers")
         customers.forEach { customer in
             customer.isLoggedIn = false
         }
     }
     func logIn(customer: Customer){
         logAllOut()
-        loggedInCustomer = customer
-        print(stateManager.loggedInCustomer)
-        let result = loggedInCustomer?.login()
-        stateManager.loggedInCustomer = loggedInCustomer
-        print(stateManager.loggedInCustomer, result)
+        let result = customer.login()
         if(result == .success){
+            appState.login(customer: customer)
             shouldNavigate = true
         }
     }
-
-//    private func logInCustomer(id:String){
-//   
-//       // print("loggin in")
-//        viewModel.logAllOut() //why aren;t these two being called?
-//        
-//        //should save the context after logIn, probably will do that in the viewModel.
-//        shouldNavigate = true
-//        //
-//       
-////        if let loggedInCustomer = loggedInCustomers.first {
-////                 loggedInCustomer.isLoggedIn = false
-////                 saveContext()
-////             }
-//    }
     
     private func deleteCustomer(offsets: IndexSet) {
         withAnimation {

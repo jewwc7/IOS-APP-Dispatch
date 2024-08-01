@@ -6,19 +6,24 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CustomerMainScreen: View {
     let list:[ListOptions] = [
         ListOptions(title: "Create Order", destination: CreateOrderScreen()),
         ListOptions(title: "My Created Orders", destination: MyCreatedOrders())
     ]
-    @Binding var loggedInCustomer: Customer?
+    @Binding var loggedInCustomer: Customer
+    @Environment(\.modelContext) private var context //how to CRUD state
+    @Query private var customers: [Customer]
+    @EnvironmentObject var appState: AppStateModel
+   
     //check for .loggedInCustomer
     //if not there, display loading spinner, else display list
     
     var body: some View {
         //how to unwrap values safely, in ui.
-        if let loggedInCustomer  {
+        if appState.loggedInCustomer != nil  {
             NavigationStack {
                 Spacer()
                 List {

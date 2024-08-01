@@ -27,6 +27,7 @@ class Order {
     var pay: Int
     var due_at: Date
     var startedAt: Date? = nil
+    var customer: Customer? = nil
     // Initializer
     init(
             orderNumber: String?,
@@ -39,6 +40,7 @@ class Order {
             dropoffContactName: String,
             dropoffCompanyOrOrg: String,
             pay: Int,
+            customer: Customer,
             due_at: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()) { //7 days from now or right now
            self.orderId = UUID().uuidString
            self.orderNumber = orderNumber
@@ -53,6 +55,7 @@ class Order {
            self.pay = pay
            self.due_at = due_at//add time to this date
            self.startedAt = nil
+           self.customer = customer
        }
     
     // Method

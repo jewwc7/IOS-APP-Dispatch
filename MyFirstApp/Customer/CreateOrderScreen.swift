@@ -11,6 +11,7 @@ import SwiftData
 struct CreateOrderScreen: View {
     @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context //how to CRUD state
+    @EnvironmentObject var appState: AppStateModel
     
     let inputHeight = 40.0
     @State private var orderNumber: String = ""
@@ -71,14 +72,21 @@ struct CreateOrderScreen: View {
       }
     func create(){
         print(context)
-        let newOrder = Order( orderNumber: orderNumber, pickupLocation: pickupLocation, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg:dropoffCompanyOrOrg, pay: 100)
-       
-        context.insert(newOrder)
-        do {
-            try context.save()
-        } catch {
-            print("Error fetching data: \(error)")
+        if let customer = appState.loggedInCustomer {
+            let newOrder = Order( orderNumber: orderNumber, pickupLocation: pickupLocation, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg:dropoffCompanyOrOrg, pay: 100, customer: customer)
+           
+            context.insert(newOrder)
+            customer.handleOrderAction(action:CustomerOrderAction.place, order:newOrder)
+            do {
+                try customer.modelContext?.save()
+                try context.save()
+            } catch {
+                print("Error creating order: \(error)")
+            }
+        }else {
+            print("No customer logged in to create the order")
         }
+
     }
     func prePopulate(){
         orderNumber = "123"
@@ -94,7 +102,7 @@ struct CreateOrderScreen: View {
 }
 
 #Preview {
-    CreateOrderScreen().modelContainer(for: Order.self, inMemory: true) //needs to be added to insert the modelContext, making it possible to CRUD state
+    CreateOrderScreen().modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateModel()) //needs to be added to insert the modelContext, making it possible to CRUD state
     //https://developer.apple.com/tutorials/develop-in-swift/save-data
 }
 

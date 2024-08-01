@@ -97,7 +97,6 @@ struct PopupView: View {
     // adding the @Binding with var is how you add mandtory props, llok @CustomerListConfig comments
     @Binding var isPopupPresented: Bool
     @Environment(\.modelContext) private var context //how to CRUD state
-
     @State private var nameInput: String = ""
     
     var body: some View {
@@ -144,7 +143,6 @@ struct PopupView: View {
 
 
 #Preview {
-    CustomerList().modelContainer(for: Customer.self, inMemory: true).environmentObject(AppStateModel())
+    CustomerList().modelContainer(for: [Customer.self, Order.self], inMemory: true).environmentObject(AppStateModel())
 }
 
-// why does this screen show up as a little blue icon when swiping to it from main app?

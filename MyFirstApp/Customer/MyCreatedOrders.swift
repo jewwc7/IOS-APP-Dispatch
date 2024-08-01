@@ -8,49 +8,61 @@
 import SwiftUI
 import SwiftData
 //WHere I left - state works, just continue on
-//Go back to customer login and login the customer using state, setting logged in to true
-//When creating an Order add a customerID relationship? 
+//When creating an Order add a customerID relationship?
 
-let order = Order( orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100)
+let order = Order( orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: Customer(name: "John"))
 
 struct MyCreatedOrders: View {
     @Query private var orders: [Order]
+    @Query private var orderModelOrders: [Order]
+    @Environment(\.modelContext) private var context //how to CRUD state
+    @EnvironmentObject var appState: AppStateModel
     
    private var tempOrders:[Order] = [order]
+    
 
     var body: some View {
         NavigationView {
-            List {
-                ForEach(tempOrders, id: \.orderId){ order in
-                    NavigationLink(destination: ViewOrder(order:order)) {
-                        VStack{
-                            HStack{
-                                Text("Pickup Address:")
-                                Spacer()
-                                Text(order.pickupLocation)
+            if let loggedInCustomer = appState.loggedInCustomer {
+                if loggedInCustomer.orders.count > 0 {
+                    List {
+                        ForEach(tempOrders, id: \.orderId){ order in
+                            NavigationLink(destination: ViewOrder(order:order)) {
+                                VStack{
+                                    HStack{
+                                        Text("Pickup Address:")
+                                        Spacer()
+                                        Text(order.pickupLocation)
+                                    }
+                                    HStack{
+                                        Text("Drop-Off Address:")
+                                        Spacer()
+                                        Text(order.dropoffLocation)
+                                    }
+                                    if order.startedAt != nil { // order.startedAt != nil
+                                        Label("started", systemImage: "car").foregroundColor(.green)
+                            
+                                    }
+                                }
+                            
                             }
-                            HStack{
-                                Text("Drop-Off Address:")
-                                Spacer()
-                                Text(order.dropoffLocation)
-                            }
-                            if order.startedAt != nil { // order.startedAt != nil
-                                Label("started", systemImage: "car").foregroundColor(.green)
-                    
-                            }
+                            
                         }
-                    
                     }
-                    
+                }else {
+                    Text("No created orders")
                 }
+            }else{
+                Text("No logged in customer")
             }
+
             
         }
     }
 }
 
 #Preview {
-    MyCreatedOrders()
+    MyCreatedOrders().modelContainer(for: [Customer.self, Order.self], inMemory: true).environmentObject(AppStateModel())
 }
 
 /// The current reading progress for a specific book.

@@ -11,7 +11,7 @@ import Foundation
 import CoreData
 //NSObject, NSFetchRequestResult, Identifiable
 
-enum OrderAction {
+enum CustomerOrderAction {
     case place
     case cancel
 }
@@ -27,7 +27,7 @@ class Customer {
     var name: String
     var numberOfOrdersPlaced: Int
     var isLoggedIn: Bool
-    
+    var orders = [Order]()
     
     // Initializer
     init(
@@ -40,24 +40,24 @@ class Customer {
         self.isLoggedIn = false
     }
     
-    
-    func handleOrderAction(action:OrderAction){
+    func handleOrderAction(action:CustomerOrderAction, order:Order){
         print(action, "performed")
         switch action {
-        case OrderAction.place:
-            self.placeOrder()
-        case OrderAction.cancel:
+        case CustomerOrderAction.place:
+            self.placeOrder(order:order)
+        case CustomerOrderAction.cancel:
             self.cancelOrder()
             
         }
     }
     
-    func placeOrder(){
+   private func placeOrder(order:Order){
         print(self.name, "created an order")
+        self.orders.append(order)
         self.numberOfOrdersPlaced += 1
         //FInd the order and run some comandds on it
     }
-    func cancelOrder(){
+  private func cancelOrder(){
         print(self.name, "canceled an order")
         self.numberOfOrdersPlaced += 1
     }

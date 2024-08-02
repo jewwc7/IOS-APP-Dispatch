@@ -33,6 +33,7 @@
 		05E126152C5C44D1009F2415 /* Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126142C5C44D1009F2415 /* Driver.swift */; };
 		05E126172C5D42A3009F2415 /* OrderCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126162C5D42A3009F2415 /* OrderCard.swift */; };
 		05E1261B2C5D642F009F2415 /* DriverOrderScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1261A2C5D642F009F2415 /* DriverOrderScreen.swift */; };
+		05E1261D2C5D85AF009F2415 /* MyChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1261C2C5D85AF009F2415 /* MyChip.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 		05E126142C5C44D1009F2415 /* Driver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Driver.swift; sourceTree = "<group>"; };
 		05E126162C5D42A3009F2415 /* OrderCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCard.swift; sourceTree = "<group>"; };
 		05E1261A2C5D642F009F2415 /* DriverOrderScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverOrderScreen.swift; sourceTree = "<group>"; };
+		05E1261C2C5D85AF009F2415 /* MyChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChip.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +191,7 @@
 			children = (
 				055187BF2BEC306A00BA0A8A /* MyButton.swift */,
 				05E1260C2C5AA3C5009F2415 /* CustomNavigationLink.swift */,
+				05E1261C2C5D85AF009F2415 /* MyChip.swift */,
 			);
 			path = "UI components";
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05E125F82BFD5966009F2415 /* ViewOrder.swift in Sources */,
+				05E1261D2C5D85AF009F2415 /* MyChip.swift in Sources */,
 				05E125FB2C51A84C009F2415 /* FirstPage.swift in Sources */,
 				05E1261B2C5D642F009F2415 /* DriverOrderScreen.swift in Sources */,
 				05632E572BFC034000BBDD89 /* Order.swift in Sources */,

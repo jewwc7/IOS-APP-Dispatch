@@ -31,7 +31,7 @@ struct DriverOrderScreen: View {
         ScrollView {
             if let loggedInDriver = appState.loggedInDriver {
                 ForEach(loggedInDriver.orders, id: \.orderId){ order in
-                    DriverOrderCard(order:$order)
+                    DriverOrderCard(order:order)
                 }
             }
             
@@ -46,9 +46,8 @@ struct DriverOrderScreen: View {
 
 
 struct DriverOrderCard: View {
-    @Binding var order:Order
+     var order:Order
  
-    
     var body: some View {
         let dueAt = formatDate(date: order.due_at)
         VStack(alignment: .leading) {
@@ -106,7 +105,7 @@ struct DriverOrderCard: View {
             
             Spacer()
             
-            MyButton(title:order.status?.rawValue ?? "nothing",onPress: handleOnPress, backgroundColor: Color.blue, image:"checkmark", frame: (Frame(height: 40, width: 140))).frame(maxWidth: .infinity)
+            MyButton(title:order.status.rawValue,onPress: handleOnPress, backgroundColor: Color.blue, image:"checkmark", frame: (Frame(height: 40, width: 140))).frame(maxWidth: .infinity)
         }.padding().overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.blue, lineWidth: 2)

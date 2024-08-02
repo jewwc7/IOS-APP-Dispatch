@@ -40,7 +40,7 @@ class Order {
     var startedAt: Date? = nil
     var customer: Customer? = nil
     var driver: Driver? = nil
-    var status:OrderStatus? = OrderStatus.canceled
+    var status:OrderStatus = OrderStatus.canceled
     
     // Initializer
     init(
@@ -141,6 +141,7 @@ class Order {
             }
             else {
                 self.status = .enRouteToPickup
+                self.startedAt = Date()
             }
         
     }

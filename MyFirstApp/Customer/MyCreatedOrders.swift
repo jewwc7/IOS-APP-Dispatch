@@ -43,6 +43,7 @@ struct MyCreatedOrders: View {
                                         Label("started", systemImage: "car").foregroundColor(.green)
                             
                                     }
+                                    MyChip(text: order.status.rawValue)
                                 }
                             
                             }

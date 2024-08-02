@@ -42,15 +42,17 @@ struct AvailableOrderScreen: View {
                         if loggedInDriver.orders.count == 0 {
                             EmptyView()
                         } else {
-                            
-                            Text("\(loggedInDriver.orders.count)") // Display your floating number
-                                .font(.system(size: 16)) // Set the font size
-                                .fontWeight(.bold) // Set the font weight if needed
-                                .foregroundColor(.white) // Set the text color
-                                .padding(8) // Add padding around the text
-                                .background(Color.blue) // Set the background color
-                                .clipShape(Circle()) // Clip the text into a circle shape
-                                .offset(x: 16, y: -16) // Offset the text position relative to the image
+                            withAnimation {
+                                Text("\(loggedInDriver.orders.count)") // Display your floating number
+                                    .font(.system(size: 16)) // Set the font size
+                                    .fontWeight(.bold) // Set the font weight if needed
+                                    .foregroundColor(.white) // Set the text color
+                                    .padding(8) // Add padding around the text
+                                    .background(Color.blue) // Set the background color
+                                    .clipShape(Circle()) // Clip the text into a circle shape
+                                    .offset(x: 16, y: -16) // Offset the text position relative to the image
+                            }
+                         
                         }
                         
                     }

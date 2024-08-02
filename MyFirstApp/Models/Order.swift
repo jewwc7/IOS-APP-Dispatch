@@ -14,6 +14,10 @@ enum OrderStatus: String, Codable  { //
     case unassinged
     case canceled
     case claimed
+    case enRouteToPickup
+    case atPickup
+    case atDropoff
+    case delivered
 }
 
 @Model
@@ -40,36 +44,36 @@ class Order {
     
     // Initializer
     init(
-            orderNumber: String?,
-            pickupLocation: String,
-            pickupPhoneNumber: String,
-            pickupContactName: String,
-            pickupCompanyOrOrg: String,
-            dropoffLocation: String,
-            dropoffPhoneNumber: String,
-            dropoffContactName: String,
-            dropoffCompanyOrOrg: String,
-            pay: Int,
-            customer: Customer,
-            status:OrderStatus = OrderStatus.unassinged,
-            due_at: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()) { //7 days from now or right now
-           self.orderId = UUID().uuidString
-           self.orderNumber = orderNumber
-           self.pickupLocation = pickupLocation
-           self.pickupPhoneNumber = pickupPhoneNumber
-           self.pickupContactName = pickupContactName
-           self.pickupCompanyOrOrg = pickupCompanyOrOrg
-           self.dropoffLocation = dropoffLocation
-           self.dropoffPhoneNumber = dropoffPhoneNumber
-           self.dropoffContactName = dropoffContactName
-           self.dropoffCompanyOrOrg = dropoffCompanyOrOrg
-           self.pay = pay
-           self.due_at = due_at//add time to this date
-           self.startedAt = nil
-           self.customer = customer
-           self.driver = nil
-           self.status = OrderStatus.unassinged
-       }
+        orderNumber: String?,
+        pickupLocation: String,
+        pickupPhoneNumber: String,
+        pickupContactName: String,
+        pickupCompanyOrOrg: String,
+        dropoffLocation: String,
+        dropoffPhoneNumber: String,
+        dropoffContactName: String,
+        dropoffCompanyOrOrg: String,
+        pay: Int,
+        customer: Customer,
+        status:OrderStatus = OrderStatus.unassinged,
+        due_at: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()) { //7 days from now or right now
+            self.orderId = UUID().uuidString
+            self.orderNumber = orderNumber
+            self.pickupLocation = pickupLocation
+            self.pickupPhoneNumber = pickupPhoneNumber
+            self.pickupContactName = pickupContactName
+            self.pickupCompanyOrOrg = pickupCompanyOrOrg
+            self.dropoffLocation = dropoffLocation
+            self.dropoffPhoneNumber = dropoffPhoneNumber
+            self.dropoffContactName = dropoffContactName
+            self.dropoffCompanyOrOrg = dropoffCompanyOrOrg
+            self.pay = pay
+            self.due_at = due_at//add time to this date
+            self.startedAt = nil
+            self.customer = customer
+            self.driver = nil
+            self.status = OrderStatus.unassinged
+        }
     
     // Method
     func introduce() {
@@ -89,7 +93,7 @@ class Order {
         }else {
             return isClaimable
         }
-
+        
     }
     
     private func isClaimable()-> ResultWithMessage{
@@ -101,6 +105,70 @@ class Order {
         }else {
             return ResultWithMessage(result: .success)
         }
+    }
+    
+    func handleStatusTransition(){
+        if(status == .delivered){
+            return print("Order already delivered")
+        }
+        else if(status == .canceled){
+           return print("Canceled order cant be delivered")
+        }
+        else if(self.status == .claimed || self.status == .unassinged){ //unassigned only here for testing purposes
+            setEnRouteToPickup()
+        }
+        else if(self.status == .enRouteToPickup){
+            setAtPickup()
+        }else if(self.status == .atPickup){
+            setAtDropOff()
+        }
+        else if(self.status == .atDropoff){
+            setDelivered()
+        }
+        
+        do {
+            try self.modelContext?.save()
+        } catch {
+            print(error)
+        }
+    }
+    
+    
+    
+    private func setEnRouteToPickup(){
+            if  false { // self.driver == nil
+                print("order has no driver")
+            }
+            else {
+                self.status = .enRouteToPickup
+            }
+        
+    }
+    private func setAtPickup(){
+        if self.status != .enRouteToPickup  {
+            print("please set enroute to pickup first")
+        }else {
+            self.status = .atPickup
+        }
+    }
+    private func setAtDropOff(){
+        if self.status != .atPickup  {
+            print("please complete pickup first")
+        }else {
+            self.status = .atDropoff
+        }
+        
+        
+    }
+    private func setDelivered(){
+        
+        if self.status != .atDropoff  {
+            print("please setAtDropoff first")
+        }else {
+            self.status = .delivered
+        }
+        
+        
     }
     
 }

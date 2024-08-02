@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
-import Foundation // how I use random number
 import SwiftData
 
+// Next make a driver scrren
+//Make a card for the driver, allow them to release, start/end pickup and dropp off
+// Do I need to make a pickup and Drop off model?
+//Make route creator-> just adds all current days orders and sorts them by etaAt
 
 struct AvailableOrderScreen: View {
     @State private var isLoggedOn = true
@@ -23,13 +26,17 @@ struct AvailableOrderScreen: View {
         let unclaimedOrders = ordersFromModel.filter { $0.driver == nil }
         
         if let loggedInDriver = appState.loggedInDriver {
+            NavigationView {
             VStack{
                 HStack(alignment: .center) {
                     ZStack {
-                        Image(systemName: "cart.circle")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 30)
+                        NavigationLink(destination: DriverOrderScreen()){
+                            Image(systemName: "cart.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
+                        }
+                     
                         
                         
                         if loggedInDriver.orders.count == 0 {
@@ -75,6 +82,7 @@ struct AvailableOrderScreen: View {
                 
                 
             }.padding(16)
+            }
         }else {
             Text("No logged in driver")
         }

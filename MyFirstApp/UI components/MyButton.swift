@@ -23,7 +23,7 @@ struct MyButton: View {
     var body: some View {
         
         
-        Button(title, systemImage: image ?? "xmark", action: onPress ?? onPressDefault).frame(width: frame?.width ?? 200, height: frame?.height ?? 300).padding().background(backgroundColor ?? .black, in: RoundedRectangle(cornerRadius: 8)).foregroundColor(.white)
+        Button(title, systemImage: image ?? "xmark", action: onPress ?? onPressDefault).frame(width: frame?.width ?? 100, height: frame?.height ?? 40).padding().background(backgroundColor ?? .blue, in: RoundedRectangle(cornerRadius: 8)).foregroundColor(.white)
     }
     
     func onPressDefault() {

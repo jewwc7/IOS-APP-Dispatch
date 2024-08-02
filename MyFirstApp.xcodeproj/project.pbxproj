@@ -32,6 +32,7 @@
 		05E126132C5AF182009F2415 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126122C5AF182009F2415 /* Route.swift */; };
 		05E126152C5C44D1009F2415 /* Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126142C5C44D1009F2415 /* Driver.swift */; };
 		05E126172C5D42A3009F2415 /* OrderCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126162C5D42A3009F2415 /* OrderCard.swift */; };
+		05E1261B2C5D642F009F2415 /* DriverOrderScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1261A2C5D642F009F2415 /* DriverOrderScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		05E126122C5AF182009F2415 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		05E126142C5C44D1009F2415 /* Driver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Driver.swift; sourceTree = "<group>"; };
 		05E126162C5D42A3009F2415 /* OrderCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCard.swift; sourceTree = "<group>"; };
+		05E1261A2C5D642F009F2415 /* DriverOrderScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverOrderScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				055187BB2BEC1CFD00BA0A8A /* AvailableOrderScreen.swift */,
+				05E1261A2C5D642F009F2415 /* DriverOrderScreen.swift */,
 			);
 			path = Driver;
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 			files = (
 				05E125F82BFD5966009F2415 /* ViewOrder.swift in Sources */,
 				05E125FB2C51A84C009F2415 /* FirstPage.swift in Sources */,
+				05E1261B2C5D642F009F2415 /* DriverOrderScreen.swift in Sources */,
 				05632E572BFC034000BBDD89 /* Order.swift in Sources */,
 				05E125FF2C52EE04009F2415 /* Customer.swift in Sources */,
 				05632E542BFBF2A800BBDD89 /* CreateOrderScreen.swift in Sources */,

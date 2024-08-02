@@ -18,7 +18,7 @@ struct MyFirstAppApp: App {
             
             //TODO: add memory stuff https://www.hackingwithswift.com/quick-start/swiftdata/how-to-add-multiple-configurations-to-a-modelcontainer
             modelContainer = try ModelContainer(for: Order.self, Customer.self)
-            // modelContainer.deleteAllData() // hack when adding props to models, phone still has old model data let this run on phone => error will happen=> comment it out => run on phone again and all is well
+             //modelContainer.deleteAllData() // hack when adding props to models, phone still has old model data let this run on phone => error will happen=> comment it out => run on phone again and all is well
             // need to
         } catch {
             print(error)

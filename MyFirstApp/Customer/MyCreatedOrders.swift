@@ -22,6 +22,8 @@ struct MyCreatedOrders: View {
     
 
     var body: some View {
+        let labelAndSytemImage = getLabelAndSystemImage()
+        
         NavigationView {
             if let loggedInCustomer = appState.loggedInCustomer {
                 if loggedInCustomer.orders.count > 0 {
@@ -39,11 +41,10 @@ struct MyCreatedOrders: View {
                                         Spacer()
                                         Text(order.dropoffLocation)
                                     }
-                                    if order.startedAt != nil { // order.startedAt != nil
-                                        Label("started", systemImage: "car").foregroundColor(.green)
+                                
+                                    Label(labelAndSytemImage.text, systemImage: labelAndSytemImage.image).foregroundColor(.green)
                             
-                                    }
-                                    MyChip(text: order.status.rawValue)
+                                    
                                 }
                             
                             }
@@ -59,6 +60,23 @@ struct MyCreatedOrders: View {
 
             
         }
+    }
+    
+    func getLabelAndSystemImage()-> LabelAndSystemImage{
+        if(order.delivered()){
+          return  LabelAndSystemImage(text: "Delivered", image: "car")
+        }
+        if(order.inProgess()){
+            return LabelAndSystemImage(text: humanizeCamelCase(order.status.rawValue), image: "car")
+        }
+        if(order.claimed()){
+           return LabelAndSystemImage(text: "Claimed", image: "person")
+            //car and status
+        }
+        else{
+           return LabelAndSystemImage(text: "Unassigned", image: "magnifyingglass")
+        }
+
     }
 }
 

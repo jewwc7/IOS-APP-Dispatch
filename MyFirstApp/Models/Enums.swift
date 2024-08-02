@@ -18,3 +18,13 @@ struct ResultWithMessage {
 var result: Result
 var message: String = ""
 }
+
+
+
+
+
+/////////////////////////////////UI
+struct LabelAndSystemImage {
+var text: String
+var image:String
+}

@@ -26,15 +26,17 @@ struct DriverOrderScreen: View {
     
     
     var body: some View {
-        @State var order = Order( orderNumber: orderNumber, pickupLocation: pickupLocation, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg:dropoffCompanyOrOrg, pay: 100, customer: Customer(name: "PlaceHolder customer"))
+        @State var tempOrder = Order( orderNumber: orderNumber, pickupLocation: pickupLocation, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg:dropoffCompanyOrOrg, pay: 100, customer: Customer(name: "PlaceHolder customer"))
         
         ScrollView {
             if let loggedInDriver = appState.loggedInDriver {
                 ForEach(loggedInDriver.orders, id: \.orderId){ order in
-                    DriverOrderCard(order:order)
+                    DriverOrderCard(order:tempOrder)
                 }
+            }else {
+                Text("Driver not logged in")
             }
-            
+        //    DriverOrderCard(order:tempOrder)
         }
     }
 }
@@ -119,6 +121,7 @@ struct DriverOrderCard: View {
     }
     
     func handleOnPress(){
+        print("handleOnPress", order.status)
         withAnimation(.easeInOut(duration: 0.5)) {
             order.handleStatusTransition()
         }

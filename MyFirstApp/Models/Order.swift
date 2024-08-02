@@ -41,7 +41,7 @@ class Order {
     var customer: Customer? = nil
     var driver: Driver? = nil
     var status:OrderStatus = OrderStatus.canceled
-    
+    let inProgressStatuses: Set<OrderStatus> = [OrderStatus.enRouteToPickup, OrderStatus.atPickup, OrderStatus.atDropoff]
     // Initializer
     init(
         orderNumber: String?,
@@ -108,13 +108,17 @@ class Order {
     }
     
     func handleStatusTransition(){
+        print("handleStatusTransition", order.status.rawValue)
         if(status == .delivered){
             return print("Order already delivered")
         }
-        else if(status == .canceled){
+        else if(canceled()){
            return print("Canceled order cant be delivered")
         }
-        else if(self.status == .claimed || self.status == .unassinged){ //unassigned only here for testing purposes
+        else if(unassigned()){
+            self.status = .claimed
+        }
+        else if(claimed()){ //unassigned only here for testing purposes
             setEnRouteToPickup()
         }
         else if(self.status == .enRouteToPickup){
@@ -127,14 +131,37 @@ class Order {
         }
         
         do {
-            try self.modelContext?.save()
+            try modelContext?.save()
         } catch {
             print(error)
         }
     }
     
+    func claimed()-> Bool{
+        //commented out for testing
+        return status == .claimed //&& driver != nil
+       // return true
+    }
+    func unassigned()-> Bool{
+        return status == .unassinged
+    }
     
+    func assigned()-> Bool{
+        return order.status == .claimed && order.driver != nil
+    }
     
+    func started()->Bool {
+        return startedAt != nil
+    }
+    func canceled()->Bool {
+        return status == .canceled
+    }
+    func delivered()->Bool {
+        return status == .delivered
+    }
+    func inProgess()-> Bool{
+        return inProgressStatuses.contains(status)
+    }
     private func setEnRouteToPickup(){
             if  false { // self.driver == nil
                 print("order has no driver")
@@ -146,6 +173,7 @@ class Order {
         
     }
     private func setAtPickup(){
+        print("setting @ pickup")
         if self.status != .enRouteToPickup  {
             print("please set enroute to pickup first")
         }else {

@@ -34,6 +34,7 @@
 		05E126172C5D42A3009F2415 /* OrderCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126162C5D42A3009F2415 /* OrderCard.swift */; };
 		05E1261B2C5D642F009F2415 /* DriverOrderScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1261A2C5D642F009F2415 /* DriverOrderScreen.swift */; };
 		05E1261D2C5D85AF009F2415 /* MyChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1261C2C5D85AF009F2415 /* MyChip.swift */; };
+		05E1261F2C5D8997009F2415 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1261E2C5D8997009F2415 /* Helpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		05E126162C5D42A3009F2415 /* OrderCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCard.swift; sourceTree = "<group>"; };
 		05E1261A2C5D642F009F2415 /* DriverOrderScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverOrderScreen.swift; sourceTree = "<group>"; };
 		05E1261C2C5D85AF009F2415 /* MyChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChip.swift; sourceTree = "<group>"; };
+		05E1261E2C5D8997009F2415 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 				055187912BE98BED00BA0A8A /* Assets.xcassets */,
 				055187932BE98BED00BA0A8A /* MyFirstApp.entitlements */,
 				055187942BE98BED00BA0A8A /* Preview Content */,
+				05E1261E2C5D8997009F2415 /* Helpers.swift */,
 			);
 			path = MyFirstApp;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 				05E1261D2C5D85AF009F2415 /* MyChip.swift in Sources */,
 				05E125FB2C51A84C009F2415 /* FirstPage.swift in Sources */,
 				05E1261B2C5D642F009F2415 /* DriverOrderScreen.swift in Sources */,
+				05E1261F2C5D8997009F2415 /* Helpers.swift in Sources */,
 				05632E572BFC034000BBDD89 /* Order.swift in Sources */,
 				05E125FF2C52EE04009F2415 /* Customer.swift in Sources */,
 				05632E542BFBF2A800BBDD89 /* CreateOrderScreen.swift in Sources */,

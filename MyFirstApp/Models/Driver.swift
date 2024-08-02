@@ -42,6 +42,7 @@ class Driver {
     
     func handleOrderAction(action:DriverOrderAction, order:Order){
         print(action, "performed")
+
         switch action {
         case DriverOrderAction.claim:
             self.claimOrder(order:order)

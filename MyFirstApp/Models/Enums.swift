@@ -13,3 +13,8 @@ enum Result {
     case failure
     case noResult
 }
+
+struct ResultWithMessage {
+var result: Result
+var message: String = ""
+}

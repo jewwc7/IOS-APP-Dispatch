@@ -42,10 +42,6 @@ class Driver {
     
     func handleOrderAction(action:DriverOrderAction, order:Order){
         print(action, "performed")
-        if order.status == OrderStatus.claimed || order.status == OrderStatus.canceled {
-            print("order already claimed or canceled") // ErrorPop
-            return
-        }
         switch action {
         case DriverOrderAction.claim:
             self.claimOrder(order:order)
@@ -56,16 +52,22 @@ class Driver {
     }
     
    private func claimOrder(order:Order){
-        print(self.name, "claimed an order")
-        self.orders.append(order)
-        order.status = OrderStatus.claimed
-        order.driver = self
-       do {
-           try order.modelContext?.save()
-           self.numberOfOrdersPlaced += 1
-       }catch{
-           print("order couldn't be claimed", error)
-       }
+        print(self.name, "request to claim an order")
+        let response = order.claim(driver:self)
+        if response.result == .success{
+            self.orders.append(order)
+            
+            do {
+                try order.modelContext?.save()
+                try self.modelContext?.save()
+            }catch{
+                print("order couldn't be claimed", error)
+            }
+
+        }else {
+            print(response.message)
+        }
+       
     
        
     }

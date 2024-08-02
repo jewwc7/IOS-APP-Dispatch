@@ -26,7 +26,7 @@ struct MyCreatedOrders: View {
             if let loggedInCustomer = appState.loggedInCustomer {
                 if loggedInCustomer.orders.count > 0 {
                     List {
-                        ForEach(tempOrders, id: \.orderId){ order in
+                        ForEach(loggedInCustomer.orders, id: \.orderId){ order in
                             NavigationLink(destination: ViewOrder(order:order)) {
                                 VStack{
                                     HStack{

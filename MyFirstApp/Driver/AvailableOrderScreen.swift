@@ -16,66 +16,73 @@ struct AvailableOrderScreen: View {
     
     @Environment(\.modelContext) private var context //how to CRUD state
     @Query private var ordersFromModel: [Order]
+    @EnvironmentObject var appState: AppStateModel
+    
     
     var body: some View {
-        let unclaimedOrders = ordersFromModel.filter { $0.status == OrderStatus.open }
+        let unclaimedOrders = ordersFromModel.filter { $0.status == OrderStatus.unclaimed }
         
-        VStack{
-            HStack(alignment: .center) {
-                ZStack {
-                    Image(systemName: "cart.circle")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
-                    
-                    
-                    if numberOfOrdersInCart < 1 {
-                        EmptyView()
-                    } else {
+        if let loggedInDriver = appState.loggedInDriver {
+            VStack{
+                HStack(alignment: .center) {
+                    ZStack {
+                        Image(systemName: "cart.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 30)
                         
-                        Text("\(numberOfOrdersInCart)") // Display your floating number
-                            .font(.system(size: 16)) // Set the font size
-                            .fontWeight(.bold) // Set the font weight if needed
-                            .foregroundColor(.white) // Set the text color
-                            .padding(8) // Add padding around the text
-                            .background(Color.blue) // Set the background color
-                            .clipShape(Circle()) // Clip the text into a circle shape
-                            .offset(x: 16, y: -16) // Offset the text position relative to the image
+                        
+                        if loggedInDriver.orders.count == 0 {
+                            EmptyView()
+                        } else {
+                            
+                            Text("\(loggedInDriver.orders.count)") // Display your floating number
+                                .font(.system(size: 16)) // Set the font size
+                                .fontWeight(.bold) // Set the font weight if needed
+                                .foregroundColor(.white) // Set the text color
+                                .padding(8) // Add padding around the text
+                                .background(Color.blue) // Set the background color
+                                .clipShape(Circle()) // Clip the text into a circle shape
+                                .offset(x: 16, y: -16) // Offset the text position relative to the image
+                        }
+                        
                     }
+                    
+                    
+                    Toggle("", isOn: $isLoggedOn).toggleStyle(SwitchToggleStyle(tint: .blue))
                     
                 }
                 
-                
-                Toggle("", isOn: $isLoggedOn).toggleStyle(SwitchToggleStyle(tint: .blue))
-                
-            }
-            
 
-                Text("Orders")
-                    .font(.title)
-                    .fontWeight(.semibold).frame(maxWidth: .infinity, alignment: .leading)
-            
-       
-            
-            ScrollView {
+                    Text("Orders")
+                        .font(.title)
+                        .fontWeight(.semibold).frame(maxWidth: .infinity, alignment: .leading)
                 
-  
+           
                 
-                VStack {
-                    // ForEach needs to identify its contents in order to perform layout, successfully delegate gestures to child views and other tasks.
-                    // https://stackoverflow.com/questions/69393430/referencing-initializer-init-content-on-foreach-requires-that-planet-c
-                    ForEach(unclaimedOrders, id: \.orderId) { order in
-                        OrderCard(order:order, onAccept: addOrderToCart, onDecline: removeOrderFromCart) // This is the view returned for each item in the array
+                ScrollView {
+                    
+      
+                    
+                    VStack {
+                        // ForEach needs to identify its contents in order to perform layout, successfully delegate gestures to child views and other tasks.
+                        // https://stackoverflow.com/questions/69393430/referencing-initializer-init-content-on-foreach-requires-that-planet-c
+                        ForEach(unclaimedOrders, id: \.orderId) { order in
+                            OrderCard(order:order, driver: loggedInDriver) // This is the view returned for each item in the array
+                        }
                     }
                 }
-            }
-            
-            
-        }.padding(16)
+                
+                
+            }.padding(16)
+        }else {
+            Text("No logged in driver")
+        }
+
         
     }
     
-    func addOrderToCart(){
+    func addOrderToCart(order:Order){
         withAnimation {
             numberOfOrdersInCart += 1
         }
@@ -92,14 +99,14 @@ struct AvailableOrderScreen: View {
 }
 
 #Preview {
-    AvailableOrderScreen()
+    AvailableOrderScreen().modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateModel())
 }
 
 
 struct OrderCard: View {
     var order: Order
-    var onAccept:(() -> Void)? //how to make functions optional
-    var onDecline:(() -> Void)?
+    var driver: Driver
+    
     var body: some View {
         
         let buttonFrame = (Frame(height: 40, width:100))
@@ -116,7 +123,7 @@ struct OrderCard: View {
             HStack {
                 // the order od modifieres matters
                 
-                MyButton(title:"Accept", onPress: accept, backgroundColor: Color.blue, image: "checkmark",frame: buttonFrame)
+                MyButton(title:"Accept", onPress: claim, backgroundColor: Color.blue, image: "checkmark",frame: buttonFrame)
                 
                 Spacer() //how to space evenly
                 
@@ -128,19 +135,14 @@ struct OrderCard: View {
         }.background(.white, in: RoundedRectangle(cornerRadius: 8)).shadow(radius: 4).frame(width: width)
     }
     
-    func accept(){
+    func claim(){
         print("Order \(order.orderId) accepted")
-        if  onAccept != nil {
-            onAccept!()
-        }
-        // onAccept != nil ? onAccept() :  print("hi")
-        
+        driver.handleOrderAction(action: DriverOrderAction.claim, order: order)        
     }
     func decline(){
+        // can add an driversThatdelcinedArray and not show the drivers that delcined that order
         print("Order \(order.orderId) declined")
-        if  onDecline != nil {
-            onDecline!() //find a better way to do this
-        }
+       
     }
 }
 

@@ -12,7 +12,7 @@ import CoreData
 //To resolve the issue, you need to ensure that OrderStatus conforms to PersistentModel. In SwiftData (and other similar frameworks like Core Data), enums that are used as properties of persistent models typically need to be marked as conforming to Codable so that they can be serialized and deserialized properly.
 enum OrderStatus: String, Codable  { //
     case claimed
-    case open
+    case unclaimed
     case canceled
 }
 
@@ -35,7 +35,9 @@ class Order {
     var due_at: Date
     var startedAt: Date? = nil
     var customer: Customer? = nil
-    var status:OrderStatus
+    var driver: Driver? = nil
+    var status:OrderStatus = OrderStatus.unclaimed
+    
     // Initializer
     init(
             orderNumber: String?,
@@ -49,6 +51,7 @@ class Order {
             dropoffCompanyOrOrg: String,
             pay: Int,
             customer: Customer,
+            status:OrderStatus = OrderStatus.unclaimed,
             due_at: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()) { //7 days from now or right now
            self.orderId = UUID().uuidString
            self.orderNumber = orderNumber
@@ -64,7 +67,8 @@ class Order {
            self.due_at = due_at//add time to this date
            self.startedAt = nil
            self.customer = customer
-           self.status = OrderStatus.open
+           self.driver = nil
+           self.status = OrderStatus.unclaimed
        }
     
     // Method

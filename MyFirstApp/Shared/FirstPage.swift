@@ -26,7 +26,7 @@ struct FirstPage: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: AvailableOrderScreen()) {
+                NavigationLink(destination: DriverList()) {
                     Text("Driver")
                 }.frame(width: buttonFrame.width, height: buttonFrame.height).padding().background(.blue, in: RoundedRectangle(cornerRadius: 8)).foregroundColor(.white)
                 

@@ -63,7 +63,7 @@ struct AvailableOrderScreen: View {
                 }
                 
 
-                    Text("Orders")
+                    Text("Available Orders")
                         .font(.title)
                         .fontWeight(.semibold).frame(maxWidth: .infinity, alignment: .leading)
                 

@@ -13,29 +13,24 @@ import SwiftData
 
 struct DriverList: View {
     @Environment(\.modelContext) private var context //how to CRUD state
-    @Query private var drivers: [Customer]
+    @Query private var drivers: [Driver]
     @State private var isPopupPresented: Bool = false
     @State var shouldNavigate: Bool = false
  //   @State private var customerListConfig = CustomerListConfig()
     @EnvironmentObject var appState: AppStateModel
    
     var body: some View {
-        // #TODo: Add popup Create ->Pop Up=> enter needed info -> save. THink portion below has this as well as edit feature
-        //# TODO: create sample data for drivers, follow apple guide portion I am in
-       // let filteredOrders = orders.filter { $0.customerId == appState.loggedInCustomer?.id }
-        
         NavigationStack {
             List {
-                ForEach(drivers,  id: \.id){ customer in
-                    @State var loggedInCustomer: Customer = customer // just to bind it
+                ForEach(drivers,  id: \.id){ driver in
+                    @State var loggedInDriver: Driver = driver // just to bind it
                     
-                    CustomNavigationLink(destination: CustomerMainScreen(), title: customer.name) {
-                        print("yooo")
-                        logIn(customer: customer)
+                    CustomNavigationLink(destination: AvailableOrderScreen(), title: loggedInDriver.name) {
+                        logIn(driver: loggedInDriver)
                     }
                     
                 }
-                  }.navigationTitle("Customer List")
+                  }.navigationTitle("Driver List")
                 .toolbar {
 //                    ToolbarItem(placement: .navigationBarTrailing) {
 //                        EditButton()
@@ -48,7 +43,7 @@ struct DriverList: View {
                 }
         }.sheet(isPresented: $isPopupPresented) {
             // Your popup view here
-            PopupView(isPopupPresented: $isPopupPresented)
+            DriverPopupView(isPopupPresented: $isPopupPresented)
         }
     }
     
@@ -56,16 +51,16 @@ struct DriverList: View {
         isPopupPresented = true
     }
     func logAllOut() {
-        print("loggin out all drivers")
-        drivers.forEach { customer in
-            customer.isLoggedIn = false
+        print("loggin out all customers")
+        drivers.forEach { driver in
+            driver.isLoggedIn = false
         }
     }
-    func logIn(customer: Customer){
+    func logIn(driver: Driver){
         logAllOut()
-        let result = customer.login()
+        let result = driver.login()
         if(result == .success){
-            appState.login(customer: customer)
+            appState.loginDriver(driver: driver)
             shouldNavigate = true
         }
     }
@@ -73,7 +68,7 @@ struct DriverList: View {
     private func deleteCustomer(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-               // print(drivers[index])
+               // print(customers[index])
                 context.delete(drivers[index])
             }
         }
@@ -119,6 +114,7 @@ struct DriverPopupView: View {
         }
         let newDriver = Driver(name:nameInput)
         context.insert(newDriver)
+        print(context.self)
         do {
             try context.save()
             isPopupPresented = false
@@ -131,10 +127,8 @@ struct DriverPopupView: View {
 
 
 #Preview {
-    CustomerList().modelContainer(for: [Customer.self, Order.self, Driver.self], inMemory: true).environmentObject(AppStateModel())
+    DriverList().modelContainer(for: [Customer.self, Order.self, Driver.self], inMemory: true).environmentObject(AppStateModel())
 }
 
 
-#Preview {
-    DriverList()
-}
+

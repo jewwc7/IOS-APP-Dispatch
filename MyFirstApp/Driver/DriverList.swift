@@ -1,8 +1,8 @@
 //
-//  CustomerList.swift
+//  DriverList.swift
 //  MyFirstApp
 //
-//  Created by Joshua Wilson on 7/25/24.
+//  Created by Joshua Wilson on 8/5/24.
 //
 
 import Foundation
@@ -10,22 +10,10 @@ import SwiftUI
 import SwiftData
 
 
-//
-//struct CustomerListConfig  {
-//    // VID: 4:20-6:06 https://developer.apple.com/videos/play/wwdc2020/10040/
-//    // VID: 7:00 = 8:00 explains binding perfectly, allows write access when you pass the prop down the hiearchy. Changes in for this prop in the child view also changes the prop in parent view @Binding var
-//     var shouldNavigate: Bool = false
-//     var isPopupPresented: Bool = false
-//     var loggedInCustomer: Customer? = nil
-//    
-////    mutating func presentCreate(){
-////        return self.isPopupPresented = true
-////    }
-//
-//}
-struct CustomerList: View {
+
+struct DriverList: View {
     @Environment(\.modelContext) private var context //how to CRUD state
-    @Query private var customers: [Customer]
+    @Query private var drivers: [Customer]
     @State private var isPopupPresented: Bool = false
     @State var shouldNavigate: Bool = false
  //   @State private var customerListConfig = CustomerListConfig()
@@ -33,13 +21,12 @@ struct CustomerList: View {
    
     var body: some View {
         // #TODo: Add popup Create ->Pop Up=> enter needed info -> save. THink portion below has this as well as edit feature
-        //# TODO: create sample data for customers, follow apple guide portion I am in
+        //# TODO: create sample data for drivers, follow apple guide portion I am in
        // let filteredOrders = orders.filter { $0.customerId == appState.loggedInCustomer?.id }
-        
         
         NavigationStack {
             List {
-                ForEach(customers,  id: \.id){ customer in
+                ForEach(drivers,  id: \.id){ customer in
                     @State var loggedInCustomer: Customer = customer // just to bind it
                     
                     CustomNavigationLink(destination: CustomerMainScreen(), title: customer.name) {
@@ -69,8 +56,8 @@ struct CustomerList: View {
         isPopupPresented = true
     }
     func logAllOut() {
-        print("loggin out all customers")
-        customers.forEach { customer in
+        print("loggin out all drivers")
+        drivers.forEach { customer in
             customer.isLoggedIn = false
         }
     }
@@ -86,15 +73,15 @@ struct CustomerList: View {
     private func deleteCustomer(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-               // print(customers[index])
-                context.delete(customers[index])
+               // print(drivers[index])
+                context.delete(drivers[index])
             }
         }
     }
     
 }
 
-struct PopupView: View {
+struct DriverPopupView: View {
     // adding the @Binding with var is how you add mandtory props, llok @CustomerListConfig comments
     @Binding var isPopupPresented: Bool
     @Environment(\.modelContext) private var context //how to CRUD state
@@ -130,13 +117,13 @@ struct PopupView: View {
         if nameInput == "" {
             return
         }
-        let newCustomer = Customer(name:nameInput)
-        context.insert(newCustomer)
+        let newDriver = Driver(name:nameInput)
+        context.insert(newDriver)
         do {
             try context.save()
             isPopupPresented = false
         } catch {
-            print("Error creating customer: \(newCustomer.name)")
+            print("Error creating driver: \(newDriver.name)")
         }
     }
 }
@@ -144,6 +131,10 @@ struct PopupView: View {
 
 
 #Preview {
-    CustomerList().modelContainer(for: [Customer.self, Order.self], inMemory: true).environmentObject(AppStateModel())
+    CustomerList().modelContainer(for: [Customer.self, Order.self, Driver.self], inMemory: true).environmentObject(AppStateModel())
 }
 
+
+#Preview {
+    DriverList()
+}

@@ -35,6 +35,7 @@
 		05E1261B2C5D642F009F2415 /* DriverOrderScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1261A2C5D642F009F2415 /* DriverOrderScreen.swift */; };
 		05E1261D2C5D85AF009F2415 /* MyChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1261C2C5D85AF009F2415 /* MyChip.swift */; };
 		05E1261F2C5D8997009F2415 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E1261E2C5D8997009F2415 /* Helpers.swift */; };
+		05E126232C614FB6009F2415 /* DriverList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126222C614FB6009F2415 /* DriverList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		05E1261A2C5D642F009F2415 /* DriverOrderScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverOrderScreen.swift; sourceTree = "<group>"; };
 		05E1261C2C5D85AF009F2415 /* MyChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChip.swift; sourceTree = "<group>"; };
 		05E1261E2C5D8997009F2415 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		05E126222C614FB6009F2415 /* DriverList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				055187BB2BEC1CFD00BA0A8A /* AvailableOrderScreen.swift */,
+				05E126222C614FB6009F2415 /* DriverList.swift */,
 				05E1261A2C5D642F009F2415 /* DriverOrderScreen.swift */,
 			);
 			path = Driver;
@@ -389,6 +392,7 @@
 				055187BC2BEC1CFD00BA0A8A /* AvailableOrderScreen.swift in Sources */,
 				05E126112C5AE954009F2415 /* DataFlowVids.swift in Sources */,
 				05E126152C5C44D1009F2415 /* Driver.swift in Sources */,
+				05E126232C614FB6009F2415 /* DriverList.swift in Sources */,
 				05E126172C5D42A3009F2415 /* OrderCard.swift in Sources */,
 				055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */,
 				05E126042C530277009F2415 /* components.swift in Sources */,

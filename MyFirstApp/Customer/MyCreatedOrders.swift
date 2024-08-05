@@ -10,25 +10,25 @@ import SwiftData
 //WHere I left - state works, just continue on
 //When creating an Order add a customerID relationship?
 
-let order = Order( orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: Customer(name: "John"))
+//let order = Order( orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: Customer(name: "John"))
 
 struct MyCreatedOrders: View {
     @Query private var orders: [Order]
     @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context //how to CRUD state
     @EnvironmentObject var appState: AppStateModel
-    
-   private var tempOrders:[Order] = [order]
+  // private var tempOrders:[Order] = [order]
     
 
     var body: some View {
-        let labelAndSytemImage = getLabelAndSystemImage()
-        
+       // let filteredOrders = orderModelOrders.filter { $0.customer?.id == appState.loggedInCustomer?.id }
         NavigationView {
             if let loggedInCustomer = appState.loggedInCustomer {
                 if loggedInCustomer.orders.count > 0 {
                     List {
                         ForEach(loggedInCustomer.orders, id: \.orderId){ order in
+                            let labelAndSytemImage = getLabelAndSystemImage(order:order)
+                            
                             NavigationLink(destination: ViewOrder(order:order)) {
                                 VStack{
                                     HStack{
@@ -48,7 +48,6 @@ struct MyCreatedOrders: View {
                                 }
                             
                             }
-                            
                         }
                     }
                 }else {
@@ -62,7 +61,8 @@ struct MyCreatedOrders: View {
         }
     }
     
-    func getLabelAndSystemImage()-> LabelAndSystemImage{
+    
+    func getLabelAndSystemImage(order:Order)-> LabelAndSystemImage{
         if(order.delivered()){
           return  LabelAndSystemImage(text: "Delivered", image: "car")
         }

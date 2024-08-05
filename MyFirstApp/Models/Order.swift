@@ -108,7 +108,7 @@ class Order {
     }
     
     func handleStatusTransition(){
-        print("handleStatusTransition", order.status.rawValue)
+        print("handleStatusTransition", status.rawValue)
         if(status == .delivered){
             return print("Order already delivered")
         }
@@ -132,6 +132,7 @@ class Order {
         
         do {
             try modelContext?.save()
+            print(self.orderId, "handle transition change")
         } catch {
             print(error)
         }
@@ -147,7 +148,7 @@ class Order {
     }
     
     func assigned()-> Bool{
-        return order.status == .claimed && order.driver != nil
+        return status == .claimed && driver != nil
     }
     
     func started()->Bool {
@@ -160,6 +161,7 @@ class Order {
         return status == .delivered
     }
     func inProgess()-> Bool{
+        print(inProgressStatuses.contains(status), status)
         return inProgressStatuses.contains(status)
     }
     private func setEnRouteToPickup(){
@@ -167,6 +169,7 @@ class Order {
                 print("order has no driver")
             }
             else {
+                print("setting @ setEnRouteToPickup")
                 self.status = .enRouteToPickup
                 self.startedAt = Date()
             }
@@ -181,6 +184,7 @@ class Order {
         }
     }
     private func setAtDropOff(){
+        print("setting @ dropoff")
         if self.status != .atPickup  {
             print("please complete pickup first")
         }else {
@@ -190,7 +194,7 @@ class Order {
         
     }
     private func setDelivered(){
-        
+        print("setting @ delivered")
         if self.status != .atDropoff  {
             print("please setAtDropoff first")
         }else {

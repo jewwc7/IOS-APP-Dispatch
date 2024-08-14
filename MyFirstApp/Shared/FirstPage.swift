@@ -9,13 +9,18 @@ import SwiftUI
 import SwiftData
 
 struct FirstPage: View {
-    // @Query private var appState: AppModel
-    //@Environment(\.modelContext) private var context //how to CRUD state
+    @Environment(\.modelContext) private var context
     
-
     var body: some View {
         
         VStack {
+            HStack {
+                Button("Create seed") {
+                    createSeeds(modelContext: context)
+                }
+            }
+            
+            
             HStack {
                 // the order od modifieres matters
                 NavigationLink(destination: CustomerList()) {
@@ -35,7 +40,6 @@ struct FirstPage: View {
             
         }
     }
-    
 }
 
 

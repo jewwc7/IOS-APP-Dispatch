@@ -17,7 +17,7 @@ import Foundation // how I use random number
 import SwiftData
 
 
-struct OrderCard: View {
+struct AvailableOrderCard: View {
     var order: Order
     var driver: Driver
     
@@ -54,24 +54,7 @@ struct OrderCard: View {
         driver.handleOrderAction(action: DriverOrderAction.claim, order: order)
     }
     func decline(){
-        // can add an driversThatdelcinedArray and not show the drivers that delcined that order
         print("Order \(order.orderId) declined")
        
     }
 }
-
-
-
-
-// What I'll do for state next is
-// Create a loggedInUser
-//add orders to cart
-//if order is in cart instead of displaying decline, display remove
-//instead of Accept, display accepted with a green background
-//Pressing cart navigates to a page that shows what orders you;ve taken
-//make this a lift view.
-//can remove orders from here too
-
-//Add a button that creates new orders
-//they appear in list view, with animation
-

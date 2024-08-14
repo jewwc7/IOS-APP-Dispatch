@@ -34,9 +34,8 @@ struct CustomerList: View {
     var body: some View {
         // #TODo: Add popup Create ->Pop Up=> enter needed info -> save. THink portion below has this as well as edit feature
         //# TODO: create sample data for customers, follow apple guide portion I am in
-       // let filteredOrders = orders.filter { $0.customerId == appState.loggedInCustomer?.id }
         
-        
+       
         NavigationStack {
             List {
                 ForEach(customers,  id: \.id){ customer in

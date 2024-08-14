@@ -56,6 +56,7 @@ class Order {
         pay: Int,
         customer: Customer,
         status:OrderStatus = OrderStatus.unassinged,
+        driver: Driver? = nil,
         due_at: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()) { //7 days from now or right now
             self.orderId = UUID().uuidString
             self.orderNumber = orderNumber
@@ -71,7 +72,7 @@ class Order {
             self.due_at = due_at//add time to this date
             self.startedAt = nil
             self.customer = customer
-            self.driver = nil
+            self.driver = driver
             self.status = OrderStatus.unassinged
         }
     
@@ -164,7 +165,15 @@ class Order {
         print(inProgressStatuses.contains(status), status)
         return inProgressStatuses.contains(status)
     }
+    
+    func dueAtFormatted()->String {
+      let formatter3 = DateFormatter()
+      formatter3.dateFormat = "HH:mm E, d MMM y"
+        return formatter3.string(from: self.due_at)
+    }
+    
     private func setEnRouteToPickup(){
+        //TODO: add back when seed data added
             if  false { // self.driver == nil
                 print("order has no driver")
             }

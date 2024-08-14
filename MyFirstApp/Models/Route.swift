@@ -36,29 +36,33 @@ class Route {
     var id: String?
 //    var orders: [Order]
     var status: String?//RouteStatus
-    var driver = Driver()
+    var driver: Driver?
     var orders = [Order]()
+    var startDate = Date()
     
     // Initializer
     init(
-      orders: [Order] = []
+      orders: [Order] = [],
+      startDate: Date = Date(),
+      driver:Driver? = nil
     ) {
         self.id = UUID().uuidString
-    //    self.orders = []
+        self.orders = []
+        self.driver = driver
         self.status = "Inactive"//RouteStatus.inactive
         self.orders = orders
+        self.startDate = startDate
     }
     
     
-//    func handleRouteStatusChange(action:RouteStatus){
-//        if action == RouteStatus.active && self.orders.count > 1{
-//          print("Can activate route, there aren't any order in the cart")
-//        }else{
-//            
-//        }
-//      
-//    }
-    
+    func addOrder(order:Order){
+        self.orders.append(order)
+        do {
+            try self.modelContext?.save()
+        }catch{
+            print("Couldnt add order to route \(self.id)", error)
+        }
+    }
   }
     
     

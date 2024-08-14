@@ -28,7 +28,8 @@ class Driver {
     var name: String
     var numberOfOrdersPlaced: Int
     var isLoggedIn: Bool
-    var orders = [Order]()
+    var orders = [Order]() //this and below are the same thing.
+    var routes: [Route] = []
     // Initializer
     init(
         name: String = ""
@@ -57,7 +58,7 @@ class Driver {
         let response = order.claim(driver:self)
         if response.result == .success{
             self.orders.append(order)
-            
+            let route = addOrderToRoute(order:order)
             do {
                 try order.modelContext?.save()
                 try self.modelContext?.save()
@@ -69,8 +70,22 @@ class Driver {
             print(response.message)
         }
        
+    }
     
-       
+    func numberOfOrders()->Int{
+       return routes.reduce(0) { (result, route) -> Int in
+            return result + route.orders.count
+        }
+    }
+    
+    private func addOrderToRoute(order:Order)->Route{
+        if let routeForOrder = self.routes.first(where: { isSameDay(first: order.due_at, second: $0.startDate) }) {
+            routeForOrder.addOrder(order: order)
+            return routeForOrder
+        } else {
+            return Route(orders: [order], startDate: onlyDate(date: order.due_at), driver: self)
+        }
+    
     }
   private func cancelOrder(){
         print(self.name, "canceled an order")

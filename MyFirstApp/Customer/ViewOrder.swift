@@ -13,42 +13,45 @@ import SwiftUI
 // idk if this observable object is what I want for a consistent state,
 //seems more like an intermediate state
 struct ViewOrder: View {
-    let order: Order
-
+    var order: Order? = Order( orderNumber: "placeholder", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "placeholder", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "placeholder", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: Customer(name: "placeholder"))
     
     var body: some View {
-        VStack {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            Text(order.orderId)
-            Text(self.order.startedAt == nil ? "Not started" : "Started")
-            
-            MyButton(title: "Set startedAt") {
-                self.startOrder()
+        if let order = order {
+            VStack() {
+                CustomerStopCard(order: order)
             }
-        }
-      
-    }
-    
-    func startOrder()->Result{
-//        print(orderTwo.startedAt)
-        do {
-            print("starting order", self.order.id)
-            self.order.startedAt = Date()
-            try self.order.modelContext?.save()
-            return .success
+        }else {
+            EmptyView()
         }
         
-        catch {
-            print(error)
-            print("Could not start \(self.order.id)")
-            return .failure
-            
+    }
+    func formatDate(date:Date)->String{
+        let formatter3 = DateFormatter()
+        formatter3.dateFormat = "HH:mm E, d MMM y"
+        return formatter3.string(from: date)
+    }
+    func getLabelAndSystemImage(order:Order)-> LabelAndSystemImage{
+        if(order.delivered()){
+            return  LabelAndSystemImage(text: "Delivered", image: "checkmark")
         }
-   
+        if(order.inProgess()){
+            return LabelAndSystemImage(text: humanizeCamelCase(order.status.rawValue), image: "car")
+        }
+        if(order.claimed()){
+            return LabelAndSystemImage(text: "Claimed", image: "person.fill.checkmark")
+            //car and status
+        }
+        else{
+            return LabelAndSystemImage(text: "Unassigned", image: "magnifyingglass")
+        }
         
     }
 }
 
-//#Preview {
-//    ViewOrder()
-//}
+
+#Preview {
+    
+    ViewOrder().modelContainer(for: [Order.self, Customer.self, Driver.self], inMemory: true).environmentObject(AppStateModel()) //needs to be added to insert the modelContext, making it possible to CRUD state
+    //https://developer.apple.com/tutorials/develop-in-swift/save-data
+}
+

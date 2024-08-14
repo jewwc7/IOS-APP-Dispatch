@@ -7,17 +7,15 @@
 
 import SwiftUI
 import SwiftData
-//WHere I left - state works, just continue on
-//When creating an Order add a customerID relationship?
 
-//let order = Order( orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: Customer(name: "John"))
+let order = Order( orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: Customer(name: "John"))
 
 struct MyCreatedOrders: View {
     @Query private var orders: [Order]
     @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context //how to CRUD state
     @EnvironmentObject var appState: AppStateModel
-  // private var tempOrders:[Order] = [order]
+   private var tempOrders:[Order] = [order]
     
 
     var body: some View {
@@ -45,8 +43,7 @@ struct MyCreatedOrders: View {
                                     Label(labelAndSytemImage.text, systemImage: labelAndSytemImage.image).foregroundColor(.green)
                             
                                     
-                                }
-                            
+                                }                            
                             }
                         }
                     }
@@ -64,13 +61,13 @@ struct MyCreatedOrders: View {
     
     func getLabelAndSystemImage(order:Order)-> LabelAndSystemImage{
         if(order.delivered()){
-          return  LabelAndSystemImage(text: "Delivered", image: "car")
+          return  LabelAndSystemImage(text: "Delivered", image: "checkmark")
         }
         if(order.inProgess()){
             return LabelAndSystemImage(text: humanizeCamelCase(order.status.rawValue), image: "car")
         }
         if(order.claimed()){
-           return LabelAndSystemImage(text: "Claimed", image: "person")
+            return LabelAndSystemImage(text: "Claimed", image: "person.fill.checkmark")
             //car and status
         }
         else{
@@ -85,44 +82,44 @@ struct MyCreatedOrders: View {
 }
 
 /// The current reading progress for a specific book.
-class ActiveRoute: ObservableObject {
-    let orders: [Order] // book will never change so just use let
-    let route: Route
-    @Published var progress: RouteProgress //adding @Published lets swiftUi know to react to this, similart to @State, // https://stackoverflow.com/questions/74484318/when-to-use-state-vs-published
-    
-    init(orders: [Order], route: Route) {
-        self.orders = orders
-        self.progress = RouteProgress(entries: [])
-        self.route = route
-        self.route.status = "Active"
-    }
-    
-    
-    // Method
-    func firstOrder() -> Order? {
-       return sortOrders().first
-    }
-    func sortOrders()-> [Order]{
-        return self.orders.sorted {$0.pay > $1.pay}
-    }
-    func getProgress(){
-        //want to return the percentage of complete orders vs incomplete.
-        //return
-    }
-    // …
-}
-
-struct RouteProgress {
-    struct Entry : Identifiable {
-        let id: UUID
-        let progress: Double
-        let time: Date
-        let status: String = "Active"
-        let note: String?
-    }
-
-    var entries: [Entry]
-}
+//class ActiveRoute: ObservableObject {
+//    let orders: [Order] // book will never change so just use let
+//    let route: Route
+//    @Published var progress: RouteProgress //adding @Published lets swiftUi know to react to this, similart to @State, // https://stackoverflow.com/questions/74484318/when-to-use-state-vs-published
+//    
+//    init(orders: [Order], route: Route) {
+//        self.orders = orders
+//        self.progress = RouteProgress(entries: [])
+//        self.route = route
+//        self.route.status = "Active"
+//    }
+//    
+//    
+//    // Method
+//    func firstOrder() -> Order? {
+//       return sortOrders().first
+//    }
+//    func sortOrders()-> [Order]{
+//        return self.orders.sorted {$0.pay > $1.pay}
+//    }
+//    func getProgress(){
+//        //want to return the percentage of complete orders vs incomplete.
+//        //return
+//    }
+//    // …
+//}
+//
+//struct RouteProgress {
+//    struct Entry : Identifiable {
+//        let id: UUID
+//        let progress: Double
+//        let time: Date
+//        let status: String = "Active"
+//        let note: String?
+//    }
+//
+//    var entries: [Entry]
+//}
 
 
 /// The current reading progress for a specific book.

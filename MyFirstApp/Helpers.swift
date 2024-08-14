@@ -5,9 +5,10 @@
 //  Created by Joshua Wilson on 8/2/24.
 //
 
+import SwiftData
 import Foundation
+import CoreData
 
-import Foundation
 
 func humanizeCamelCase(_ input: String) -> String {
     // Create a regular expression to find capital letters
@@ -30,4 +31,35 @@ func humanizeCamelCase(_ input: String) -> String {
     }
     
     return capitalizedWords.joined(separator: " ")
+}
+
+
+func createOrder(driver:Driver? = nil, customer:Customer? = nil)->Order{
+    return Order( orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: customer ?? Customer(name: "John"), driver:Driver(name: "Jack") )
+    
+}
+
+func isSameDay(first:Date, second:Date)-> Bool{
+    return Calendar.current.isDate(first, equalTo: second, toGranularity: .day)
+}
+
+func onlyDate(date:Date)->Date{
+    let calendar = Calendar.current
+    let dateComponents = calendar.dateComponents([.year, .month, .day], from: date)
+
+    // Create a new date from these components, effectively stripping the time
+    if let strippedDate = calendar.date(from: dateComponents) {
+        print("Original Date: \(date)")
+        print("Date with Time Stripped: \(strippedDate)")
+        return strippedDate
+    }else {
+        return date
+    }
+    
+}
+
+func convertDateToDateOnlyString(day:Date)-> String{
+    let formatter1 = DateFormatter()
+    formatter1.dateStyle = .short
+   return formatter1.string(from: day)
 }

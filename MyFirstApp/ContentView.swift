@@ -18,7 +18,7 @@ struct ContentView: View {
     init() {
         do {
             //TODO: add memory stuff https://www.hackingwithswift.com/quick-start/swiftdata/how-to-add-multiple-configurations-to-a-modelcontainer
-            modelContainer = try ModelContainer(for: Order.self, Customer.self)
+            modelContainer = try ModelContainer(for: Order.self, Customer.self, Driver.self)
         } catch {
             print(error)
             fatalError("Could not initialize ModelContainer")
@@ -55,7 +55,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateModel())
+        .modelContainer(for: [Order.self, Customer.self, Driver.self, Route.self], inMemory: true).environmentObject(AppStateModel())
         //add this to access state and persist making it possible to CRUD state
        // https://developer.apple.com/tutorials/develop-in-swift/save-data
 }

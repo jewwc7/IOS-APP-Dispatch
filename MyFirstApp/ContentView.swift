@@ -39,7 +39,7 @@ struct ContentView: View {
                 VStack {
                     Button("Show Notification") {
                         appState.displayNotification {
-                            Text("Hi")
+                            Text("Test Notification")
                         } //where I left off, I should add props that I can pass, specfically the content, how do I pass a view??
                         
                         

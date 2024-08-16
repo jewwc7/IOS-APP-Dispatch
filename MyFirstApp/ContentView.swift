@@ -38,7 +38,10 @@ struct ContentView: View {
                 FirstPage()
                 VStack {
                     Button("Show Notification") {
-                        appState.displayNotifcation() //where I left off, I should add props that I can pass, specfically the content
+                        appState.displayNotification {
+                            Text("Hi")
+                        } //where I left off, I should add props that I can pass, specfically the content, how do I pass a view??
+                        
                         
 //                        UIApplication.shared.inAppNotification(adaptForDynmaicIsland: false, timeout: 5, swipeToClose: true) {
 //                          

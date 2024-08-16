@@ -20,6 +20,7 @@
 		05632E572BFC034000BBDD89 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05632E562BFC034000BBDD89 /* Order.swift */; };
 		05B99ED02C6D6E3700D8B876 /* Seeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B99ECF2C6D6E3700D8B876 /* Seeds.swift */; };
 		05B99ED22C6D74CA00D8B876 /* CustomerStopCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B99ED12C6D74CA00D8B876 /* CustomerStopCard.swift */; };
+		05B99ED42C6E415200D8B876 /* MyNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B99ED32C6E415200D8B876 /* MyNotification.swift */; };
 		05E125F42BFD48B9009F2415 /* CustomerMainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */; };
 		05E125F62BFD5047009F2415 /* MyCreatedOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125F52BFD5047009F2415 /* MyCreatedOrders.swift */; };
 		05E125F82BFD5966009F2415 /* ViewOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125F72BFD5966009F2415 /* ViewOrder.swift */; };
@@ -76,6 +77,7 @@
 		05632E562BFC034000BBDD89 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		05B99ECF2C6D6E3700D8B876 /* Seeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Seeds.swift; sourceTree = "<group>"; };
 		05B99ED12C6D74CA00D8B876 /* CustomerStopCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerStopCard.swift; sourceTree = "<group>"; };
+		05B99ED32C6E415200D8B876 /* MyNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNotification.swift; sourceTree = "<group>"; };
 		05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerMainScreen.swift; sourceTree = "<group>"; };
 		05E125F52BFD5047009F2415 /* MyCreatedOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCreatedOrders.swift; sourceTree = "<group>"; };
 		05E125F72BFD5966009F2415 /* ViewOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewOrder.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				055187BF2BEC306A00BA0A8A /* MyButton.swift */,
 				05E1260C2C5AA3C5009F2415 /* CustomNavigationLink.swift */,
 				05E1261C2C5D85AF009F2415 /* MyChip.swift */,
+				05B99ED32C6E415200D8B876 /* MyNotification.swift */,
 			);
 			path = "UI components";
 			sourceTree = "<group>";
@@ -406,6 +409,7 @@
 				05E1261F2C5D8997009F2415 /* Helpers.swift in Sources */,
 				05632E572BFC034000BBDD89 /* Order.swift in Sources */,
 				05E125FF2C52EE04009F2415 /* Customer.swift in Sources */,
+				05B99ED42C6E415200D8B876 /* MyNotification.swift in Sources */,
 				05632E542BFBF2A800BBDD89 /* CreateOrderScreen.swift in Sources */,
 				055187BC2BEC1CFD00BA0A8A /* AvailableOrderScreen.swift in Sources */,
 				05E126112C5AE954009F2415 /* DataFlowVids.swift in Sources */,

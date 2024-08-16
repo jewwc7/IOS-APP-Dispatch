@@ -8,15 +8,6 @@
 import SwiftUI
 import SwiftData
 
-///
-//Create seeds and buttons to create and destry seeds
-/////
-///
-//Make a card for the driver, allow them to release, start/end pickup and dropp off
-//Make route creator-> just adds all current days orders and sorts them by etaAt
-//Update the information the customer sees when they click their created orded.
-    // just make the UI look better
-//Make UI look better overall, add loading states, error/success messages
 struct AvailableOrderScreen: View {
     @State private var isLoggedOn = true
     @State private var numberOfOrdersInCart = 0

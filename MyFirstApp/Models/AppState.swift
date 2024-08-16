@@ -11,26 +11,39 @@ import Foundation
 import SwiftUI
 import Combine
 
-
+struct IAnimatedNotification {
+     var isShowingMyNotification: Bool = false
+     //var data: Content = Text("Hi")
+}
 
 class AppStateModel: ObservableObject {
-    // Properties
-   
-//    @Environment(\.modelContext) private var context //how to CRUD state
-//    @Query private var customers: [Customer]
     @Published var loggedInCustomer: Customer? = nil
     @Published var loggedInDriver: Driver? = nil
+    @Published var isShowingMyNotification: Bool = false
+    @Published var notificationAnimation = IAnimatedNotification()
     
     func login(customer: Customer) {
       loggedInCustomer = customer
-        print("hey",loggedInCustomer)
-//        print("Hello, my name is \(orderId) and I am being picked up from \(pickupLocation)  and am to be dropped off at \(dropoffLocation) for a cost of $\(pay).")
     }
     
     //not in use yet, but will be the same thing as the customers just with drivers
     func loginDriver(driver: Driver){
     loggedInDriver = driver
-        print("hey",loggedInDriver)
+    }
+    
+    func toggleNotification(){
+        isShowingMyNotification.toggle()
+    }
+    
+    func displayNotifcation(){
+        UIApplication.shared.inAppNotification(adaptForDynmaicIsland: false, timeout: 5, swipeToClose: true) {
+
+            HStack {
+                Text("The driver in on their way to pickup order")
+            }.padding().background(.blue)
+        }
+    
+
     }
     
 }

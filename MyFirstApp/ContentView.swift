@@ -5,6 +5,10 @@
 //  Created by Joshua Wilson on 5/6/24.
 //
 
+//popup -> create a observable and write a conditonal to display here
+// send notifcation to customer when order transiitons happen
+// make a mapView for the route?
+
 import SwiftUI
 import SwiftData
 
@@ -32,6 +36,17 @@ struct ContentView: View {
                 
                 // this is how to align horizontally
                 FirstPage()
+                VStack {
+                    Button("Show Notification") {
+                        appState.displayNotifcation()
+//                        UIApplication.shared.inAppNotification(adaptForDynmaicIsland: false, timeout: 5, swipeToClose: true) {
+//                          
+//                            HStack {
+//                                Text("The driver in on their way to pickup order")
+//                            }.padding().background(.blue)
+//                        }
+                    }
+                }
             }.navigationViewStyle(.stack)
             //this doesn;t work for now, look up navigatgion architecture
 //                .navigationDestination(for: AppRoute.self) { appRoute in
@@ -49,6 +64,7 @@ struct ContentView: View {
         }
         
     }
+    
     
 }
 ////////////////////////////////////////

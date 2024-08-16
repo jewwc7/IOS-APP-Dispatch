@@ -219,14 +219,28 @@ class Order {
         
     }
      func statusDidChange() {
-        // Example: Posting a notification
-      //  NotificationCenter.default.post(name: .orderStatusChanged, object: nil, userInfo: ["status": status])
-        print("Order status changed to \(self.status.rawValue)")
         UIApplication.shared.inAppNotification(adaptForDynmaicIsland: false, timeout: 5, swipeToClose: true) {
-            Text("Order status changed to \(self.status.rawValue)").padding().background(.white)
+            Text("Hi \(self.customer?.name ?? "") your order is now \(humanizeCamelCase(self.status.rawValue))").padding().background(.white)
         }
         // Alternatively, you could call a delegate method, execute a closure, etc.
     }
+    
+    func driverRouteStatus ()-> String{
+        let title:String = {
+            switch self.status {
+            case .enRouteToPickup:
+                "En route to pickup"
+            case .atPickup:
+                "At pickup"
+            case .atDropoff:
+                "At Dropoff"
+            default:
+                "Claimed"
+            }
+        }()
+        return title
+    }
+
 }
 
 

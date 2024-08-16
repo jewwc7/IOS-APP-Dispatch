@@ -76,7 +76,7 @@ struct DriveStopCardData: View {
             
             Spacer()
             
-            MyButton(title:order.status.rawValue,onPress: handleOnPress, backgroundColor: Color.blue, image:"checkmark", frame: (Frame(height: 40, width: 140))).frame(maxWidth: .infinity)
+            MyButton(title:driverRouteStatus(order.status),onPress: handleOnPress, backgroundColor: Color.blue, image:"checkmark", frame: (Frame(height: 40, width: 140))).frame(maxWidth: .infinity).disabled(order.delivered())
         }.padding().overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.blue, lineWidth: 2)
@@ -84,11 +84,31 @@ struct DriveStopCardData: View {
     }
     
     func handleOnPress(){
-        withAnimation(.easeInOut(duration: 0.5)) {
+        withAnimation(.smooth) {
             order.handleStatusTransition()
           //  order.statusDidChange()
         }
       
+    }
+    
+    func driverRouteStatus (_ status: OrderStatus)-> String{
+        let title:OrderStatus = {
+            switch status {
+            case .claimed:
+                OrderStatus.enRouteToPickup
+            case .enRouteToPickup:
+                OrderStatus.atPickup
+            case .atPickup:
+                OrderStatus.atDropoff
+            case .atDropoff:
+                OrderStatus.delivered
+            case .delivered:
+                OrderStatus.delivered
+            default:
+                OrderStatus.enRouteToPickup
+            }
+        }()
+        return humanizeCamelCase(title.rawValue)
     }
 }
 
@@ -146,6 +166,6 @@ struct DriveStopCard: View {
 }
 
 #Preview {
-    DriveStopCard(order:testOrder).modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateModel()) //needs to be added to insert the modelContext, making it possible to CRUD state
+    DriveStopCard(order:testOrder).modelContainer(for: [Order.self, Customer.self, Driver.self], inMemory: true).environmentObject(AppStateModel()) //needs to be added to insert the modelContext, making it possible to CRUD state
     //https://developer.apple.com/tutorials/develop-in-swift/save-data
 }

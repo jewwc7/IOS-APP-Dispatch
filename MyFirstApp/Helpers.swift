@@ -11,26 +11,30 @@ import CoreData
 
 
 func humanizeCamelCase(_ input: String) -> String {
-    // Create a regular expression to find capital letters
-    let pattern = "([A-Z][a-z]*)"
+    // Check if the input is a single uncapitalized word
+    if input.range(of: "^[a-z]+$", options: .regularExpression) != nil {
+        return input.prefix(1).uppercased() + input.dropFirst()
+    }
+    
+    // Adjust the regular expression to capture the initial lowercase letters followed by an uppercase letter
+    // and sequences of an uppercase letter followed by lowercase letters
+    let pattern = "([a-z]+(?=[A-Z])|[A-Z][a-z]*)"
     let regex = try! NSRegularExpression(pattern: pattern, options: [])
     
-    // Find matches in the input string
     let range = NSRange(location: 0, length: input.utf16.count)
     let matches = regex.matches(in: input, options: [], range: range)
     
-    // Extract matched words and join them with spaces
-    let words = matches.map { match -> String in
+    var words = matches.map { match -> String in
         let matchRange = Range(match.range, in: input)!
         return String(input[matchRange])
     }
     
-    // Capitalize the first letter of each word and join them with spaces
-    let capitalizedWords = words.map { word in
-        word.prefix(1).uppercased() + word.dropFirst()
+    // Special handling to capitalize the first word if it starts with lowercase letters
+    if let first = words.first, first.range(of: "^[a-z]+", options: .regularExpression) != nil {
+        words[0] = first.prefix(1).uppercased() + first.dropFirst()
     }
     
-    return capitalizedWords.joined(separator: " ")
+    return words.joined(separator: " ")
 }
 
 

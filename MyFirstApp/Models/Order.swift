@@ -8,7 +8,8 @@
 import SwiftData
 import Foundation
 import CoreData
-
+import SwiftUI
+import Combine
 //To resolve the issue, you need to ensure that OrderStatus conforms to PersistentModel. In SwiftData (and other similar frameworks like Core Data), enums that are used as properties of persistent models typically need to be marked as conforming to Codable so that they can be serialized and deserialized properly.
 enum OrderStatus: String, Codable  { //
     case unassinged
@@ -25,12 +26,10 @@ class Order {
     // Properties
     var orderId: String
     var orderNumber: String?
-    
     var pickupLocation: String
     var pickupPhoneNumber: String
     var pickupContactName: String
     var pickupCompanyOrOrg: String
-    
     var dropoffLocation: String
     var dropoffPhoneNumber: String
     var dropoffContactName: String
@@ -40,9 +39,17 @@ class Order {
     var startedAt: Date? = nil
     var customer: Customer? = nil
     var driver: Driver? = nil
-    var status:OrderStatus = OrderStatus.canceled
+    var status:OrderStatus = OrderStatus.unassinged
     let inProgressStatuses: Set<OrderStatus> = [OrderStatus.enRouteToPickup, OrderStatus.atPickup, OrderStatus.atDropoff]
-    // Initializer
+    //Note: SwiftData properties do not support willSet or didSet property observers, unless they have @Transient so had to make a transient prop, update this when status is updated. @Transient does not persist the data, so status is not persisted, so this is a workaround
+   // https://www.hackingwithswift.com/quick-start/swiftdata/how-to-create-derived-attributes-with-swiftdata
+    @Transient var transientStatus: OrderStatus = .unassinged {
+             didSet {
+                 //In Swift, didSet is a property observer that executes a block of code immediately after the value of a property changes. Property observers are used to monitor changes in a property’s value, which allows you to respond to changes in state or value without the need to explicitly call a method or function.
+                 self.statusDidChange()
+             }
+         }
+     
     init(
         orderNumber: String?,
         pickupLocation: String,
@@ -73,7 +80,7 @@ class Order {
             self.startedAt = nil
             self.customer = customer
             self.driver = driver
-            self.status = OrderStatus.unassinged
+            self.status = status
         }
     
     // Method
@@ -109,7 +116,6 @@ class Order {
     }
     
     func handleStatusTransition(){
-        print("handleStatusTransition", status.rawValue)
         if(status == .delivered){
             return print("Order already delivered")
         }
@@ -133,7 +139,7 @@ class Order {
         
         do {
             try modelContext?.save()
-            print(self.orderId, "handle transition change")
+            self.transientStatus = self.status
         } catch {
             print(error)
         }
@@ -173,8 +179,8 @@ class Order {
     }
     
     private func setEnRouteToPickup(){
-        //TODO: add back when seed data added
-            if  false { // self.driver == nil
+ 
+            if   self.driver == nil {
                 print("order has no driver")
             }
             else {
@@ -212,7 +218,15 @@ class Order {
         
         
     }
-    
+     func statusDidChange() {
+        // Example: Posting a notification
+      //  NotificationCenter.default.post(name: .orderStatusChanged, object: nil, userInfo: ["status": status])
+        print("Order status changed to \(self.status.rawValue)")
+        UIApplication.shared.inAppNotification(adaptForDynmaicIsland: false, timeout: 5, swipeToClose: true) {
+            Text("Order status changed to \(self.status.rawValue)").padding().background(.white)
+        }
+        // Alternatively, you could call a delegate method, execute a closure, etc.
+    }
 }
 
 

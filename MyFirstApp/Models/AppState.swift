@@ -42,9 +42,6 @@ class AppStateModel: ObservableObject {
                 Text("The driver in on their way to pickup order")
             }.padding().background(.blue)
         }
-    
-
     }
-    
 }
 

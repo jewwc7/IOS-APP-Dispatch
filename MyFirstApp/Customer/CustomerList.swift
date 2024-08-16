@@ -32,17 +32,8 @@ struct CustomerList: View {
     @EnvironmentObject var appState: AppStateModel
    
     var body: some View {
-        // #TODo: Add popup Create ->Pop Up=> enter needed info -> save. THink portion below has this as well as edit feature
-        //# TODO: create sample data for customers, follow apple guide portion I am in
-        VStack(spacing: 0) {
-            MyNotification(text: "Hello")
-        }.frame(height: 0, alignment: .top)
-  
+
         NavigationStack {
-            Button("Press me") {
-                appState.isShowingMyNotification = true
-            }
-           
             List {
                 ForEach(customers,  id: \.id){ customer in
                     @State var loggedInCustomer: Customer = customer // just to bind it
@@ -105,6 +96,7 @@ struct PopupView: View {
     @Binding var isPopupPresented: Bool
     @Environment(\.modelContext) private var context //how to CRUD state
     @State private var nameInput: String = ""
+    @EnvironmentObject var appState: AppStateModel
     
     var body: some View {
         VStack {
@@ -141,6 +133,7 @@ struct PopupView: View {
         do {
             try context.save()
             isPopupPresented = false
+            appState.displayNotifcation()
         } catch {
             print("Error creating customer: \(newCustomer.name)")
         }

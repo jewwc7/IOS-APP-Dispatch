@@ -8,8 +8,6 @@
 import SwiftData
 import SwiftUI
 
-// Where I left off:THe order statuses are being updated locally but not globally.(customer screen doesn;t show update logs and the button text) Why?
-
 struct RouteScreen: View {
     @Environment(\.modelContext) private var context // how to CRUD state
     @EnvironmentObject var appState: AppStateModel

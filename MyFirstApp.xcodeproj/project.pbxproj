@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		051AB4D02C73EC85004F5677 /* LocationSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4CF2C73EC85004F5677 /* LocationSearchService.swift */; };
+		051AB4D22C73F95B004F5677 /* AddressSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4D12C73F95B004F5677 /* AddressSelection.swift */; };
 		0551878E2BE98BEC00BA0A8A /* MyFirstAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */; };
 		055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878F2BE98BEC00BA0A8A /* ContentView.swift */; };
 		055187922BE98BED00BA0A8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 055187912BE98BED00BA0A8A /* Assets.xcassets */; };
@@ -60,6 +62,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		051AB4CF2C73EC85004F5677 /* LocationSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchService.swift; sourceTree = "<group>"; };
+		051AB4D12C73F95B004F5677 /* AddressSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSelection.swift; sourceTree = "<group>"; };
 		0551878A2BE98BEC00BA0A8A /* MyFirstApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFirstApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFirstAppApp.swift; sourceTree = "<group>"; };
 		0551878F2BE98BEC00BA0A8A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -230,6 +234,7 @@
 				05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */,
 				05E125F52BFD5047009F2415 /* MyCreatedOrders.swift */,
 				05E125F72BFD5966009F2415 /* ViewOrder.swift */,
+				051AB4D12C73F95B004F5677 /* AddressSelection.swift */,
 			);
 			path = Customer;
 			sourceTree = "<group>";
@@ -238,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				05632E562BFC034000BBDD89 /* Order.swift */,
+				051AB4CF2C73EC85004F5677 /* LocationSearchService.swift */,
 				05E125FE2C52EE04009F2415 /* Customer.swift */,
 				05E126122C5AF182009F2415 /* Route.swift */,
 				05E125FC2C51AA14009F2415 /* AppState.swift */,
@@ -414,11 +420,13 @@
 				055187BC2BEC1CFD00BA0A8A /* AvailableOrderScreen.swift in Sources */,
 				05E126112C5AE954009F2415 /* DataFlowVids.swift in Sources */,
 				05B99ED02C6D6E3700D8B876 /* Seeds.swift in Sources */,
+				051AB4D22C73F95B004F5677 /* AddressSelection.swift in Sources */,
 				05E126152C5C44D1009F2415 /* Driver.swift in Sources */,
 				05E126232C614FB6009F2415 /* DriverList.swift in Sources */,
 				05E126172C5D42A3009F2415 /* AvailableOrderCard.swift in Sources */,
 				05E126272C6190C7009F2415 /* DriveStopCard.swift in Sources */,
 				055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */,
+				051AB4D02C73EC85004F5677 /* LocationSearchService.swift in Sources */,
 				05E126042C530277009F2415 /* components.swift in Sources */,
 				05E126132C5AF182009F2415 /* Route.swift in Sources */,
 				05E126012C52F54E009F2415 /* CustomerList.swift in Sources */,

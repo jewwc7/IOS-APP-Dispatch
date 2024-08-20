@@ -9,7 +9,8 @@ import MapKit
 import SwiftUI
 
 struct MapView: View {
-    @Binding var address: LocationResult
+    //  @Binding var address: LocationResult
+    @Binding var addresses: [LocationResult]
     @State var region = MKCoordinateRegion()
     @State private(set) var annotationItems: [AnnotationItem] = []
 
@@ -18,15 +19,28 @@ struct MapView: View {
             coordinateRegion: $region,
             annotationItems: annotationItems,
             annotationContent: { item in
-                MapMarker(coordinate: item.coordinate)
+                MapMarker(coordinate: item.coordinate) // default marker
+                // custom markers, they're tough to see though
+//                MapAnnotation(coordinate: item.coordinate) {
+//                    // Custom view for marker
+//                    Image(systemName: "shippingbox")
+//                        .aspectRatio(contentMode: .fit) // Keeps the aspect ratio of the image
+//                        .frame(width: 100, height: 100) // Specify the desired width and height
+//                        // .foregroundColor(.blue)
+//                        .onTapGesture {
+//                            // TODO: display info about the marker
+//                        }
+//                }
             }
         )
         .onAppear {
             // print("address", address)
-            getPlace(from: address)
-        }.onChange(of: address) { _, _ in  // _, _ oldvalue, newValue
-            print("onChange address", address)
-            getPlace(from: address)
+            //  getPlace(from: addresses.first)
+        }.onChange(of: addresses) { _, _ in // _, _ oldvalue, newValue
+            print("onChange address", addresses)
+            for address in addresses {
+                getPlace(from: address)
+            }
         }
         .edgesIgnoringSafeArea(.bottom)
     }
@@ -42,15 +56,25 @@ struct MapView: View {
         Task {
             let response = try await MKLocalSearch(request: request).start()
             await MainActor.run {
-                annotationItems = response.mapItems.map {
-                    AnnotationItem(
-                        latitude: $0.placemark.coordinate.latitude,
-                        longitude: $0.placemark.coordinate.longitude
-                    )
-                }
+                addAnnotationItems(response)
 
                 region = response.boundingRegion
             }
+        }
+    }
+
+    func addAnnotationItems(_ response: MKLocalSearch.Response) {
+        let newAnnotation: [AnnotationItem] = response.mapItems.map {
+            AnnotationItem(
+                latitude: $0.placemark.coordinate.latitude,
+                longitude: $0.placemark.coordinate.longitude
+            )
+        }
+        // TODO: bug where all entered addresses will appear on map. COme back later and filter out based on tpye(pu or droppff, would need to add a new struct that like Locationtype
+        // print(annotationItems.count)
+
+        if let firstAn = newAnnotation.first {
+            annotationItems.append(firstAn)
         }
     }
 }

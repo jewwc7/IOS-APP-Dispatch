@@ -14,6 +14,8 @@ struct CreateOrderScreen: View {
     @EnvironmentObject var appState: AppStateModel
 
     let inputHeight = 40.0
+    @State private var currentAddresses: [LocationResult] = []
+
     @State var isPickupAddressSelectionPresented = false
     @State var isDropoffAddressSelectionPresented = false
     @State private var orderNumber: String = ""
@@ -32,7 +34,7 @@ struct CreateOrderScreen: View {
         VStack {
             Text("Create An Order").bold().font(.title).multilineTextAlignment(.center).padding().shadow(radius: 8)
             //  if let pickupLocationSelected = pickupLocation {
-            MapView(address: $pickupLocation)
+            MapView(addresses: $currentAddresses)
             // }
 
             Form { // forms should not be nested in scrollviews, they are already scrollviews
@@ -47,7 +49,7 @@ struct CreateOrderScreen: View {
                     TextField("Contact name", text: $pickupContactName).frame(height: inputHeight)
                     TextField("Company or Organization", text: $pickupCompanyOrOrg).frame(height: inputHeight)
                 }.sheet(isPresented: $isPickupAddressSelectionPresented) {
-                    AddressSelection(isPresented: $isPickupAddressSelectionPresented, address: $pickupLocation)
+                    AddressSelection(isPresented: $isPickupAddressSelectionPresented, address: $pickupLocation, currentAddresses: $currentAddresses)
                 }
                 Section(header: Text("Drop Off").bold().font(.title2)) {
                     TextField("Dropoff Location", text: $dropoffLocation.title).frame(height: inputHeight).onTapGesture {
@@ -58,7 +60,7 @@ struct CreateOrderScreen: View {
                     TextField("Company or Organization", text: $dropoffCompanyOrOrg).frame(height: inputHeight)
                     TextField("Drop-off Notes", text: $dropoffNotes).frame(height: inputHeight * 4)
                 }.sheet(isPresented: $isDropoffAddressSelectionPresented) {
-                    AddressSelection(isPresented: $isDropoffAddressSelectionPresented, address: $dropoffLocation)
+                    AddressSelection(isPresented: $isDropoffAddressSelectionPresented, address: $dropoffLocation, currentAddresses: $currentAddresses)
                 }
                 MyButton(title: "Create", onPress: create, backgroundColor: Color.green, image: "checkmark", frame: Frame(height: 40)).frame(maxWidth: .infinity)
                 MyButton(title: "Random", onPress: prePopulate, backgroundColor: Color.blue, image: "checkmark", frame: Frame(height: 40)).frame(maxWidth: .infinity)

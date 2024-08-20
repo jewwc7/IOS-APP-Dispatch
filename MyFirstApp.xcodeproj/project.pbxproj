@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		051AB4D02C73EC85004F5677 /* LocationSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4CF2C73EC85004F5677 /* LocationSearchService.swift */; };
 		051AB4D22C73F95B004F5677 /* AddressSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4D12C73F95B004F5677 /* AddressSelection.swift */; };
+		051AB4DB2C753E56004F5677 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4DA2C753E56004F5677 /* MapView.swift */; };
 		0551878E2BE98BEC00BA0A8A /* MyFirstAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */; };
 		055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878F2BE98BEC00BA0A8A /* ContentView.swift */; };
 		055187922BE98BED00BA0A8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 055187912BE98BED00BA0A8A /* Assets.xcassets */; };
@@ -64,6 +65,7 @@
 /* Begin PBXFileReference section */
 		051AB4CF2C73EC85004F5677 /* LocationSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchService.swift; sourceTree = "<group>"; };
 		051AB4D12C73F95B004F5677 /* AddressSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSelection.swift; sourceTree = "<group>"; };
+		051AB4DA2C753E56004F5677 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		0551878A2BE98BEC00BA0A8A /* MyFirstApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFirstApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFirstAppApp.swift; sourceTree = "<group>"; };
 		0551878F2BE98BEC00BA0A8A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -128,6 +130,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		051AB4D52C7533E1004F5677 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		055187812BE98BEC00BA0A8A = {
 			isa = PBXGroup;
 			children = (
@@ -152,6 +161,7 @@
 		0551878C2BE98BEC00BA0A8A /* MyFirstApp */ = {
 			isa = PBXGroup;
 			children = (
+				051AB4D52C7533E1004F5677 /* ViewModels */,
 				05B99ECE2C6D6E2900D8B876 /* DB */,
 				05E126022C53024A009F2415 /* Designs */,
 				05E125F92C51A825009F2415 /* Shared */,
@@ -265,6 +275,7 @@
 			isa = PBXGroup;
 			children = (
 				05E125FA2C51A84C009F2415 /* FirstPage.swift */,
+				051AB4DA2C753E56004F5677 /* MapView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -408,6 +419,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05B99ED22C6D74CA00D8B876 /* CustomerStopCard.swift in Sources */,
+				051AB4DB2C753E56004F5677 /* MapView.swift in Sources */,
 				05E125F82BFD5966009F2415 /* ViewOrder.swift in Sources */,
 				05E1261D2C5D85AF009F2415 /* MyChip.swift in Sources */,
 				05E125FB2C51A84C009F2415 /* FirstPage.swift in Sources */,

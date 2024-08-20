@@ -14,63 +14,54 @@ struct CreateOrderScreen: View {
     @EnvironmentObject var appState: AppStateModel
 
     let inputHeight = 40.0
-    @State var isAddressSelectionPresented = false
+    @State var isPickupAddressSelectionPresented = false
+    @State var isDropoffAddressSelectionPresented = false
     @State private var orderNumber: String = ""
-    @State private var pickupLocation: String = ""
+    @State private var pickupLocation: LocationResult = .init(title: "", subtitle: "")
     @State private var pickupPhoneNumber: String = ""
     @State private var pickupContactName: String = ""
     @State private var pickupCompanyOrOrg: String = ""
 
-    @State private var dropoffLocation: String = ""
+    @State private var dropoffLocation: LocationResult = .init(title: "", subtitle: "")
     @State private var dropoffPhoneNumber: String = ""
     @State private var dropoffContactName: String = ""
     @State private var dropoffCompanyOrOrg: String = ""
     @State private var dropoffNotes: String = ""
 
     var body: some View {
-//        List(orderModelOrders) { order in
-//                 HStack {
-//                     Text(order.pickupLocation)
-//                     Spacer()
-//                     Text(order.dropoffLocation)
-//                 }
-//             }
         VStack {
             Text("Create An Order").bold().font(.title).multilineTextAlignment(.center).padding().shadow(radius: 8)
+            //  if let pickupLocationSelected = pickupLocation {
+            MapView(address: $pickupLocation)
+            // }
 
             Form { // forms should not be nested in scrollviews, they are already scrollviews
                 Section(header: Text("Order Information").bold().font(.title2)) {
                     TextField("Order Number", text: $orderNumber).frame(height: inputHeight)
                 }
                 Section(header: Text("Pickup").bold().font(.title2)) {
-                    TextField("Pickup Location", text: $pickupLocation).frame(height: inputHeight).onTapGesture {
-                        isAddressSelectionPresented = true
+                    TextField("Pickup Location", text: $pickupLocation.title).frame(height: inputHeight).onTapGesture {
+                        isPickupAddressSelectionPresented = true
                     }
                     TextField("Phone number", text: $pickupPhoneNumber).frame(height: inputHeight)
                     TextField("Contact name", text: $pickupContactName).frame(height: inputHeight)
                     TextField("Company or Organization", text: $pickupCompanyOrOrg).frame(height: inputHeight)
+                }.sheet(isPresented: $isPickupAddressSelectionPresented) {
+                    AddressSelection(isPresented: $isPickupAddressSelectionPresented, address: $pickupLocation)
                 }
                 Section(header: Text("Drop Off").bold().font(.title2)) {
-                    TextField("Pickup Location", text: $dropoffLocation).frame(height: inputHeight)
+                    TextField("Dropoff Location", text: $dropoffLocation.title).frame(height: inputHeight).onTapGesture {
+                        isDropoffAddressSelectionPresented = true
+                    }
                     TextField("Phone number", text: $dropoffPhoneNumber).frame(height: inputHeight)
                     TextField("Contact name", text: $dropoffContactName).frame(height: inputHeight)
                     TextField("Company or Organization", text: $dropoffCompanyOrOrg).frame(height: inputHeight)
                     TextField("Drop-off Notes", text: $dropoffNotes).frame(height: inputHeight * 4)
+                }.sheet(isPresented: $isDropoffAddressSelectionPresented) {
+                    AddressSelection(isPresented: $isDropoffAddressSelectionPresented, address: $dropoffLocation)
                 }
                 MyButton(title: "Create", onPress: create, backgroundColor: Color.green, image: "checkmark", frame: Frame(height: 40)).frame(maxWidth: .infinity)
                 MyButton(title: "Random", onPress: prePopulate, backgroundColor: Color.blue, image: "checkmark", frame: Frame(height: 40)).frame(maxWidth: .infinity)
-            }.sheet(isPresented: $isAddressSelectionPresented) {
-                // Your popup view here
-                AddressSelection(isPresented: $isAddressSelectionPresented)
-            }
-        }
-    }
-
-    func printStateVariables() {
-        let mirror = Mirror(reflecting: self)
-        for child in mirror.children {
-            if let label = child.label, label.hasPrefix("_") {
-                print("\(label.dropFirst()): \(child.value)")
             }
         }
     }
@@ -78,7 +69,8 @@ struct CreateOrderScreen: View {
     func create() {
         print(context)
         if let customer = appState.loggedInCustomer {
-            let newOrder = Order(orderNumber: orderNumber, pickupLocation: pickupLocation, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg: dropoffCompanyOrOrg, pay: 100, customer: customer)
+            // TODO: Update the pickup and dropp off to concat the title and subtitle. THink I should make pickup and dropp models
+            let newOrder = Order(orderNumber: orderNumber, pickupLocation: pickupLocation.title, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation.title, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg: dropoffCompanyOrOrg, pay: 100, customer: customer)
 
             context.insert(newOrder)
             customer.handleOrderAction(action: CustomerOrderAction.place, order: newOrder)
@@ -95,11 +87,11 @@ struct CreateOrderScreen: View {
 
     func prePopulate() {
         orderNumber = "123"
-        pickupLocation = "1234 main st"
+        pickupLocation = LocationResult(id: UUID(), title: "1234 main st", subtitle: "Kansas City, MO 64127")
         pickupPhoneNumber = "281-330-8004"
         pickupContactName = "Mike Jones"
         pickupCompanyOrOrg = "Swishahouse"
-        dropoffLocation = "6789 broadway st"
+        dropoffLocation = LocationResult(id: UUID(), title: "6789 broadway st", subtitle: "Kansas City, MO 64111")
         dropoffPhoneNumber = "904-490-7777"
         dropoffContactName = "Johnny"
         dropoffCompanyOrOrg = "Diamond Boys"

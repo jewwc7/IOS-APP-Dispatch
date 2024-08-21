@@ -37,7 +37,7 @@ struct MapView: View {
             // print("address", address)
             //  getPlace(from: addresses.first)
         }.onChange(of: addresses) { _, _ in // _, _ oldvalue, newValue
-            print("onChange address", addresses)
+            //   print("onChange address", addresses)
             for address in addresses {
                 getPlace(from: address)
             }

@@ -8,6 +8,16 @@
 import SwiftData
 import SwiftUI
 
+struct SheetController {
+    var isPresented: Bool
+    var type: String // "pickup" | "dropoff"
+}
+
+// WHere I left off
+//line 82
+// concat the addresses for display.
+// now work on map for drivers with routes
+
 struct CreateOrderScreen: View {
     @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context // how to CRUD state
@@ -15,9 +25,7 @@ struct CreateOrderScreen: View {
 
     let inputHeight = 40.0
     @State private var currentAddresses: [LocationResult] = []
-
-    @State var isPickupAddressSelectionPresented = false
-    @State var isDropoffAddressSelectionPresented = false
+    @State var sheetController = SheetController(isPresented: false, type: "pickup")
     @State private var orderNumber: String = ""
     @State private var pickupLocation: LocationResult = .init(title: "", subtitle: "")
     @State private var pickupPhoneNumber: String = ""
@@ -43,38 +51,44 @@ struct CreateOrderScreen: View {
                 }
                 Section(header: Text("Pickup").bold().font(.title2)) {
                     TextField("Pickup Location", text: $pickupLocation.title).frame(height: inputHeight).onTapGesture {
-                        isPickupAddressSelectionPresented = true
+                        sheetController.type = "pickup"
+                        sheetController.isPresented = true
                     }
                     TextField("Phone number", text: $pickupPhoneNumber).frame(height: inputHeight)
                     TextField("Contact name", text: $pickupContactName).frame(height: inputHeight)
                     TextField("Company or Organization", text: $pickupCompanyOrOrg).frame(height: inputHeight)
-                }.sheet(isPresented: $isPickupAddressSelectionPresented) {
-                    AddressSelection(isPresented: $isPickupAddressSelectionPresented, address: $pickupLocation, currentAddresses: $currentAddresses)
                 }
                 Section(header: Text("Drop Off").bold().font(.title2)) {
                     TextField("Dropoff Location", text: $dropoffLocation.title).frame(height: inputHeight).onTapGesture {
-                        isDropoffAddressSelectionPresented = true
+                        sheetController.type = "dropoff"
+                        sheetController.isPresented = true
                     }
                     TextField("Phone number", text: $dropoffPhoneNumber).frame(height: inputHeight)
                     TextField("Contact name", text: $dropoffContactName).frame(height: inputHeight)
                     TextField("Company or Organization", text: $dropoffCompanyOrOrg).frame(height: inputHeight)
                     TextField("Drop-off Notes", text: $dropoffNotes).frame(height: inputHeight * 4)
-                }.sheet(isPresented: $isDropoffAddressSelectionPresented) {
-                    AddressSelection(isPresented: $isDropoffAddressSelectionPresented, address: $dropoffLocation, currentAddresses: $currentAddresses)
                 }
                 MyButton(title: "Create", onPress: create, backgroundColor: Color.green, image: "checkmark", frame: Frame(height: 40)).frame(maxWidth: .infinity)
                 MyButton(title: "Random", onPress: prePopulate, backgroundColor: Color.blue, image: "checkmark", frame: Frame(height: 40)).frame(maxWidth: .infinity)
             }
+        }.sheet(isPresented: $sheetController.isPresented) {
+            AddressSelection(isPresented: $sheetController.isPresented, address: sheetController.type == "pickup" ? $pickupLocation : $dropoffLocation, currentAddresses: $currentAddresses)
         }
     }
 
     func create() {
         print(context)
         if let customer = appState.loggedInCustomer {
-            // TODO: Update the pickup and dropp off to concat the title and subtitle. THink I should make pickup and dropp models
-            let newOrder = Order(orderNumber: orderNumber, pickupLocation: pickupLocation.title, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation.title, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg: dropoffCompanyOrOrg, pay: 100, customer: customer)
+            // TODO: Move the pickup and dropp off data to their respective models, then will need to update UI, don;t think anything else needs to be updated
+            let newOrder = Order(orderNumber: orderNumber, pickupLocation: pickupLocation.title + pickupLocation.subtitle, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation.title + dropoffLocation.subtitle, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg: dropoffCompanyOrOrg, pay: 100, customer: customer)
+
+            let pickup = Pickup(order: order, address: pickupLocation.title, cityStateZip: pickupLocation.subtitle, locationId: pickupLocation.id, phoneNumber: pickupPhoneNumber, contactName: pickupContactName, company: pickupCompanyOrOrg)
+            let dropoff = Dropoff(order: order, address: dropoffLocation.title, cityStateZip: dropoffLocation.subtitle, locationId: dropoffLocation.id, phoneNumber: dropoffPhoneNumber, contactName: dropoffContactName, company: dropoffCompanyOrOrg)
 
             context.insert(newOrder)
+            context.insert(pickup)
+            context.insert(dropoff)
+
             customer.handleOrderAction(action: CustomerOrderAction.place, order: newOrder)
             do {
                 try customer.modelContext?.save()

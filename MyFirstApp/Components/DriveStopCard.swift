@@ -5,94 +5,141 @@
 //  Created by Joshua Wilson on 8/5/24.
 //
 
-
-import SwiftUI
 import SwiftData
+import SwiftUI
 
-
-let testOrder = Order( orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: Customer(name: "John"))
+struct DriverStopCard: View {
+    @State private var isExpanded: Bool = false
+    var order: Order = createOrder()
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            // Header
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Pickup: \(order.pickup?.fullAddress() ?? "")")
+                        .font(.headline)
+    
+                    Text("Dropoff: \(order.dropoff?.fullAddress() ?? "")")
+                        .font(.headline)
+                        .padding(.top, 8)
+                    HStack {
+                        Text("Due:")
+                        MyChip(text: order.dueAtFormatted())
+                    }
+                   
+                }.padding()
+            
+                Spacer()
+                
+                Button(action: {
+                    withAnimation {
+                        isExpanded.toggle()
+                    }
+                }) {
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        .padding()
+                }
+            }
+            .background(Color.gray.opacity(0.2))
+            .cornerRadius(10)
+            
+            // Content
+            if isExpanded {
+                DriveStopCardData(order: order).transition(.opacity) // Transition effect when expanding/collapsing
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+            }
+        }
+        .padding()
+//        .background(Color.white)
+//        .cornerRadius(10)
+//        .shadow(radius: 5)
+    }
+}
 
 struct DriveStopCardData: View {
-     var order:Order
+    var order: Order
+    let pickup: Pickup
+    let dropoff: Dropoff
     
- 
+    init(order: Order) {
+        self.order = order
+        self.pickup = order.pickup!
+        self.dropoff = order.dropoff!
+    }
+    
     var body: some View {
-        let dueAt = order.dueAtFormatted()
         VStack(alignment: .leading) {
-            VStack(){
+            VStack {
                 Text("Pickup info").font(.title2)
-            }.padding(.vertical,2)
-            VStack(alignment:.leading) {
+            }.padding(.vertical, 2)
+            VStack(alignment: .leading) {
                 Text("Organization")
-                Text(order.pickupCompanyOrOrg).bold()
+                Text(pickup.company).bold()
             }.padding(.vertical, 2)
             
-            VStack(alignment:.leading) {
+            VStack(alignment: .leading) {
                 Text("Address")
-                Text(order.pickupLocation ).bold()
+                Text(pickup.fullAddress()).bold()
             }.padding(.vertical, 2)
             HStack {
-                VStack(alignment:.leading) {
-                    
+                VStack(alignment: .leading) {
                     Text("Contact name")
-                    Text(order.pickupContactName).bold()
+                    Text(pickup.contactName).bold()
                 }
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Text("Phone")
-                    Text(order.pickupPhoneNumber).bold()
+                    Text(pickup.phoneNumber).bold()
                 }
-                
             }
-          .padding(.vertical, 2)
+            .padding(.vertical, 2)
            
-            
             Divider()
             VStack(alignment: .leading) {
-                VStack(){
+                VStack {
                     Text("Dropoff info").font(.title2)
-                }.padding(.vertical,2)
-                VStack(alignment:.leading) {
+                }.padding(.vertical, 2)
+                VStack(alignment: .leading) {
                     Text("Organization")
-                    Text(order.dropoffCompanyOrOrg).bold()
+                    Text(dropoff.company).bold()
                 }.padding(.vertical, 2)
                 
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Text("Address")
-                    Text(order.dropoffLocation ).bold()
+                    Text(dropoff.fullAddress()).bold()
                 }.padding(.vertical, 2)
                 HStack {
-                    VStack(alignment:.leading) {
-                        
+                    VStack(alignment: .leading) {
                         Text("Contact name")
-                        Text(order.dropoffContactName).bold()
+                        Text(dropoff.contactName).bold()
                     }
-                    VStack(alignment:.leading) {
+                    VStack(alignment: .leading) {
                         Text("Phone")
-                        Text(order.dropoffPhoneNumber).bold()
+                        Text(dropoff.phoneNumber).bold()
                     }
-                    
                 }
             }
             
             Spacer()
             
-            MyButton(title:driverRouteStatus(order.status),onPress: handleOnPress, backgroundColor: Color.blue, image:"checkmark", frame: (Frame(height: 40, width: 140))).frame(maxWidth: .infinity).disabled(order.delivered())
+            MyButton(title: driverRouteStatus(order.status), onPress: handleOnPress, backgroundColor: Color.blue, image: "checkmark", frame: Frame(height: 40, width: 140)).frame(maxWidth: .infinity).disabled(order.delivered())
         }.padding().overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.blue, lineWidth: 2)
         )
     }
     
-    func handleOnPress(){
+    func handleOnPress() {
         withAnimation(.smooth) {
             order.handleStatusTransition()
-          //  order.statusDidChange()
+            //  order.statusDidChange()
         }
-      
     }
     
-    func driverRouteStatus (_ status: OrderStatus)-> String{
-        let title:OrderStatus = {
+    func driverRouteStatus(_ status: OrderStatus) -> String {
+        let title: OrderStatus = {
             switch status {
             case .claimed:
                 OrderStatus.enRouteToPickup
@@ -112,60 +159,8 @@ struct DriveStopCardData: View {
     }
 }
 
-
-
-struct DriveStopCard: View {
-    @State private var isExpanded: Bool = false
-    var order:Order
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            // Header
-            HStack {
-                VStack(alignment:.leading) {
-                    Text("Pickup: \(order.pickupLocation)")
-                        .font(.headline)
-                    Text("Dropoff: \(order.dropoffLocation)")
-                        .font(.headline)
-//                        .padding()
-                    MyChip(text: order.dueAtFormatted())
-                }.padding()
-            
-                
-                Spacer()
-                
-       
-                    
-                    Button(action: {
-                        withAnimation {
-                            isExpanded.toggle()
-                        }
-                    }) {
-                        Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                            .padding()
-                    }
-                
-            
-            }
-            .background(Color.gray.opacity(0.2))
-            .cornerRadius(10)
-            
-            // Content
-            if isExpanded {
-                DriveStopCardData(order: order).transition(.opacity) // Transition effect when expanding/collapsing
-                .background(Color.white)
-                .cornerRadius(10)
-                .shadow(radius: 5)
-            }
-        }
-        .padding()
-//        .background(Color.white)
-//        .cornerRadius(10)
-//        .shadow(radius: 5)
-    }
-}
-
 #Preview {
-    DriveStopCard(order:testOrder).modelContainer(for: [Order.self, Customer.self, Driver.self], inMemory: true).environmentObject(AppStateModel()) //needs to be added to insert the modelContext, making it possible to CRUD state
-    //https://developer.apple.com/tutorials/develop-in-swift/save-data
+    ModelPreview { order in
+        DriverStopCard(order: order)
+    }.environmentObject(AppStateModel())
 }

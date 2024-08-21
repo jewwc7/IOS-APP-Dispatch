@@ -36,10 +36,12 @@ class Order {
     var dropoffContactName: String
     var dropoffCompanyOrOrg: String
     var pay: Int
-    var due_at: Date
+    var dueAt: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
     var startedAt: Date?
     var customer: Customer?
     var driver: Driver?
+    var pickup: Pickup?
+    var dropoff: Dropoff?
     var status: OrderStatus = OrderStatus.unassinged
     let inProgressStatuses: Set<OrderStatus> = [OrderStatus.enRouteToPickup, OrderStatus.atPickup, OrderStatus.atDropoff]
     // Note: SwiftData properties do not support willSet or didSet property observers, unless they have @Transient so had to make a transient prop, update this when status is updated. @Transient does not persist the data, so status is not persisted, so this is a workaround
@@ -65,7 +67,9 @@ class Order {
         customer: Customer,
         status: OrderStatus = OrderStatus.unassinged,
         driver: Driver? = nil,
-        due_at: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date())
+        pickup: Pickup? = nil,
+        droppoff: Dropoff? = nil,
+        dueAt: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date())
     { // 7 days from now or right now
         self.orderId = UUID().uuidString
         self.orderNumber = orderNumber
@@ -78,11 +82,13 @@ class Order {
         self.dropoffContactName = dropoffContactName
         self.dropoffCompanyOrOrg = dropoffCompanyOrOrg
         self.pay = pay
-        self.due_at = due_at // add time to this date
+        self.dueAt = dueAt // add time to this date
         self.startedAt = nil
         self.customer = customer
         self.driver = driver
         self.status = status
+        self.pickup = pickup
+        self.dropoff = droppoff
     }
     
     // Method
@@ -91,7 +97,7 @@ class Order {
     }
     
     func late() -> Bool {
-        return due_at > Date()
+        return dueAt > Date()
     }
     
     func claim(driver: Driver) -> ResultWithMessage {
@@ -175,7 +181,7 @@ class Order {
     func dueAtFormatted() -> String {
         let formatter3 = DateFormatter()
         formatter3.dateFormat = "HH:mm E, d MMM y"
-        return formatter3.string(from: due_at)
+        return formatter3.string(from: dueAt)
     }
     
     private func setEnRouteToPickup() {

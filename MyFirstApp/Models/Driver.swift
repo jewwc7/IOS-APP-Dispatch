@@ -79,11 +79,11 @@ class Driver {
     }
     
     private func addOrderToRoute(order:Order)->Route{
-        if let routeForOrder = self.routes.first(where: { isSameDay(first: order.due_at, second: $0.startDate) }) {
+        if let routeForOrder = self.routes.first(where: { isSameDay(first: order.dueAt, second: $0.startDate) }) {
             routeForOrder.addOrder(order: order)
             return routeForOrder
         } else {
-            return Route(orders: [order], startDate: onlyDate(date: order.due_at), driver: self)
+            return Route(orders: [order], startDate: onlyDate(date: order.dueAt), driver: self)
         }
     
     }

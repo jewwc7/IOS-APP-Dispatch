@@ -10,7 +10,7 @@ import SwiftUI
 
 struct DriverStopCard: View {
     @State private var isExpanded: Bool = false
-    var order: Order // = createOrder()
+    var stop: Stop // = createOrder()
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -20,19 +20,20 @@ struct DriverStopCard: View {
                     VStack(alignment: .leading) {
                         Text("Pickup:")
                             .font(.subheadline)
-                        Text(order.pickup.fullAddress())
+                        Text(stop.fullAddress)
                             .font(.headline)
                     }
                     VStack(alignment: .leading) {
                         Text("Dropoff:")
                             .font(.subheadline)
-                        Text(order.dropoff.fullAddress())
+                        Text(stop.fullAddress)
                             .font(.headline)
                     }.padding(.top, 8)
                 
                     HStack(spacing: 20) {
                         Text("Due:")
-                        Text(order.dueAtFormatted()).font(.headline).foregroundStyle(.red)
+                        // TODO: use the stops when implemented
+                        Text(stop.order?.dueAtFormatted() ?? "Missing due date").font(.headline).foregroundStyle(.red)
                         //  MyChip(text: order.dueAtFormatted())
                     }.padding(.top, 12)
                    
@@ -54,7 +55,7 @@ struct DriverStopCard: View {
             
             // Content
             if isExpanded {
-                DriveStopCardData(order: order).transition(.opacity) // Transition effect when expanding/collapsing
+                DriveStopCardData(stop: stop).transition(.opacity) // Transition effect when expanding/collapsing
                     .background(Color.white)
                     .cornerRadius(10)
                     .shadow(radius: 5)
@@ -68,14 +69,10 @@ struct DriverStopCard: View {
 }
 
 struct DriveStopCardData: View {
-    var order: Order
-    let pickup: Pickup
-    let dropoff: Dropoff
-    
-    init(order: Order) {
-        self.order = order
-        self.pickup = order.pickup
-        self.dropoff = order.dropoff
+    var stop: Stop
+
+    init(stop: Stop) {
+        self.stop = stop
     }
     
     var body: some View {
@@ -85,54 +82,34 @@ struct DriveStopCardData: View {
             }.padding(.vertical, 2)
             VStack(alignment: .leading) {
                 Text("Organization")
-                Text(pickup.company).bold()
+                Text(stop.company).bold()
             }.padding(.vertical, 2)
             
             VStack(alignment: .leading) {
                 Text("Address")
-                Text(pickup.fullAddress()).bold()
+                Text(stop.fullAddress).bold()
             }.padding(.vertical, 2)
             HStack {
                 VStack(alignment: .leading) {
                     Text("Contact name")
-                    Text(pickup.contactName).bold()
+                    Text(stop.contactName).bold()
                 }
                 VStack(alignment: .leading) {
                     Text("Phone")
-                    Text(pickup.phoneNumber).bold()
+                    Text(stop.phoneNumber).bold()
                 }
             }
             .padding(.vertical, 2)
            
             Divider()
-            VStack(alignment: .leading) {
-                VStack {
-                    Text("Dropoff info").font(.title2)
-                }.padding(.vertical, 2)
-                VStack(alignment: .leading) {
-                    Text("Organization")
-                    Text(dropoff.company).bold()
-                }.padding(.vertical, 2)
-                
-                VStack(alignment: .leading) {
-                    Text("Address")
-                    Text(dropoff.fullAddress()).bold()
-                }.padding(.vertical, 2)
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Contact name")
-                        Text(dropoff.contactName).bold()
-                    }
-                    VStack(alignment: .leading) {
-                        Text("Phone")
-                        Text(dropoff.phoneNumber).bold()
-                    }
-                }
-            }
             
             Spacer()
-            
-            MyButton(title: driverRouteStatus(order.status), onPress: handleOnPress, backgroundColor: Color.blue, image: "checkmark", frame: Frame(height: 40, width: 140)).frame(maxWidth: .infinity).disabled(order.delivered())
+            if let order = stop.order {
+                MyButton(title: driverRouteStatus(order.status), onPress: handleOnPress, backgroundColor: Color.blue, image: "checkmark", frame: Frame(height: 40, width: 140)).frame(maxWidth: .infinity).disabled(order.delivered())
+            } else {
+                MyButton(title: "Can't start Order")
+            }
+         
         }.padding().overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.blue, lineWidth: 2)
@@ -141,8 +118,11 @@ struct DriveStopCardData: View {
     
     func handleOnPress() {
         withAnimation(.smooth) {
-            order.handleStatusTransition()
-            //  order.statusDidChange()
+            if let order = stop.order {
+                order.handleStatusTransition()
+            } else {
+                print("stop has no associated order")
+            }
         }
     }
     

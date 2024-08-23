@@ -31,8 +31,8 @@ struct RouteScreen: View {
             if let loggedInDriver = appState.loggedInDriver {
                 ForEach(loggedInDriver.routes) { route in
                     Section(header: Text(convertDateToDateOnlyString(day: route.startDate)).bold().font(/*@START_MENU_TOKEN@*/ .title/*@END_MENU_TOKEN@*/)) {
-                        ForEach(route.orders, id: \.orderId) { order in
-                            DriverStopCard(order: order)
+                        ForEach(route.makeStops(), id: \.id) { stop in
+                            DriverStopCard(stop: stop)
                         }
                     }
                 }

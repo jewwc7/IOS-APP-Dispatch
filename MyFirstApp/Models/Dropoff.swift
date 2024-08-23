@@ -12,7 +12,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-class Dropoff {
+class Dropoff: Stop {
     // Properties
     var id: String
     var order: Order?
@@ -22,6 +22,10 @@ class Dropoff {
     var phoneNumber: String
     var contactName: String
     var company: String
+    // Computed property for fullAddress
+    var fullAddress: String {
+        return "\(address), \(cityStateZip)"
+    }
 
     init(
         address: String,
@@ -39,9 +43,5 @@ class Dropoff {
         self.contactName = contactName
         self.company = company
         self.order = order
-    }
-
-    func fullAddress() -> String {
-        return address + ", " + cityStateZip
     }
 }

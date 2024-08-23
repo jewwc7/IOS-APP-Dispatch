@@ -6,45 +6,37 @@
 //
 
 import Foundation
-import SwiftUI
 import SwiftData
-
+import SwiftUI
 
 //
-//struct CustomerListConfig  {
+// struct CustomerListConfig  {
 //    // VID: 4:20-6:06 https://developer.apple.com/videos/play/wwdc2020/10040/
 //    // VID: 7:00 = 8:00 explains binding perfectly, allows write access when you pass the prop down the hiearchy. Changes in for this prop in the child view also changes the prop in parent view @Binding var
 //     var shouldNavigate: Bool = false
 //     var isPopupPresented: Bool = false
 //     var loggedInCustomer: Customer? = nil
-//    
+//
 ////    mutating func presentCreate(){
 ////        return self.isPopupPresented = true
 ////    }
 //
-//}
+// }
 struct CustomerList: View {
-    @Environment(\.modelContext) private var context //how to CRUD state
+    @Environment(\.modelContext) private var context // how to CRUD state
     @Query private var customers: [Customer]
     @State private var isPopupPresented: Bool = false
     @State var shouldNavigate: Bool = false
- //   @State private var customerListConfig = CustomerListConfig()
+    //   @State private var customerListConfig = CustomerListConfig()
     @EnvironmentObject var appState: AppStateModel
-   
-    var body: some View {
 
+    var body: some View {
         NavigationStack {
             List {
-                ForEach(customers,  id: \.id){ customer in
-                    @State var loggedInCustomer: Customer = customer // just to bind it
-                    
-                    CustomNavigationLink(destination: CustomerMainScreen(), title: customer.name) {
-                        print("yooo")
-                        logIn(customer: customer)
-                    }
-                    
+                ForEach(customers, id: \.id) { customer in
+                    CustomNavigationLink(destination: CustomerMainScreen(customer: customer), title: customer.name) {}
                 }
-                  }.navigationTitle("Customer List")
+            }.navigationTitle("Customer List")
                 .toolbar {
 //                    ToolbarItem(placement: .navigationBarTrailing) {
 //                        EditButton()
@@ -59,62 +51,45 @@ struct CustomerList: View {
             // Your popup view here
             PopupView(isPopupPresented: $isPopupPresented)
         }
-    
     }
-    
-    func create(){
+
+    func create() {
         isPopupPresented = true
     }
-    func logAllOut() {
-        print("loggin out all customers")
-        customers.forEach { customer in
-            customer.isLoggedIn = false
-        }
-    }
-    func logIn(customer: Customer){
-        logAllOut()
-        let result = customer.login()
-        if(result == .success){
-            appState.login(customer: customer)
-            shouldNavigate = true
-        }
-    }
-    
+
     private func deleteCustomer(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-               // print(customers[index])
+                // print(customers[index])
                 context.delete(customers[index])
             }
         }
     }
-    
 }
 
 struct PopupView: View {
     // adding the @Binding with var is how you add mandtory props, llok @CustomerListConfig comments
     @Binding var isPopupPresented: Bool
-    @Environment(\.modelContext) private var context //how to CRUD state
+    @Environment(\.modelContext) private var context // how to CRUD state
     @State private var nameInput: String = ""
     @EnvironmentObject var appState: AppStateModel
-    
+
     var body: some View {
         VStack {
             VStack(alignment: .leading) {
-                    Text("Name")
-                        .font(.headline)
-                        .padding(.bottom, 2)
-                    
-                    TextField("Name", text: $nameInput)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding()
-                    
-                }
-                .padding()
+                Text("Name")
+                    .font(.headline)
+                    .padding(.bottom, 2)
+
+                TextField("Name", text: $nameInput)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+            }
+            .padding()
             Button(action: create) {
                 Label("Create", systemImage: "plus")
             }.padding()
-   
+
             Button(action: {
                 // Dismiss the sheet
                 isPopupPresented = false
@@ -123,12 +98,12 @@ struct PopupView: View {
             }
         }
     }
-    
-    private func create(){
+
+    private func create() {
         if nameInput == "" {
             return
         }
-        let newCustomer = Customer(name:nameInput)
+        let newCustomer = Customer(name: nameInput)
         context.insert(newCustomer)
         do {
             try context.save()
@@ -142,9 +117,6 @@ struct PopupView: View {
     }
 }
 
-
-
 #Preview {
     CustomerList().modelContainer(for: [Customer.self, Order.self], inMemory: true).environmentObject(AppStateModel())
 }
-

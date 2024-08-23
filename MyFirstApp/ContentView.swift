@@ -5,10 +5,7 @@
 //  Created by Joshua Wilson on 5/6/24.
 //
 
-// Next add the Faker library
-// Make the buttons have a loading state?
-// Test out drivers with delivs due on dif days and allow customer to input due date (hard coded right now)
-// make a mapView for the route?
+// Have no idea why previews aren;t working anymore, but the app works
 
 import SwiftData
 import SwiftUI
@@ -25,7 +22,8 @@ struct ContentView: View {
     init() {
         do {
             // TODO: add memory stuff https://www.hackingwithswift.com/quick-start/swiftdata/how-to-add-multiple-configurations-to-a-modelcontainer
-            modelContainer = try ModelContainer(for: Order.self, Customer.self, Driver.self)
+            modelContainer = try ModelContainer(for: Order.self, Customer.self, Driver.self, Pickup.self, Dropoff.self)
+            //   createSeeds(modelContext: modelContainer.mainContext)
         } catch {
             print(error)
             fatalError("Could not initialize ModelContainer")
@@ -53,7 +51,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: [Order.self, Customer.self, Driver.self, Route.self], inMemory: true).environmentObject(AppStateModel())
+        .modelContainer(for: [Order.self, Customer.self, Driver.self, Route.self, Dropoff.self, Pickup.self], inMemory: true).environmentObject(AppStateModel())
     // add this to access state and persist making it possible to CRUD state
     // https://developer.apple.com/tutorials/develop-in-swift/save-data
 }

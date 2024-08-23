@@ -10,23 +10,31 @@ import SwiftUI
 
 struct DriverStopCard: View {
     @State private var isExpanded: Bool = false
-    var order: Order = createOrder()
+    var order: Order // = createOrder()
     
     var body: some View {
         VStack(alignment: .leading) {
             // Header
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Pickup: \(order.pickup?.fullAddress() ?? "")")
-                        .font(.headline)
-    
-                    Text("Dropoff: \(order.dropoff?.fullAddress() ?? "")")
-                        .font(.headline)
-                        .padding(.top, 8)
-                    HStack {
-                        Text("Due:")
-                        MyChip(text: order.dueAtFormatted())
+                    VStack(alignment: .leading) {
+                        Text("Pickup:")
+                            .font(.subheadline)
+                        Text(order.pickup.fullAddress())
+                            .font(.headline)
                     }
+                    VStack(alignment: .leading) {
+                        Text("Dropoff:")
+                            .font(.subheadline)
+                        Text(order.dropoff.fullAddress())
+                            .font(.headline)
+                    }.padding(.top, 8)
+                
+                    HStack(spacing: 20) {
+                        Text("Due:")
+                        Text(order.dueAtFormatted()).font(.headline).foregroundStyle(.red)
+                        //  MyChip(text: order.dueAtFormatted())
+                    }.padding(.top, 12)
                    
                 }.padding()
             
@@ -66,8 +74,8 @@ struct DriveStopCardData: View {
     
     init(order: Order) {
         self.order = order
-        self.pickup = order.pickup!
-        self.dropoff = order.dropoff!
+        self.pickup = order.pickup
+        self.dropoff = order.dropoff
     }
     
     var body: some View {
@@ -159,8 +167,8 @@ struct DriveStopCardData: View {
     }
 }
 
-#Preview {
-    ModelPreview { order in
-        DriverStopCard(order: order)
-    }.environmentObject(AppStateModel())
-}
+// #Preview {
+//    ModelPreview { order in
+//        DriverStopCard(order: order)
+//    }.environmentObject(AppStateModel())
+// }

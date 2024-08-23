@@ -37,13 +37,13 @@ func humanizeCamelCase(_ input: String) -> String {
 }
 
 func createOrder(driver: Driver? = nil, customer: Customer? = nil, pickup: Pickup? = nil, dropoff: Dropoff? = nil) -> Order {
-    let order = Order(orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: customer ?? Customer(name: "John"), driver: driver)
+    let finalPickup = pickup ?? Pickup(address: "1234 main st", cityStateZip: "Kansas City, MO 64127", locationId: UUID(), phoneNumber: "281-330-8004", contactName: "Mike Jones", company: "Swishahouse")
+    let finaldropoff = dropoff ?? Dropoff(address: "6789 broadway st", cityStateZip: "Kansas City, MO 64111", locationId: UUID(), phoneNumber: "904-490-7777", contactName: "Johnny", company: "Diamond Boys")
 
-    let finalPickup = pickup ?? Pickup(order: order, address: "1234 main st", cityStateZip: "Kansas City, MO 64127", locationId: UUID(), phoneNumber: "281-330-8004", contactName: "Mike Jones", company: "Swishahouse")
-    let finaldropoff = dropoff ?? Dropoff(order: order, address: "6789 broadway st", cityStateZip: "Kansas City, MO 64111", locationId: UUID(), phoneNumber: "904-490-7777", contactName: "Johnny", company: "Diamond Boys")
+    let order = Order(orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: customer ?? Customer(name: "John"), driver: driver, pickup: finalPickup, dropoff: finaldropoff)
 
-    order.pickup = finalPickup
-    order.dropoff = finaldropoff
+    finalPickup.order = order
+    finaldropoff.order = order
     return order
 }
 

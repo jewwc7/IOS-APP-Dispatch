@@ -40,8 +40,8 @@ class Order {
     var startedAt: Date?
     var customer: Customer?
     var driver: Driver?
-    var pickup: Pickup?
-    var dropoff: Dropoff?
+    var pickup: Pickup
+    var dropoff: Dropoff
     var status: OrderStatus = OrderStatus.unassinged
     let inProgressStatuses: Set<OrderStatus> = [OrderStatus.enRouteToPickup, OrderStatus.atPickup, OrderStatus.atDropoff]
     // Note: SwiftData properties do not support willSet or didSet property observers, unless they have @Transient so had to make a transient prop, update this when status is updated. @Transient does not persist the data, so status is not persisted, so this is a workaround
@@ -67,10 +67,10 @@ class Order {
         customer: Customer,
         status: OrderStatus = OrderStatus.unassinged,
         driver: Driver? = nil,
-        pickup: Pickup? = nil,
-        droppoff: Dropoff? = nil,
-        dueAt: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date())
-    { // 7 days from now or right now
+        pickup: Pickup,
+        dropoff: Dropoff,
+        dueAt: Date? = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+    ) { // 7 days from now or right now
         self.orderId = UUID().uuidString
         self.orderNumber = orderNumber
         self.pickupLocation = pickupLocation
@@ -82,13 +82,13 @@ class Order {
         self.dropoffContactName = dropoffContactName
         self.dropoffCompanyOrOrg = dropoffCompanyOrOrg
         self.pay = pay
-        self.dueAt = dueAt // add time to this date
+        self.dueAt = dueAt ?? Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date() // add time to this date
         self.startedAt = nil
         self.customer = customer
         self.driver = driver
         self.status = status
         self.pickup = pickup
-        self.dropoff = droppoff
+        self.dropoff = dropoff
     }
     
     // Method
@@ -180,7 +180,10 @@ class Order {
     
     func dueAtFormatted() -> String {
         let formatter3 = DateFormatter()
-        formatter3.dateFormat = "HH:mm E, d MMM y"
+        // formatter3.dateFormat = "HH:mm E, d MMM y"
+        formatter3.timeZone = TimeZone.current
+        formatter3.dateStyle = .medium
+        formatter3.timeStyle = .short
         return formatter3.string(from: dueAt)
     }
     

@@ -17,8 +17,8 @@ import SwiftData
 import SwiftUI
 
 struct AvailableOrderCard: View {
-    var order: Order? = createOrders(1, customer: Customer(name: "Jim"))
-    var driver: Driver? = Driver(name: "Jack")
+    var order: Order
+    var driver: Driver
     
     var body: some View {
         let buttonFrame = Frame(height: 40, width: 100)
@@ -26,9 +26,9 @@ struct AvailableOrderCard: View {
         
         VStack {
             VStack {
-                Text(order!.orderId)
-                Text(order!.pickupLocation).font(.system(size: 24)).bold()
-                Text("$\(String(order!.pay))").foregroundColor(.green).font(.system(size: 24))
+                Text(order.orderId)
+                Text(order.pickupLocation).font(.system(size: 24)).bold()
+                Text("$\(String(order.pay))").foregroundColor(.green).font(.system(size: 24))
             }.padding(24).foregroundColor(.black).frame(width: width)
             
             HStack {
@@ -46,16 +46,17 @@ struct AvailableOrderCard: View {
     }
     
     func claim() {
-        print("Order \(order!.orderId) accepted")
-        driver!.handleOrderAction(action: DriverOrderAction.claim, order: order!)
+        print("Order \(order.orderId) accepted")
+        driver.handleOrderAction(action: DriverOrderAction.claim, order: order)
     }
 
     func decline() {
-        print("Order \(order!.orderId) declined")
+        print("Order \(order.orderId) declined")
     }
 }
 
-#Preview {
-    AvailableOrderCard().modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateModel()) // needs to be added to insert the modelContext, making it possible to CRUD state
-    // https://developer.apple.com/tutorials/develop-in-swift/save-data
-}
+// #Preview {
+//    ModelPreview { order in
+//        AvailableOrderCard(order: order, driver: Driver(name: "Hank"))
+//    }.environmentObject(AppStateModel())
+// }

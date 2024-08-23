@@ -15,7 +15,7 @@ import SwiftUI
 class Pickup {
     // Properties
     var id: String
-    var order: Order
+    var order: Order?
     var address: String
     var cityStateZip: String
     var locationId: UUID
@@ -24,7 +24,6 @@ class Pickup {
     var company: String
 
     init(
-        order: Order,
         address: String,
         cityStateZip: String,
         locationId: UUID,

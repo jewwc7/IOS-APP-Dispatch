@@ -14,7 +14,7 @@ struct SheetController {
 }
 
 // WHere I left off
-//line 82
+// line 82
 // concat the addresses for display.
 // now work on map for drivers with routes
 
@@ -80,14 +80,15 @@ struct CreateOrderScreen: View {
         print(context)
         if let customer = appState.loggedInCustomer {
             // TODO: Move the pickup and dropp off data to their respective models, then will need to update UI, don;t think anything else needs to be updated
-            let newOrder = Order(orderNumber: orderNumber, pickupLocation: pickupLocation.title + pickupLocation.subtitle, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation.title + dropoffLocation.subtitle, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg: dropoffCompanyOrOrg, pay: 100, customer: customer)
+            let pickup = Pickup(address: pickupLocation.title, cityStateZip: pickupLocation.subtitle, locationId: pickupLocation.id, phoneNumber: pickupPhoneNumber, contactName: pickupContactName, company: pickupCompanyOrOrg)
+            let dropoff = Dropoff(address: dropoffLocation.title, cityStateZip: dropoffLocation.subtitle, locationId: dropoffLocation.id, phoneNumber: dropoffPhoneNumber, contactName: dropoffContactName, company: dropoffCompanyOrOrg)
 
-            let pickup = Pickup(order: order, address: pickupLocation.title, cityStateZip: pickupLocation.subtitle, locationId: pickupLocation.id, phoneNumber: pickupPhoneNumber, contactName: pickupContactName, company: pickupCompanyOrOrg)
-            let dropoff = Dropoff(order: order, address: dropoffLocation.title, cityStateZip: dropoffLocation.subtitle, locationId: dropoffLocation.id, phoneNumber: dropoffPhoneNumber, contactName: dropoffContactName, company: dropoffCompanyOrOrg)
+            let newOrder = Order(orderNumber: orderNumber, pickupLocation: pickupLocation.title + pickupLocation.subtitle, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation.title + dropoffLocation.subtitle, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg: dropoffCompanyOrOrg, pay: 100, customer: customer, pickup: pickup, dropoff: dropoff)
 
             context.insert(newOrder)
-            context.insert(pickup)
-            context.insert(dropoff)
+            // don't need to insert because they are inserted when I insert the order
+//            context.insert(pickup)
+//            context.insert(dropoff)
 
             customer.handleOrderAction(action: CustomerOrderAction.place, order: newOrder)
             do {

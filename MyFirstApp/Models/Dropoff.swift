@@ -15,7 +15,7 @@ import SwiftUI
 class Dropoff {
     // Properties
     var id: String
-    var order: Order
+    var order: Order?
     var address: String
     var cityStateZip: String
     var locationId: UUID
@@ -24,7 +24,6 @@ class Dropoff {
     var company: String
 
     init(
-        order: Order,
         address: String,
         cityStateZip: String,
         locationId: UUID,
@@ -41,7 +40,7 @@ class Dropoff {
         self.company = company
         self.order = order
     }
-    
+
     func fullAddress() -> String {
         return address + ", " + cityStateZip
     }

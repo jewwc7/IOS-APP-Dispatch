@@ -22,6 +22,8 @@ class Dropoff: Stop {
     var phoneNumber: String
     var contactName: String
     var company: String
+    var stopType: StopType.RawValue
+    var deliveredAt: Date?
     // Computed property for fullAddress
     var fullAddress: String {
         return "\(address), \(cityStateZip)"
@@ -42,6 +44,8 @@ class Dropoff: Stop {
         self.phoneNumber = phoneNumber
         self.contactName = contactName
         self.company = company
+        self.stopType = StopType.dropoff.rawValue
         self.order = order
+        self.deliveredAt = nil
     }
 }

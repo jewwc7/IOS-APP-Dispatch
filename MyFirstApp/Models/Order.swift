@@ -17,6 +17,7 @@ enum OrderStatus: String, Codable { //
     case canceled
     case claimed
     case enRouteToPickup
+    case enRouteToDropOff
     case atPickup
     case atDropoff
     case delivered
@@ -172,7 +173,19 @@ class Order {
     func delivered() -> Bool {
         return status == .delivered
     }
+   
+    func isEnrouteToPickup() -> Bool {
+        return status == .enRouteToPickup
+    }
+    
+    func isAtPickup() -> Bool {
+        return status == .atPickup
+    }
 
+    func isAtDropOff() -> Bool {
+        return status == .atDropoff
+    }
+    
     func inProgess() -> Bool {
         print(inProgressStatuses.contains(status), status)
         return inProgressStatuses.contains(status)

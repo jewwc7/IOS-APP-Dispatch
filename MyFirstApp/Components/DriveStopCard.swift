@@ -18,18 +18,11 @@ struct DriverStopCard: View {
             HStack {
                 VStack(alignment: .leading) {
                     VStack(alignment: .leading) {
-                        Text("Pickup:")
+                        textForStopType(stop)
                             .font(.subheadline)
                         Text(stop.fullAddress)
                             .font(.headline)
                     }
-                    VStack(alignment: .leading) {
-                        Text("Dropoff:")
-                            .font(.subheadline)
-                        Text(stop.fullAddress)
-                            .font(.headline)
-                    }.padding(.top, 8)
-                
                     HStack(spacing: 20) {
                         Text("Due:")
                         // TODO: use the stops when implemented
@@ -55,7 +48,7 @@ struct DriverStopCard: View {
             
             // Content
             if isExpanded {
-                DriveStopCardData(stop: stop).transition(.opacity) // Transition effect when expanding/collapsing
+                ExpandedDriverStopCard(stop: stop).transition(.opacity) // Transition effect when expanding/collapsing
                     .background(Color.white)
                     .cornerRadius(10)
                     .shadow(radius: 5)
@@ -66,84 +59,23 @@ struct DriverStopCard: View {
 //        .cornerRadius(10)
 //        .shadow(radius: 5)
     }
-}
-
-struct DriveStopCardData: View {
-    var stop: Stop
-
-    init(stop: Stop) {
-        self.stop = stop
-    }
     
-    var body: some View {
-        VStack(alignment: .leading) {
-            VStack {
-                Text("Pickup info").font(.title2)
-            }.padding(.vertical, 2)
-            VStack(alignment: .leading) {
-                Text("Organization")
-                Text(stop.company).bold()
-            }.padding(.vertical, 2)
-            
-            VStack(alignment: .leading) {
-                Text("Address")
-                Text(stop.fullAddress).bold()
-            }.padding(.vertical, 2)
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("Contact name")
-                    Text(stop.contactName).bold()
-                }
-                VStack(alignment: .leading) {
-                    Text("Phone")
-                    Text(stop.phoneNumber).bold()
-                }
-            }
-            .padding(.vertical, 2)
-           
-            Divider()
-            
-            Spacer()
-            if let order = stop.order {
-                MyButton(title: driverRouteStatus(order.status), onPress: handleOnPress, backgroundColor: Color.blue, image: "checkmark", frame: Frame(height: 40, width: 140)).frame(maxWidth: .infinity).disabled(order.delivered())
-            } else {
-                MyButton(title: "Can't start Order")
-            }
-         
-        }.padding().overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.blue, lineWidth: 2)
-        )
-    }
-    
-    func handleOnPress() {
-        withAnimation(.smooth) {
-            if let order = stop.order {
-                order.handleStatusTransition()
-            } else {
-                print("stop has no associated order")
-            }
+    @ViewBuilder
+    func textForStopType(_ stop: Stop) -> some View {
+        switch StopType(rawValue: stop.stopType) {
+        case .pickup:
+            Text("Pickup  by orders dueAt")
+                .font(.headline)
+                .foregroundColor(.green)
+        // Use pickup properties if needed
+        case .dropoff:
+            Text("Dropoff by dropoffs dueAt ")
+                .font(.headline)
+                .foregroundColor(.blue)
+        // Use dropoff properties if needed
+        case .none:
+            ContentUnavailableView("Not a pickup or dropoff", systemImage: "xmark")
         }
-    }
-    
-    func driverRouteStatus(_ status: OrderStatus) -> String {
-        let title: OrderStatus = {
-            switch status {
-            case .claimed:
-                OrderStatus.enRouteToPickup
-            case .enRouteToPickup:
-                OrderStatus.atPickup
-            case .atPickup:
-                OrderStatus.atDropoff
-            case .atDropoff:
-                OrderStatus.delivered
-            case .delivered:
-                OrderStatus.delivered
-            default:
-                OrderStatus.enRouteToPickup
-            }
-        }()
-        return humanizeCamelCase(title.rawValue)
     }
 }
 

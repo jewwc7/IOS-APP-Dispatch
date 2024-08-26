@@ -22,6 +22,8 @@ class Pickup: Stop {
     var phoneNumber: String
     var contactName: String
     var company: String
+    var stopType: StopType.RawValue
+    var deliveredAt: Date? = nil
     var fullAddress: String {
         return "\(address), \(cityStateZip)"
     }
@@ -41,6 +43,8 @@ class Pickup: Stop {
         self.phoneNumber = phoneNumber
         self.contactName = contactName
         self.company = company
+        self.stopType = StopType.pickup.rawValue
         self.order = order
+        self.deliveredAt = nil
     }
 }

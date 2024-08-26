@@ -18,10 +18,12 @@ protocol Stop {
     var contactName: String { get set }
     var company: String { get set }
     var fullAddress: String { get }
+    var stopType: StopType.RawValue { get }
+    var deliveredAt: Date? { get set }
+    // var dueAt: Date? { get set }
 }
 
-// Define an enum to encapsulate Pickup and Dropoff
-enum StopType {
-    case pickup(Pickup)
-    case dropoff(Dropoff)
+enum StopType: String, Codable {
+    case pickup
+    case dropoff
 }

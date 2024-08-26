@@ -81,30 +81,39 @@ struct ExpandedDriverStopCard: View {
     
     func buttonData() -> UIInfo {
         if let order = stop.order {
-            let enRouteText = "Heading to pickup"
-            let atPickupText = "At pickup"
-            let enRouteToDropoffText = "Leaving pickup"
-            let atDroppOffText = "At dropoff"
-            let deliveredText = "Delivered"
-            let pickedUpText = "Picked up" // displays when disabled
-  
+            let statusTexts = order.statusTexts
+            let enRouteText = statusTexts["enRoute"] ?? missingKey
+            let atPickupText = statusTexts["atPickup"] ?? missingKey
+            let enRouteToDropoffText = statusTexts["enRouteToDropoff"] ?? missingKey
+            let atDropoffText = statusTexts["atDropoff"] ?? missingKey
+            let deliveredText = statusTexts["delivered"] ?? missingKey
+            let pickedUpText = statusTexts["pickedUp"] ?? missingKey
+            let completeDeliveryText = statusTexts["completeDelivery"] ?? missingKey
+          
             if order.claimed() {
-                return UIInfo(pickup: StopUI(buttonTitle: enRouteText, isButtonDisabled: false), dropoff: StopUI(buttonTitle: atDroppOffText, isButtonDisabled: true))
+                return UIInfo(pickup: StopUI(buttonTitle: enRouteText, isButtonDisabled: false), dropoff: StopUI(buttonTitle: atDropoffText, isButtonDisabled: true))
             }
             if order.isEnrouteToPickup() {
-                return UIInfo(pickup: StopUI(buttonTitle: atPickupText, isButtonDisabled: false), dropoff: StopUI(buttonTitle: atDroppOffText, isButtonDisabled: true))
+                return UIInfo(pickup: StopUI(buttonTitle: atPickupText, isButtonDisabled: false), dropoff: StopUI(buttonTitle: atDropoffText, isButtonDisabled: true))
             }
             if order.isAtPickup() {
-                return UIInfo(pickup: StopUI(buttonTitle: enRouteToDropoffText, isButtonDisabled: false), dropoff: StopUI(buttonTitle: atDroppOffText, isButtonDisabled: true))
+                return UIInfo(pickup: StopUI(buttonTitle: enRouteToDropoffText, isButtonDisabled: false), dropoff: StopUI(buttonTitle: atDropoffText, isButtonDisabled: true))
+            }
+            if order.isEnrouteToDropoff() {
+                return UIInfo(pickup: StopUI(buttonTitle: pickedUpText, isButtonDisabled: true), dropoff: StopUI(buttonTitle: atDropoffText, isButtonDisabled: false))
             }
             if order.isAtDropOff() {
-                return UIInfo(pickup: StopUI(buttonTitle: pickedUpText, isButtonDisabled: true), dropoff: StopUI(buttonTitle: atDroppOffText, isButtonDisabled: false))
+                return UIInfo(pickup: StopUI(buttonTitle: pickedUpText, isButtonDisabled: true), dropoff: StopUI(buttonTitle: completeDeliveryText, isButtonDisabled: false))
             }
             if order.delivered() {
                 return UIInfo(pickup: StopUI(buttonTitle: "Picked up", isButtonDisabled: true), dropoff: StopUI(buttonTitle: deliveredText, isButtonDisabled: true))
             }
         }
         return UIInfo(pickup: StopUI(buttonTitle: "Invalid transition", isButtonDisabled: true), dropoff: StopUI(buttonTitle: "Invalid transition", isButtonDisabled: false))
+    }
+    
+    var missingKey: String {
+        "Mising dictionary key"
     }
 }
 

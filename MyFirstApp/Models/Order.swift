@@ -44,6 +44,16 @@ class Order {
     var pickup: Pickup
     var dropoff: Dropoff
     var status: OrderStatus = OrderStatus.unassinged
+    let statusTexts: [String: String] = [
+        "enRoute": "Heading to pickup",
+        "atPickup": "At pickup",
+        "enRouteToDropoff": "Leaving pickup",
+        "atDropoff": "At dropoff",
+        "delivered": "Delivered",
+        "pickedUp": "Picked up", // displays when disabled
+        "completeDelivery": "Complete delivery"
+    ]
+
     let inProgressStatuses: Set<OrderStatus> = [OrderStatus.enRouteToPickup, OrderStatus.atPickup, OrderStatus.atDropoff]
     // Note: SwiftData properties do not support willSet or didSet property observers, unless they have @Transient so had to make a transient prop, update this when status is updated. @Transient does not persist the data, so status is not persisted, so this is a workaround
     // https://www.hackingwithswift.com/quick-start/swiftdata/how-to-create-derived-attributes-with-swiftdata
@@ -132,11 +142,13 @@ class Order {
             status = .claimed
         } else if claimed() { // unassigned only here for testing purposes
             setEnRouteToPickup()
-        } else if status == .enRouteToPickup {
+        } else if isEnrouteToPickup() {
             setAtPickup()
-        } else if status == .atPickup {
-            setAtDropOff()
-        } else if status == .atDropoff {
+        } else if isAtPickup() {
+            setEnrouteToDropoff()
+        } else if isEnrouteToDropoff() {
+            setAtDropoff()
+        } else if isAtDropOff() {
             setDelivered()
         }
         
@@ -182,6 +194,10 @@ class Order {
         return status == .atPickup
     }
 
+    func isEnrouteToDropoff() -> Bool {
+        return status == .enRouteToDropOff
+    }
+
     func isAtDropOff() -> Bool {
         return status == .atDropoff
     }
@@ -218,11 +234,20 @@ class Order {
             status = .atPickup
         }
     }
-
-    private func setAtDropOff() {
-        print("setting @ dropoff")
+    
+    private func setEnrouteToDropoff() {
+        print("setting @ enrouteToDropoff")
         if status != .atPickup {
             print("please complete pickup first")
+        } else {
+            status = .enRouteToDropOff
+        }
+    }
+
+    private func setAtDropoff() {
+        print("setting @ dropoff")
+        if status != .enRouteToDropOff {
+            print("please setEnRouteToDroppoff first pickup first")
         } else {
             status = .atDropoff
         }

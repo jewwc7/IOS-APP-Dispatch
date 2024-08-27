@@ -8,16 +8,6 @@
 import SwiftData
 import SwiftUI
 
-struct SheetController {
-    var isPresented: Bool
-    var type: String // "pickup" | "dropoff"
-}
-
-// WHere I left off
-// line 82
-// concat the addresses for display.
-// now work on map for drivers with routes
-
 struct CreateOrderScreen: View {
     @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context // how to CRUD state
@@ -26,7 +16,7 @@ struct CreateOrderScreen: View {
     let errorManager = ErrorManager()
 
     let inputHeight = 40.0
-    @State var sheetController = SheetController(isPresented: false, type: "pickup")
+
     @State private var orderNumber: String = ""
     @State private var pickupLocation: LocationResult = .init(title: "", subtitle: "")
     @State private var pickupPhoneNumber: String = ""
@@ -86,8 +76,6 @@ struct CreateOrderScreen: View {
         }
     }
 
-    // Where I left,
-    // add validation, all fields must have data and dropofftime can't be earlier than pickup time
     // remove the uncessary data from orders
     func create() {
         isLoading = true

@@ -36,17 +36,6 @@ func humanizeCamelCase(_ input: String) -> String {
     return words.joined(separator: " ")
 }
 
-func createOrder(driver: Driver? = nil, customer: Customer? = nil, pickup: Pickup? = nil, dropoff: Dropoff? = nil) -> Order {
-    let finalPickup = pickup ?? Pickup(address: "1234 main st", cityStateZip: "Kansas City, MO 64127", locationId: UUID(), phoneNumber: "281-330-8004", contactName: "Mike Jones", company: "Swishahouse")
-    let finaldropoff = dropoff ?? Dropoff(address: "6789 broadway st", cityStateZip: "Kansas City, MO 64111", locationId: UUID(), phoneNumber: "904-490-7777", contactName: "Johnny", company: "Diamond Boys")
-
-    let order = Order(orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Mike Jones", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: customer ?? Customer(name: "John"), driver: driver, pickup: finalPickup, dropoff: finaldropoff)
-
-    finalPickup.order = order
-    finaldropoff.order = order
-    return order
-}
-
 func isSameDay(first: Date, second: Date) -> Bool {
     return Calendar.current.isDate(first, equalTo: second, toGranularity: .day)
 }
@@ -69,4 +58,13 @@ func convertDateToDateOnlyString(day: Date) -> String {
     let formatter1 = DateFormatter()
     formatter1.dateStyle = .short
     return formatter1.string(from: day)
+}
+
+func formattedDate(_ date: Date) -> String {
+    let formatter3 = DateFormatter()
+    // formatter3.dateFormat = "HH:mm E, d MMM y"
+    formatter3.timeZone = TimeZone.current
+    formatter3.dateStyle = .medium
+    formatter3.timeStyle = .short
+    return formatter3.string(from: date)
 }

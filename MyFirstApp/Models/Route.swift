@@ -58,7 +58,7 @@ class Route {
         do {
             try self.modelContext?.save()
         } catch {
-            print("Couldnt add order to route \(self.id)", error)
+            print("Couldnt add order to route \(String(describing: self.id))", error)
         }
     }
 

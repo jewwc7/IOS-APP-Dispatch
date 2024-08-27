@@ -7,28 +7,25 @@
 
 import SwiftUI
 
-
-
-struct CustomNavigationLink< Destination: View>: View {
+struct CustomNavigationLink<Destination: View>: View {
     let destination: Destination
-    let title:String
+    let title: String
     var bgColor: Color? = .gray
     var textColor: Color? = .white
     var onTapGesture: (() -> Void)? = nil
-    
-  //  let label: () -> Label  //label not in use right now
+
+    //  let label: () -> Label  //label not in use right now
     @State private var isActive: Bool = false
-   // @Binding var config: ICustomNavigationLinkConfig
+    // @Binding var config: ICustomNavigationLinkConfig
 //    let config = ICustomNavigationLink(title: "PlaceHolder") {
 //        print("Hello")
 //    }
-    
+
     var body: some View {
         NavigationStack {
             NavigationLink(title) {
                 destination
-            }.simultaneousGesture(TapGesture().onEnded{
-                print("custom nav pressed", onTapGesture)
+            }.simultaneousGesture(TapGesture().onEnded {
                 if let onTapGesture {
                     onTapGesture()
                 }
@@ -44,15 +41,14 @@ struct CustomNavigationLink< Destination: View>: View {
 //            }
         }
     }
-    
-    func noTapGestureProvided(){
+
+    func noTapGestureProvided() {
         print("No tap gesture provided to custom navigation link")
     }
 }
 
 #Preview {
-    CustomNavigationLink(destination: CustomerList(), title:"PlaceHolderPreview") {
+    CustomNavigationLink(destination: CustomerList(), title: "PlaceHolderPreview") {
         print("preview tapped")
     }
-    }
-
+}

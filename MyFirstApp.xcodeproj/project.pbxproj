@@ -16,6 +16,7 @@
 		051AB4E42C769245004F5677 /* ModelPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4E32C769245004F5677 /* ModelPreview.swift */; };
 		051AB4E92C793335004F5677 /* Stop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4E82C793335004F5677 /* Stop.swift */; };
 		051AB4EC2C7D0883004F5677 /* ExpandedDriverStopCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4EB2C7D0883004F5677 /* ExpandedDriverStopCard.swift */; };
+		051AB4EE2C7D3333004F5677 /* MyDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4ED2C7D3333004F5677 /* MyDatePicker.swift */; };
 		0551878E2BE98BEC00BA0A8A /* MyFirstAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */; };
 		055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878F2BE98BEC00BA0A8A /* ContentView.swift */; };
 		055187922BE98BED00BA0A8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 055187912BE98BED00BA0A8A /* Assets.xcassets */; };
@@ -79,6 +80,7 @@
 		051AB4E82C793335004F5677 /* Stop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stop.swift; sourceTree = "<group>"; };
 		051AB4EA2C7D05CF004F5677 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		051AB4EB2C7D0883004F5677 /* ExpandedDriverStopCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedDriverStopCard.swift; sourceTree = "<group>"; };
+		051AB4ED2C7D3333004F5677 /* MyDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDatePicker.swift; sourceTree = "<group>"; };
 		0551878A2BE98BEC00BA0A8A /* MyFirstApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFirstApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFirstAppApp.swift; sourceTree = "<group>"; };
 		0551878F2BE98BEC00BA0A8A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				05E1260C2C5AA3C5009F2415 /* CustomNavigationLink.swift */,
 				05E1261C2C5D85AF009F2415 /* MyChip.swift */,
 				05B99ED32C6E415200D8B876 /* MyNotification.swift */,
+				051AB4ED2C7D3333004F5677 /* MyDatePicker.swift */,
 			);
 			path = "UI components";
 			sourceTree = "<group>";
@@ -479,6 +482,7 @@
 				055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */,
 				051AB4D02C73EC85004F5677 /* LocationSearchService.swift in Sources */,
 				05E126042C530277009F2415 /* components.swift in Sources */,
+				051AB4EE2C7D3333004F5677 /* MyDatePicker.swift in Sources */,
 				051AB4E42C769245004F5677 /* ModelPreview.swift in Sources */,
 				051AB4E22C7690B9004F5677 /* PreviewSampleData.swift in Sources */,
 				05E126132C5AF182009F2415 /* Route.swift in Sources */,

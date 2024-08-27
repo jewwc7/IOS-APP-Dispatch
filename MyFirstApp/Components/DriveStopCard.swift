@@ -10,7 +10,7 @@ import SwiftUI
 
 struct DriverStopCard: View {
     @State private var isExpanded: Bool = false
-    var stop: Stop // = createOrder()
+    var stop: Stop
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -23,12 +23,6 @@ struct DriverStopCard: View {
                         Text(stop.fullAddress)
                             .font(.headline)
                     }
-                    HStack(spacing: 20) {
-                        Text("Due:")
-                        // TODO: use the stops when implemented
-                        Text(stop.order?.dueAtFormatted() ?? "Missing due date").font(.headline).foregroundStyle(.red)
-                        //  MyChip(text: order.dueAtFormatted())
-                    }.padding(.top, 12)
                    
                 }.padding()
             
@@ -64,12 +58,12 @@ struct DriverStopCard: View {
     func textForStopType(_ stop: Stop) -> some View {
         switch StopType(rawValue: stop.stopType) {
         case .pickup:
-            Text("Pickup  by orders dueAt")
+            Text("Pickup by \(formattedDate(stop.dueAt))")
                 .font(.headline)
                 .foregroundColor(.green)
         // Use pickup properties if needed
         case .dropoff:
-            Text("Dropoff by dropoffs dueAt ")
+            Text("Dropoff by \(formattedDate(stop.dueAt))")
                 .font(.headline)
                 .foregroundColor(.blue)
         // Use dropoff properties if needed

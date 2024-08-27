@@ -23,6 +23,11 @@ enum OrderStatus: String, Codable { //
     case delivered
 }
 
+// enum OrderError: Error {
+//    case alreadyClaimed
+//    case invalidDriver
+// }
+
 @Model
 class Order {
     // Properties
@@ -269,19 +274,37 @@ class Order {
         // Alternatively, you could call a delegate method, execute a closure, etc.
     }
     
-    func driverRouteStatus() -> String {
-        let title: String = {
-            switch self.status {
-            case .enRouteToPickup:
-                "En route to pickup"
-            case .atPickup:
-                "At pickup"
-            case .atDropoff:
-                "At Dropoff"
-            default:
-                "Claimed"
+    func validateFields(
+        pickupLocation: String,
+        pickupPhoneNumber: String,
+        pickupContactName: String,
+        pickupCompanyOrOrg: String,
+        dropoffLocation: String,
+        dropoffPhoneNumber: String,
+        dropoffContactName: String,
+        dropoffCompanyOrOrg: String,
+        dueAt: String
+    ) throws {
+        let fields = [
+            ("Pickup location", pickupLocation),
+            ("Pickup phone number", pickupPhoneNumber),
+            ("Pickup contact name", pickupContactName),
+            ("Pickup company or organization", pickupCompanyOrOrg),
+            ("Dropoff location", dropoffLocation),
+            ("Dropoff phone number", dropoffPhoneNumber),
+            ("Dropoff contact name", dropoffContactName),
+            ("Dropoff company or organization", dropoffCompanyOrOrg)
+        ]
+        
+        for (fieldName, fieldValue) in fields {
+            if fieldValue.isEmpty {
+                throw BaseError(type: .ValidationError, message: "Fields are empty")
             }
-        }()
-        return title
+        }
+        let isDropoffBeforePickup = dropoff.dueAt < pickup.dueAt
+        if isDropoffBeforePickup {
+            throw BaseError(type: .ValidationError, message: "Dropoff can't be before pickup")
+        }
+        // return ResultWithMessage(result: .success, message: "success") // .failure(.emptyField(message: "\(fieldName) is empty"))
     }
 }

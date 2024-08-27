@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-let testOrderTwo = createOrder()
+let testOrderTwo = createOrders(customer: Customer(name: "Jake"))
 
 struct CustomerStopCardData: View {
     var order: Order

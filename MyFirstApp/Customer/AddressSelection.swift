@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct AddressSelection: View {
-    @Binding var isPresented: Bool
     @State var locationSearchService = LocationSearchService()
     @Binding var address: LocationResult
-    @Binding var currentAddresses: [LocationResult]
+    @Environment(\.presentationMode) var presentationMode // auto avaialble
     //  @Binding var addressTwo: String?
 
     var body: some View {
@@ -25,15 +24,20 @@ struct AddressSelection: View {
                             Text(result.title)
                             Text(result.subtitle).font(.caption).foregroundStyle(.secondary)
                         }.onTapGesture {
-                            address = result
-                            currentAddresses.append(result)
-                            isPresented = false
+                            handleResultSelection(result)
                         } // .contentShape(Rectangle()) supposed to allow click on entire list element but not working https://stackoverflow.com/questions/62640073/hstack-ontapgesture-only-works-on-elements
                     }
                 }
             }
         }
         .searchable(text: $locationSearchService.query)
+    }
+
+    private func handleResultSelection(_ result: LocationResult) {
+        DispatchQueue.main.async { // "modifying state during view update", some reason assigning the address causes this. Looked up but didn;t find anything that worked, wrapping it in this doesn;t work. https://stackoverflow.com/questions/71953853/swiftui-map-causes-modifying-state-during-view-update
+            address = result
+        }
+        presentationMode.wrappedValue.dismiss() // Go back after selecting an address
     }
 }
 

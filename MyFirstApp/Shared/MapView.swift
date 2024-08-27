@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MapView: View {
     //  @Binding var address: LocationResult
-    @Binding var addresses: [LocationResult]
+    var addresses: [LocationResult]
     @State var region = MKCoordinateRegion()
     @State private(set) var annotationItems: [AnnotationItem] = []
 
@@ -43,6 +43,7 @@ struct MapView: View {
             }
         }
         .edgesIgnoringSafeArea(.bottom)
+        .frame(height: 400)
     }
 
     func getPlace(from address: LocationResult) {
@@ -57,8 +58,7 @@ struct MapView: View {
             let response = try await MKLocalSearch(request: request).start()
             await MainActor.run {
                 addAnnotationItems(response)
-
-                region = response.boundingRegion
+                updateRegionToFitAllAnnotations()
             }
         }
     }
@@ -76,6 +76,33 @@ struct MapView: View {
         if let firstAn = newAnnotation.first {
             annotationItems.append(firstAn)
         }
+    }
+
+    // zoom map out to see both addresses
+    func updateRegionToFitAllAnnotations() {
+        guard !annotationItems.isEmpty else { return }
+
+        var minLat = annotationItems[0].coordinate.latitude
+        var maxLat = annotationItems[0].coordinate.latitude
+        var minLon = annotationItems[0].coordinate.longitude
+        var maxLon = annotationItems[0].coordinate.longitude
+
+        for annotation in annotationItems {
+            minLat = min(minLat, annotation.coordinate.latitude)
+            maxLat = max(maxLat, annotation.coordinate.latitude)
+            minLon = min(minLon, annotation.coordinate.longitude)
+            maxLon = max(maxLon, annotation.coordinate.longitude)
+        }
+
+        let centerLat = (minLat + maxLat) / 2
+        let centerLon = (minLon + maxLon) / 2
+        let spanLat = (maxLat - minLat) * 1.2 // Add some padding
+        let spanLon = (maxLon - minLon) * 1.2 // Add some padding
+
+        region = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: centerLat, longitude: centerLon),
+            span: MKCoordinateSpan(latitudeDelta: spanLat, longitudeDelta: spanLon)
+        )
     }
 }
 

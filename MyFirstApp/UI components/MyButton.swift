@@ -5,6 +5,13 @@
 //  Created by Joshua Wilson on 5/8/24.
 //
 
+//
+//  MyButton.swift
+//  MyFirstApp
+//
+//  Created by Joshua Wilson on 5/8/24.
+//
+
 import SwiftUI
 
 struct Frame {
@@ -12,14 +19,22 @@ struct Frame {
     var width: CGFloat?
 }
 
+enum ButtonType: String {
+    case filled
+    case clear
+    case outline
+}
+
 struct MyButton: View {
     let title: String
-    var onPress: (() -> Void)? // how to make this an optional property, the  ? at the end does not work
-    var backgroundColor: Color? // If it’s set to let then it has to be set at init. And can’t be changed. Let us for constants, var is for
+    var titleColor: Color? = .white
+    var onPress: (() -> Void)?
+    var backgroundColor: Color?
     var image: String?
-    var titleColor: Color?
     var frame: Frame?
     var isDisabled: Bool = false
+    var isLoading: Bool = false
+    var buttonType: ButtonType? = .filled
     var getBackgroundColor: Color {
         if isDisabled == true {
             .gray
@@ -29,20 +44,40 @@ struct MyButton: View {
     }
 
     var body: some View {
-        Button(title, systemImage: image ?? "xmark", action: onPress ?? onPressDefault).frame(width: frame?.width ?? 100, height: frame?.height ?? 40).padding().background(getBackgroundColor, in: RoundedRectangle(cornerRadius: 8)).foregroundColor(.white)
+        Button(action: {
+            //         isLoading = true
+            onPress?()
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                isLoading = false
+//            }
+        }) {
+            HStack {
+                if let image = image {
+                    Image(systemName: image)
+                }
+                Text(title)
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .padding(.leading, 8)
+                }
+            }
+        }
+        .frame(width: frame?.width, height: frame?.height)
+        .padding()
+        .background(buttonType == ButtonType.clear ? Color.clear : getBackgroundColor, in: RoundedRectangle(cornerRadius: 8))
+        .foregroundColor(titleColor)
+        .fixedSize(horizontal: true, vertical: false) // Ensure the button resizes to fit its content
+//        .overlay(
+//            RoundedRectangle(cornerRadius: 8)
+//                .stroke(buttonType == ButtonType.clear ? Color.clear : getBackgroundColor, lineWidth: 1)
+//        )
+        .disabled(isDisabled || isLoading)
     }
 
     func onPressDefault() {
         print("Button tapped!")
     }
-
-//    func getBackgroundColor() -> Color {
-//        if isDisabled == true {
-//            .gray
-//        } else {
-//            backgroundColor ?? .blue
-//        }
-//    }
 }
 
 #Preview {

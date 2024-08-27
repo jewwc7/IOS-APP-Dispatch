@@ -24,6 +24,7 @@ class Pickup: Stop {
     var company: String
     var stopType: StopType.RawValue
     var deliveredAt: Date? = nil
+    var dueAt: Date
     var fullAddress: String {
         return "\(address), \(cityStateZip)"
     }
@@ -34,7 +35,8 @@ class Pickup: Stop {
         locationId: UUID,
         phoneNumber: String,
         contactName: String,
-        company: String
+        company: String,
+        dueAt: Date
     ) { // 7 days from now or right now
         self.id = UUID().uuidString
         self.address = address
@@ -43,6 +45,7 @@ class Pickup: Stop {
         self.phoneNumber = phoneNumber
         self.contactName = contactName
         self.company = company
+        self.dueAt = dueAt
         self.stopType = StopType.pickup.rawValue
         self.order = order
         self.deliveredAt = nil

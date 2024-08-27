@@ -20,7 +20,7 @@ protocol Stop {
     var fullAddress: String { get }
     var stopType: StopType.RawValue { get }
     var deliveredAt: Date? { get set }
-    // var dueAt: Date? { get set }
+    var dueAt: Date { get set }
 }
 
 enum StopType: String, Codable {

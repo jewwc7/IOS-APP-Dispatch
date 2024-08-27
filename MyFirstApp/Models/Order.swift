@@ -275,15 +275,6 @@ class Order {
     }
     
     func validateFields(
-        pickupLocation: String,
-        pickupPhoneNumber: String,
-        pickupContactName: String,
-        pickupCompanyOrOrg: String,
-        dropoffLocation: String,
-        dropoffPhoneNumber: String,
-        dropoffContactName: String,
-        dropoffCompanyOrOrg: String,
-        dueAt: String
     ) throws {
         let fields = [
             ("Pickup location", pickupLocation),
@@ -296,7 +287,7 @@ class Order {
             ("Dropoff company or organization", dropoffCompanyOrOrg)
         ]
         
-        for (fieldName, fieldValue) in fields {
+        for (_fieldName, fieldValue) in fields {
             if fieldValue.isEmpty {
                 throw BaseError(type: .ValidationError, message: "Fields are empty")
             }

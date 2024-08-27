@@ -17,6 +17,7 @@
 		051AB4E92C793335004F5677 /* Stop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4E82C793335004F5677 /* Stop.swift */; };
 		051AB4EC2C7D0883004F5677 /* ExpandedDriverStopCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4EB2C7D0883004F5677 /* ExpandedDriverStopCard.swift */; };
 		051AB4EE2C7D3333004F5677 /* MyDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4ED2C7D3333004F5677 /* MyDatePicker.swift */; };
+		051AB4F02C7E80F9004F5677 /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4EF2C7E80F9004F5677 /* ErrorManager.swift */; };
 		0551878E2BE98BEC00BA0A8A /* MyFirstAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */; };
 		055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878F2BE98BEC00BA0A8A /* ContentView.swift */; };
 		055187922BE98BED00BA0A8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 055187912BE98BED00BA0A8A /* Assets.xcassets */; };
@@ -81,6 +82,7 @@
 		051AB4EA2C7D05CF004F5677 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		051AB4EB2C7D0883004F5677 /* ExpandedDriverStopCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedDriverStopCard.swift; sourceTree = "<group>"; };
 		051AB4ED2C7D3333004F5677 /* MyDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDatePicker.swift; sourceTree = "<group>"; };
+		051AB4EF2C7E80F9004F5677 /* ErrorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
 		0551878A2BE98BEC00BA0A8A /* MyFirstApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFirstApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFirstAppApp.swift; sourceTree = "<group>"; };
 		0551878F2BE98BEC00BA0A8A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 				05E125FC2C51AA14009F2415 /* AppState.swift */,
 				05E1260A2C585534009F2415 /* Enums.swift */,
 				05E126142C5C44D1009F2415 /* Driver.swift */,
+				051AB4EF2C7E80F9004F5677 /* ErrorManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -472,6 +475,7 @@
 				055187BC2BEC1CFD00BA0A8A /* AvailableOrderScreen.swift in Sources */,
 				05E126112C5AE954009F2415 /* DataFlowVids.swift in Sources */,
 				051AB4E92C793335004F5677 /* Stop.swift in Sources */,
+				051AB4F02C7E80F9004F5677 /* ErrorManager.swift in Sources */,
 				05B99ED02C6D6E3700D8B876 /* Seeds.swift in Sources */,
 				051AB4D22C73F95B004F5677 /* AddressSelection.swift in Sources */,
 				05E126152C5C44D1009F2415 /* Driver.swift in Sources */,

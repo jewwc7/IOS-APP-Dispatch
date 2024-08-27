@@ -23,6 +23,7 @@ struct CreateOrderScreen: View {
     @Environment(\.modelContext) private var context // how to CRUD state
     @EnvironmentObject var appState: AppStateModel
     @Environment(\.presentationMode) var presentationMode // auto avaialble
+    let errorManager = ErrorManager()
 
     let inputHeight = 40.0
     @State var sheetController = SheetController(isPresented: false, type: "pickup")
@@ -95,16 +96,16 @@ struct CreateOrderScreen: View {
             let dropoff = Dropoff(address: dropoffLocation.title, cityStateZip: dropoffLocation.subtitle, locationId: dropoffLocation.id, phoneNumber: dropoffPhoneNumber, contactName: dropoffContactName, company: dropoffCompanyOrOrg, dueAt: dropoffDueAt)
 
             let newOrder = Order(orderNumber: orderNumber, pickupLocation: pickupLocation.title + pickupLocation.subtitle, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation.title + dropoffLocation.subtitle, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg: dropoffCompanyOrOrg, pay: 100, customer: customer, pickup: pickup, dropoff: dropoff)
-
-            context.insert(newOrder) // this should go after handleOrderAction
+            context.insert(newOrder)
+            // this should go after handleOrderAction
             // should do the validating on the model. Order.isValid?
             // don't need to insert because they are inserted when I insert the order
 //            context.insert(pickup)
 //            context.insert(dropoff)
-            customer.handleOrderAction(action: CustomerOrderAction.place, order: newOrder)
 
             do {
-                try customer.modelContext?.save()
+                try customer.handleOrderAction(action: CustomerOrderAction.place, order: newOrder)
+                // try customer.modelContext?.save()
                 try context.save()
                 // used to simulat a 2second api request
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -112,9 +113,13 @@ struct CreateOrderScreen: View {
                     isLoading = false
                     presentationMode.wrappedValue.dismiss()
                 }
+            } catch let error as BaseError { // Swift checks if the error thrown conforms to the BaseError type or is a
+                isLoading = false
+                errorManager.handleError(error)
+                print(["message": error.message, "type": error.type])
             } catch {
                 isLoading = false
-                print("Error creating order: \(error)")
+                print(error.localizedDescription)
             }
         } else {
             isLoading = false

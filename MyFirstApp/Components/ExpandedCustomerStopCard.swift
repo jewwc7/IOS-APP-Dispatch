@@ -7,9 +7,10 @@
 
 import SwiftUI
 
+// THis is called Customer but is used for available orderCArd, move this to correctly named file and delete this file
 struct ExpandedCustomerStopCard: View {
     var stop: Stop
-        
+    
     struct UIInfo {
         var pickup: StopUI
         var dropoff: StopUI
@@ -18,7 +19,7 @@ struct ExpandedCustomerStopCard: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                TextChip(title: "Pickup", font: .subheadline)
+                TextChip(title: stop.stopType, font: .subheadline)
                 Spacer()
             }
             VStack(alignment: .leading) {
@@ -45,10 +46,11 @@ struct ExpandedCustomerStopCard: View {
             Divider()
                 
             Spacer()
-        } // .padding().overlay(
-//            RoundedRectangle(cornerRadius: 10)
-//                .stroke(Color.blue, lineWidth: 2)
-//        )
+               
+        }.padding().overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.blue, lineWidth: 2)
+        )
     }
         
     func handleOnPress() {
@@ -98,10 +100,10 @@ struct ExpandedCustomerStopCard: View {
                 return UIInfo(pickup: StopUI(buttonTitle: pickedUpText, isButtonDisabled: true), dropoff: StopUI(buttonTitle: atDropoffText, isButtonDisabled: false))
             }
             if order.isAtDropOff() {
-                return UIInfo(pickup: StopUI(buttonTitle: pickedUpText, isButtonDisabled: true), dropoff: StopUI(buttonTitle: completeDeliveryText, isButtonDisabled: false))
+                return UIInfo(pickup: StopUI(buttonTitle: pickedUpText, isButtonDisabled: true), dropoff: StopUI(buttonTitle: "Complete Delivery", isButtonDisabled: false))
             }
             if order.delivered() {
-                return UIInfo(pickup: StopUI(buttonTitle: "Picked up", isButtonDisabled: true), dropoff: StopUI(buttonTitle: deliveredText, isButtonDisabled: true))
+                return UIInfo(pickup: StopUI(buttonTitle: deliveredText, isButtonDisabled: true), dropoff: StopUI(buttonTitle: deliveredText, isButtonDisabled: true))
             }
         }
         return UIInfo(pickup: StopUI(buttonTitle: "Invalid transition", isButtonDisabled: true), dropoff: StopUI(buttonTitle: "Invalid transition", isButtonDisabled: false))

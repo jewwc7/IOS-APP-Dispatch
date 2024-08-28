@@ -39,7 +39,7 @@ struct MyCreatedOrders: View {
             return LabelAndSystemImage(text: "Delivered", image: "checkmark")
         }
         if order.inProgess() {
-            return LabelAndSystemImage(text: humanizeCamelCase(order.status.rawValue), image: "car")
+            return LabelAndSystemImage(text: humanizeCamelCase(order.status), image: "car")
         }
         if order.claimed() {
             return LabelAndSystemImage(text: "Claimed", image: "person.fill.checkmark")

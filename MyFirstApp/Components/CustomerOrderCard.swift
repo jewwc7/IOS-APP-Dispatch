@@ -40,7 +40,7 @@ struct CustomerOrderCard: View {
                         HStack {
                             Text(formattedDate(order.dropoff.dueAt)).font(.subheadline).bold()
                             Spacer()
-                            TextChip(title: order.statusTexts[order.status.rawValue] ?? "missing key", bgColor: c, font: .subheadline)
+                            TextChip(title: order.statusTexts[order.status] ?? "missing key", bgColor: c, font: .subheadline)
                         }.padding(.vertical, 12)
                     }
                 }

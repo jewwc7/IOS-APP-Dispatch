@@ -67,7 +67,7 @@ struct AvailableOrderCard: View {
             } // .frame(width: 60).padding(20)
 
             // Content
-            if isExpanded { //needs to be it's on expanded card?
+            if isExpanded { // needs to be it's on expanded card?
                 ExpandedCustomerStopCard(stop: order.pickup).transition(.opacity) // Transition effect when expanding/collapsing
                     .background(Color.white)
                     .cornerRadius(10)
@@ -86,7 +86,7 @@ struct AvailableOrderCard: View {
 
     func getLabelAndSystemImage(order: Order) -> LabelAndSystemImage {
         let statusTexts = order.statusTexts
-        let statusText = statusTexts[order.status.rawValue] ?? "missing key"
+        let statusText = statusTexts[order.status] ?? "missing key"
 
         if order.delivered() {
             return LabelAndSystemImage(text: statusText, image: "checkmark")

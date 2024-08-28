@@ -11,6 +11,7 @@ struct ViewOrder: View {
     var order: Order /* ? = createOrders(customer: Customer(name: "Jackie")) */
     var pickup: Pickup
     var dropoff: Dropoff
+    @State private var currentStatus: OrderStatus = .unassigned
     
     init(order: Order) {
         self.order = order
@@ -21,10 +22,36 @@ struct ViewOrder: View {
     var body: some View {
         let c: Color = order.inProgess() ? .green : order.claimed() ? .blue : .red
         NavigationView {
+            VStack {
+                ProgressView(value: progressValue, total: 1.0)
+                    .progressViewStyle(LinearProgressViewStyle())
+                    .padding()
+
+                Text(order.statusTexts[currentStatus.rawValue] ?? "")
+                    .font(.headline)
+                    .padding()
+                
+                HStack {
+                    ForEach(OrderStatus.allCases, id: \.self) { status in
+                        Button(action: {
+                            currentStatus = status
+                        }) {
+                            Text(status.rawValue.capitalized)
+                                .padding(5)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(5)
+                        }
+                    }
+                }
+            }
+       
+            //  .padding()
+            
             List {
                 Section(header: Text("Driver status").font(.subheadline)) {
                     VStack {
-                        TextChip(title: order.statusTexts[order.status.rawValue] ?? "missing key", bgColor: c, font: .subheadline)
+                        TextChip(title: order.statusTexts[order.status] ?? "missing key", bgColor: c, font: .subheadline)
                     }
                 }
      
@@ -100,6 +127,15 @@ struct ViewOrder: View {
             }
         }
         .navigationTitle("Order Details")
+    }
+    
+    private var progressValue: Double {
+        // This line attempts to find the index of the currentStatus in the array of all possible OrderStatus cases (OrderStatus.allCases).
+        // If currentStatus is not found in OrderStatus.allCases, the guard statement returns 0.0, indicating no //progress.
+        guard let index = OrderStatus.allCases.firstIndex(of: currentStatus) else {
+            return 0.0
+        }
+        return Double(index) / Double(OrderStatus.allCases.count - 1)
     }
 }
 

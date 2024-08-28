@@ -5,10 +5,7 @@
 //  Created by Joshua Wilson on 5/6/24.
 //
 
-// Next add the Faker library
-// Make the buttons have a loading state?
-// Test out drivers with delivs due on dif days and allow customer to input due date (hard coded right now)
-// make a mapView for the route?
+// Big Watch out, enums cause previews to not work if they are assigned to swift data model. Instead assign the Raw value
 
 import SwiftData
 import SwiftUI

@@ -9,7 +9,6 @@ import SwiftData
 import SwiftUI
 
 struct MyCreatedOrders: View {
-    @Query private var orders: [Order]
     @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context // how to CRUD state
     @EnvironmentObject var appState: AppStateModel
@@ -20,7 +19,7 @@ struct MyCreatedOrders: View {
             if let loggedInCustomer = appState.loggedInCustomer {
                 if loggedInCustomer.orders.count > 0 {
                     List {
-                        ForEach(loggedInCustomer.orders, id: \.orderId) { order in
+                        ForEach(loggedInCustomer.orders, id: \.id) { order in
                             let labelAndSytemImage = getLabelAndSystemImage(order: order)
 
                             NavigationLink(destination: ViewOrder(order: order)) {
@@ -28,12 +27,12 @@ struct MyCreatedOrders: View {
                                     HStack {
                                         Text("Pickup Address:")
                                         Spacer()
-                                        Text(order.pickupLocation)
+                                        Text(order.pickup.fullAddress)
                                     }
                                     HStack {
                                         Text("Drop-Off Address:")
                                         Spacer()
-                                        Text(order.dropoffLocation)
+                                        Text(order.dropoff.fullAddress)
                                     }
 
                                     Label(labelAndSytemImage.text, systemImage: labelAndSytemImage.image).foregroundColor(.green)

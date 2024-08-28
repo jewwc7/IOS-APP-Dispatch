@@ -51,4 +51,22 @@ class Dropoff: Stop {
         self.order = order
         self.deliveredAt = nil
     }
+
+    func validateFields(
+    ) throws {
+        let fields = [ // think it's ok without city and location ID? Not all the locations have city
+            ("Pickup address", address),
+            ("Pickup phone number", phoneNumber),
+            ("Pickup contact name", contactName),
+            ("Pickup company or organization", company),
+        ]
+
+        for (_fieldName, fieldValue) in fields {
+            if fieldValue.isEmpty {
+                throw BaseError(type: .ValidationError, message: "Pickup has empty fields")
+            }
+        }
+
+        // return ResultWithMessage(result: .success, message: "success") // .failure(.emptyField(message: "\(fieldName) is empty"))
+    }
 }

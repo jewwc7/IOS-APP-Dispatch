@@ -60,7 +60,7 @@ struct AvailableOrderScreen: View {
                         VStack {
                             // ForEach needs to identify its contents in order to perform layout, successfully delegate gestures to child views and other tasks.
                             // https://stackoverflow.com/questions/69393430/referencing-initializer-init-content-on-foreach-requires-that-planet-c
-                            ForEach(unclaimedOrders, id: \.orderId) { order in
+                            ForEach(unclaimedOrders, id: \.id) { order in
                                 AvailableOrderCard(order: order, driver: loggedInDriver) // This is the view returned for each item in the array
                             }
                         }

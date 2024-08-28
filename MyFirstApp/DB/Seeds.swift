@@ -30,7 +30,7 @@ func createOrders(_ numOfOrders: Int = 1, customer: Customer, pickup: Pickup? = 
     let finalPickup = pickup ?? Pickup(address: "1234 main st", cityStateZip: "Kansas City, MO 64127", locationId: UUID(), phoneNumber: "281-330-8004", contactName: "Mike Jones", company: "Swishahouse", dueAt: pickupDueAt)
     let finaldropoff = dropoff ?? Dropoff(address: "6789 broadway st", cityStateZip: "Kansas City, MO 64111", locationId: UUID(), phoneNumber: "904-490-7777", contactName: "Johnny", company: "Diamond Boys", dueAt: dropoffDueAt)
 
-    let order = Order(orderNumber: "123", pickupLocation: "1234 main st", pickupPhoneNumber: "281-330-8004", pickupContactName: "Slim", pickupCompanyOrOrg: "Swishahouse", dropoffLocation: "6789 broadway st", dropoffPhoneNumber: "904-490-7777", dropoffContactName: "Johnny", dropoffCompanyOrOrg: "Diamond Boys", pay: 100, customer: customer, pickup: finalPickup, dropoff: finaldropoff)
+    let order = Order(orderNumber: "123", pay: 100.00, customer: customer, pickup: finalPickup, dropoff: finaldropoff)
 
     finalPickup.order = order
     finaldropoff.order = order

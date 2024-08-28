@@ -26,8 +26,8 @@ struct AvailableOrderCard: View {
         
         VStack {
             VStack {
-                Text(order.orderId)
-                Text(order.pickupLocation).font(.system(size: 24)).bold()
+                Text(order.id)
+                Text(order.pickup.fullAddress).font(.system(size: 24)).bold()
                 Text("$\(String(order.pay))").foregroundColor(.green).font(.system(size: 24))
             }.padding(24).foregroundColor(.black).frame(width: width)
             
@@ -46,12 +46,11 @@ struct AvailableOrderCard: View {
     }
     
     func claim() {
-        print("Order \(order.orderId) accepted")
         driver.handleOrderAction(action: DriverOrderAction.claim, order: order)
     }
 
     func decline() {
-        print("Order \(order.orderId) declined")
+        print("Order \(order.id) declined")
     }
 }
 

@@ -80,10 +80,12 @@ struct CreateOrderScreen: View {
     func create() {
         isLoading = true
         if let customer = appState.loggedInCustomer {
+            let randomDouble = Double.random(in: 1.00 ... 100.90)
+
             let pickup = Pickup(address: pickupLocation.title, cityStateZip: pickupLocation.subtitle, locationId: pickupLocation.id, phoneNumber: pickupPhoneNumber, contactName: pickupContactName, company: pickupCompanyOrOrg, dueAt: pickupDueAt)
             let dropoff = Dropoff(address: dropoffLocation.title, cityStateZip: dropoffLocation.subtitle, locationId: dropoffLocation.id, phoneNumber: dropoffPhoneNumber, contactName: dropoffContactName, company: dropoffCompanyOrOrg, dueAt: dropoffDueAt)
 
-            let newOrder = Order(orderNumber: orderNumber, pickupLocation: pickupLocation.title + pickupLocation.subtitle, pickupPhoneNumber: pickupPhoneNumber, pickupContactName: pickupContactName, pickupCompanyOrOrg: pickupCompanyOrOrg, dropoffLocation: dropoffLocation.title + dropoffLocation.subtitle, dropoffPhoneNumber: dropoffPhoneNumber, dropoffContactName: dropoffContactName, dropoffCompanyOrOrg: dropoffCompanyOrOrg, pay: 100, customer: customer, pickup: pickup, dropoff: dropoff)
+            let newOrder = Order(orderNumber: orderNumber, pay: randomDouble, customer: customer, pickup: pickup, dropoff: dropoff)
             context.insert(newOrder)
             // this should go after handleOrderAction
             // should do the validating on the model. Order.isValid?

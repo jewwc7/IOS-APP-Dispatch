@@ -59,7 +59,7 @@ class Customer {
     private func placeOrder(order: Order) throws {
         print(self.name, "requested to place an order")
 
-        try order.validateFields() // don't include do-catch so error can bubble up
+        try order.validatePickupAndDropOff() // don't include do-catch so error can bubble up
         self.orders.append(order)
         self.numberOfOrdersPlaced += 1
         print(self.name, "placed an order!")

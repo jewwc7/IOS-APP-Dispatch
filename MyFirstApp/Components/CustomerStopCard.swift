@@ -10,87 +10,24 @@ import SwiftUI
 
 let testOrderTwo = createOrders(customer: Customer(name: "Jake"))
 
-struct CustomerStopCardData: View {
-    var order: Order
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            VStack {
-                Text("Pickup info").font(.title2)
-            }.padding(.vertical, 2)
-            VStack(alignment: .leading) {
-                Text("Organization")
-                Text(order.pickupCompanyOrOrg).bold()
-            }.padding(.vertical, 2)
-            
-            VStack(alignment: .leading) {
-                Text("Address")
-                Text(order.pickupLocation).bold()
-            }.padding(.vertical, 2)
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("Contact name")
-                    Text(order.pickupContactName).bold()
-                }
-                VStack(alignment: .leading) {
-                    Text("Phone")
-                    Text(order.pickupPhoneNumber).bold()
-                }
-            }
-            .padding(.vertical, 2)
-           
-            Divider()
-            VStack(alignment: .leading) {
-                VStack {
-                    Text("Dropoff info").font(.title2)
-                }.padding(.vertical, 2)
-                VStack(alignment: .leading) {
-                    Text("Organization")
-                    Text(order.dropoffCompanyOrOrg).bold()
-                }.padding(.vertical, 2)
-                
-                VStack(alignment: .leading) {
-                    Text("Address")
-                    Text(order.dropoffLocation).bold()
-                }.padding(.vertical, 2)
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Contact name")
-                        Text(order.dropoffContactName).bold()
-                    }
-                    VStack(alignment: .leading) {
-                        Text("Phone")
-                        Text(order.dropoffPhoneNumber).bold()
-                    }
-                }
-            }
-            
-            Spacer()
-            
-        }.padding().overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.blue, lineWidth: 2)
-        )
-    }
-}
-
 struct CustomerStopCard: View {
     @State private var isExpanded: Bool = false
     var order: Order
-    
+
     var body: some View {
         let labelAndSytemImage = getLabelAndSystemImage(order: order)
-        
+
         VStack(alignment: .leading) {
             // Header
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Pickup: \(order.pickupLocation)")
+                    Text("Pickup: \(order.pickup.fullAddress)")
                         .font(.headline)
-                    Text("Dropoff: \(order.dropoffLocation)")
+                    Text("Dropoff: \(order.dropoff.fullAddress)")
                         .font(.headline)
 //                        .padding()
-                    MyChip(text: order.dueAtFormatted())
+                    MyChip(text: formattedDate(order.dropoff.dueAt))
+
                     if let orderDriver = order.driver {
                         HStack {
                             Image(systemName: "person").foregroundColor(.green)
@@ -100,7 +37,7 @@ struct CustomerStopCard: View {
                         Label(labelAndSytemImage.text, systemImage: labelAndSytemImage.image).foregroundColor(.green)
                     }
                 }.padding()
-            
+
                 Spacer()
                 Button(action: {
                     withAnimation {
@@ -113,10 +50,14 @@ struct CustomerStopCard: View {
             }
             .background(Color.gray.opacity(0.2))
             .cornerRadius(10)
-            
+
             // Content
             if isExpanded {
-                CustomerStopCardData(order: order).transition(.opacity) // Transition effect when expanding/collapsing
+                ExpandedCustomerStopCard(stop: order.pickup).transition(.opacity) // Transition effect when expanding/collapsing
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                ExpandedCustomerStopCard(stop: order.dropoff).transition(.opacity) // Transition effect when expanding/collapsing
                     .background(Color.white)
                     .cornerRadius(10)
                     .shadow(radius: 5)
@@ -127,19 +68,22 @@ struct CustomerStopCard: View {
 //        .cornerRadius(10)
 //        .shadow(radius: 5)
     }
-    
+
     func getLabelAndSystemImage(order: Order) -> LabelAndSystemImage {
+        let statusTexts = order.statusTexts
+        let statusText = statusTexts[order.status.rawValue] ?? "missing key"
+
         if order.delivered() {
-            return LabelAndSystemImage(text: "Delivered", image: "checkmark")
+            return LabelAndSystemImage(text: statusText, image: "checkmark")
         }
         if order.inProgess() {
-            return LabelAndSystemImage(text: humanizeCamelCase(order.status.rawValue), image: "car")
+            return LabelAndSystemImage(text: statusText, image: "car")
         }
         if order.claimed() {
-            return LabelAndSystemImage(text: "Claimed", image: "person.fill.checkmark")
+            return LabelAndSystemImage(text: statusText, image: "person.fill.checkmark")
             // car and status
         } else {
-            return LabelAndSystemImage(text: "Unassigned", image: "magnifyingglass")
+            return LabelAndSystemImage(text: statusText, image: "magnifyingglass")
         }
     }
 }

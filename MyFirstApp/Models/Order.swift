@@ -31,25 +31,18 @@ enum OrderStatus: String, Codable { //
 @Model
 class Order {
     // Properties
-    var orderId: String
+    var id: String
     var orderNumber: String?
-    var pickupLocation: String
-    var pickupPhoneNumber: String
-    var pickupContactName: String
-    var pickupCompanyOrOrg: String
-    var dropoffLocation: String
-    var dropoffPhoneNumber: String
-    var dropoffContactName: String
-    var dropoffCompanyOrOrg: String
-    var pay: Int
-    var dueAt: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+    var pay: Double
     var startedAt: Date?
     var customer: Customer?
     var driver: Driver?
     var pickup: Pickup
     var dropoff: Dropoff
     var status: OrderStatus = OrderStatus.unassinged
-    let statusTexts: [String: String] = [
+    let statusTexts: [OrderStatus.RawValue: String] = [
+        "unassigned": "Unassigned",
+        "claimed": "Claimed",
         "enRoute": "Heading to pickup",
         "atPickup": "At pickup",
         "enRouteToDropoff": "Leaving pickup",
@@ -59,7 +52,7 @@ class Order {
         "completeDelivery": "Complete delivery"
     ]
 
-    let inProgressStatuses: Set<OrderStatus> = [OrderStatus.enRouteToPickup, OrderStatus.atPickup, OrderStatus.atDropoff]
+    let inProgressStatuses: Set<OrderStatus> = [OrderStatus.enRouteToPickup, OrderStatus.atPickup, OrderStatus.atDropoff, OrderStatus.enRouteToDropOff]
     // Note: SwiftData properties do not support willSet or didSet property observers, unless they have @Transient so had to make a transient prop, update this when status is updated. @Transient does not persist the data, so status is not persisted, so this is a workaround
     // https://www.hackingwithswift.com/quick-start/swiftdata/how-to-create-derived-attributes-with-swiftdata
     @Transient var transientStatus: OrderStatus = .unassinged {
@@ -68,37 +61,19 @@ class Order {
             statusDidChange()
         }
     }
-     
+
     init(
         orderNumber: String?,
-        pickupLocation: String,
-        pickupPhoneNumber: String,
-        pickupContactName: String,
-        pickupCompanyOrOrg: String,
-        dropoffLocation: String,
-        dropoffPhoneNumber: String,
-        dropoffContactName: String,
-        dropoffCompanyOrOrg: String,
-        pay: Int,
+        pay: Double,
         customer: Customer,
         status: OrderStatus = OrderStatus.unassinged,
         driver: Driver? = nil,
         pickup: Pickup,
-        dropoff: Dropoff,
-        dueAt: Date? = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+        dropoff: Dropoff
     ) { // 7 days from now or right now
-        self.orderId = UUID().uuidString
+        self.id = UUID().uuidString
         self.orderNumber = orderNumber
-        self.pickupLocation = pickupLocation
-        self.pickupPhoneNumber = pickupPhoneNumber
-        self.pickupContactName = pickupContactName
-        self.pickupCompanyOrOrg = pickupCompanyOrOrg
-        self.dropoffLocation = dropoffLocation
-        self.dropoffPhoneNumber = dropoffPhoneNumber
-        self.dropoffContactName = dropoffContactName
-        self.dropoffCompanyOrOrg = dropoffCompanyOrOrg
         self.pay = pay
-        self.dueAt = dueAt ?? Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date() // add time to this date
         self.startedAt = nil
         self.customer = customer
         self.driver = driver
@@ -106,16 +81,12 @@ class Order {
         self.pickup = pickup
         self.dropoff = dropoff
     }
-    
-    // Method
-    func introduce() {
-        print("Hello, my name is \(orderId) and I am being picked up from \(pickupLocation)  and am to be dropped off at \(dropoffLocation) for a cost of $\(pay).")
-    }
-    
-    func late() -> Bool {
-        return dueAt > Date()
-    }
-    
+
+    // check if pickup or dropOff is late
+//    func late() -> Bool {
+//        return dueAt > Date()
+//    }
+
     func claim(driver: Driver) -> ResultWithMessage {
         let isClaimable = self.isClaimable()
         if isClaimable.result == .success {
@@ -126,7 +97,7 @@ class Order {
             return isClaimable
         }
     }
-    
+
     private func isClaimable() -> ResultWithMessage {
         if driver != nil {
             return ResultWithMessage(result: .failure, message: "Driver already assigned")
@@ -137,7 +108,7 @@ class Order {
             return ResultWithMessage(result: .success)
         }
     }
-    
+
     func handleStatusTransition() {
         if status == .delivered {
             return print("Order already delivered")
@@ -156,7 +127,7 @@ class Order {
         } else if isAtDropOff() {
             setDelivered()
         }
-        
+
         do {
             try modelContext?.save()
             transientStatus = status
@@ -164,7 +135,7 @@ class Order {
             print(error)
         }
     }
-    
+
     func claimed() -> Bool {
         // commented out for testing
         return status == .claimed // && driver != nil
@@ -174,11 +145,11 @@ class Order {
     func unassigned() -> Bool {
         return status == .unassinged
     }
-    
+
     func assigned() -> Bool {
         return status == .claimed && driver != nil
     }
-    
+
     func started() -> Bool {
         return startedAt != nil
     }
@@ -190,11 +161,11 @@ class Order {
     func delivered() -> Bool {
         return status == .delivered
     }
-   
+
     func isEnrouteToPickup() -> Bool {
         return status == .enRouteToPickup
     }
-    
+
     func isAtPickup() -> Bool {
         return status == .atPickup
     }
@@ -206,21 +177,12 @@ class Order {
     func isAtDropOff() -> Bool {
         return status == .atDropoff
     }
-    
+
     func inProgess() -> Bool {
         print(inProgressStatuses.contains(status), status)
         return inProgressStatuses.contains(status)
     }
-    
-    func dueAtFormatted() -> String {
-        let formatter3 = DateFormatter()
-        // formatter3.dateFormat = "HH:mm E, d MMM y"
-        formatter3.timeZone = TimeZone.current
-        formatter3.dateStyle = .medium
-        formatter3.timeStyle = .short
-        return formatter3.string(from: dueAt)
-    }
-    
+
     private func setEnRouteToPickup() {
         if driver == nil {
             print("order has no driver")
@@ -239,7 +201,7 @@ class Order {
             status = .atPickup
         }
     }
-    
+
     private func setEnrouteToDropoff() {
         print("setting @ enrouteToDropoff")
         if status != .atPickup {
@@ -273,29 +235,10 @@ class Order {
         }
         // Alternatively, you could call a delegate method, execute a closure, etc.
     }
-    
-    func validateFields(
+
+    func validatePickupAndDropOff(
     ) throws {
-        let fields = [
-            ("Pickup location", pickupLocation),
-            ("Pickup phone number", pickupPhoneNumber),
-            ("Pickup contact name", pickupContactName),
-            ("Pickup company or organization", pickupCompanyOrOrg),
-            ("Dropoff location", dropoffLocation),
-            ("Dropoff phone number", dropoffPhoneNumber),
-            ("Dropoff contact name", dropoffContactName),
-            ("Dropoff company or organization", dropoffCompanyOrOrg)
-        ]
-        
-        for (_fieldName, fieldValue) in fields {
-            if fieldValue.isEmpty {
-                throw BaseError(type: .ValidationError, message: "Fields are empty")
-            }
-        }
-        let isDropoffBeforePickup = dropoff.dueAt < pickup.dueAt
-        if isDropoffBeforePickup {
-            throw BaseError(type: .ValidationError, message: "Dropoff can't be before pickup")
-        }
-        // return ResultWithMessage(result: .success, message: "success") // .failure(.emptyField(message: "\(fieldName) is empty"))
+        try pickup.validateFields()
+        try dropoff.validateFields()
     }
 }

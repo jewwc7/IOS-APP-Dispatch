@@ -18,6 +18,7 @@
 		051AB4EC2C7D0883004F5677 /* ExpandedDriverStopCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4EB2C7D0883004F5677 /* ExpandedDriverStopCard.swift */; };
 		051AB4EE2C7D3333004F5677 /* MyDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4ED2C7D3333004F5677 /* MyDatePicker.swift */; };
 		051AB4F02C7E80F9004F5677 /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4EF2C7E80F9004F5677 /* ErrorManager.swift */; };
+		051AB4F22C7EB173004F5677 /* ExpandedCustomerStopCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4F12C7EB173004F5677 /* ExpandedCustomerStopCard.swift */; };
 		0551878E2BE98BEC00BA0A8A /* MyFirstAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */; };
 		055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878F2BE98BEC00BA0A8A /* ContentView.swift */; };
 		055187922BE98BED00BA0A8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 055187912BE98BED00BA0A8A /* Assets.xcassets */; };
@@ -83,6 +84,7 @@
 		051AB4EB2C7D0883004F5677 /* ExpandedDriverStopCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedDriverStopCard.swift; sourceTree = "<group>"; };
 		051AB4ED2C7D3333004F5677 /* MyDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDatePicker.swift; sourceTree = "<group>"; };
 		051AB4EF2C7E80F9004F5677 /* ErrorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
+		051AB4F12C7EB173004F5677 /* ExpandedCustomerStopCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedCustomerStopCard.swift; sourceTree = "<group>"; };
 		0551878A2BE98BEC00BA0A8A /* MyFirstApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFirstApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFirstAppApp.swift; sourceTree = "<group>"; };
 		0551878F2BE98BEC00BA0A8A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				05E126262C6190C7009F2415 /* DriveStopCard.swift */,
 				05B99ED12C6D74CA00D8B876 /* CustomerStopCard.swift */,
 				051AB4EB2C7D0883004F5677 /* ExpandedDriverStopCard.swift */,
+				051AB4F12C7EB173004F5677 /* ExpandedCustomerStopCard.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -472,6 +475,7 @@
 				05E125FF2C52EE04009F2415 /* Customer.swift in Sources */,
 				05B99ED42C6E415200D8B876 /* MyNotification.swift in Sources */,
 				05632E542BFBF2A800BBDD89 /* CreateOrderScreen.swift in Sources */,
+				051AB4F22C7EB173004F5677 /* ExpandedCustomerStopCard.swift in Sources */,
 				055187BC2BEC1CFD00BA0A8A /* AvailableOrderScreen.swift in Sources */,
 				05E126112C5AE954009F2415 /* DataFlowVids.swift in Sources */,
 				051AB4E92C793335004F5677 /* Stop.swift in Sources */,

@@ -46,7 +46,7 @@ struct CreateOrderScreen: View {
                     }
                 }
             }
-
+            // The updating UI error is caused by the map. Reporduce by prepopulating or entering address
             MapView(addresses: [pickupLocation, dropoffLocation])
 
             Form { // forms should not be nested in scrollviews, they are already scrollviews
@@ -87,11 +87,7 @@ struct CreateOrderScreen: View {
 
             let newOrder = Order(orderNumber: orderNumber, pay: randomDouble, customer: customer, pickup: pickup, dropoff: dropoff)
             context.insert(newOrder)
-            // this should go after handleOrderAction
-            // should do the validating on the model. Order.isValid?
-            // don't need to insert because they are inserted when I insert the order
-//            context.insert(pickup)
-//            context.insert(dropoff)
+            // don't need to insert p/u and d/o because they are inserted when I insert the order
 
             do {
                 try customer.handleOrderAction(action: CustomerOrderAction.place, order: newOrder)

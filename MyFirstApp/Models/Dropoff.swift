@@ -30,6 +30,10 @@ class Dropoff: Stop {
         return "\(address), \(cityStateZip)"
     }
 
+    var fullAddressSpaced: String {
+        return "\(address)\n\(cityStateZip)"
+    }
+
     init(
         address: String,
         cityStateZip: String,

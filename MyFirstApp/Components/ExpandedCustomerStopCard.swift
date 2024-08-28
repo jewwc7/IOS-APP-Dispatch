@@ -17,6 +17,10 @@ struct ExpandedCustomerStopCard: View {
 
     var body: some View {
         VStack(alignment: .leading) {
+            HStack {
+                TextChip(title: "Pickup", font: .subheadline)
+                Spacer()
+            }
             VStack(alignment: .leading) {
                 Text("Organization")
                 Text(stop.company).bold()
@@ -41,11 +45,10 @@ struct ExpandedCustomerStopCard: View {
             Divider()
                 
             Spacer()
-               
-        }.padding().overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.blue, lineWidth: 2)
-        )
+        } // .padding().overlay(
+//            RoundedRectangle(cornerRadius: 10)
+//                .stroke(Color.blue, lineWidth: 2)
+//        )
     }
         
     func handleOnPress() {

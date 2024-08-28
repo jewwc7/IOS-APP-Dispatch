@@ -13,7 +13,7 @@ import SwiftUI
 
 // To resolve the issue, you need to ensure that OrderStatus conforms to PersistentModel. In SwiftData (and other similar frameworks like Core Data), enums that are used as properties of persistent models typically need to be marked as conforming to Codable so that they can be serialized and deserialized properly.
 enum OrderStatus: String, Codable { //
-    case unassinged
+    case unassigned
     case canceled
     case claimed
     case enRouteToPickup
@@ -39,7 +39,7 @@ class Order {
     var driver: Driver?
     var pickup: Pickup
     var dropoff: Dropoff
-    var status: OrderStatus = OrderStatus.unassinged
+    var status: OrderStatus = OrderStatus.unassigned
     let statusTexts: [OrderStatus.RawValue: String] = [
         "unassigned": "Unassigned",
         "claimed": "Claimed",
@@ -49,13 +49,13 @@ class Order {
         "atDropoff": "At dropoff",
         "delivered": "Delivered",
         "pickedUp": "Picked up", // displays when disabled
-        "completeDelivery": "Complete delivery"
+        "completeDelivery": "Complete delivery" // display when entire deliv complete
     ]
 
     let inProgressStatuses: Set<OrderStatus> = [OrderStatus.enRouteToPickup, OrderStatus.atPickup, OrderStatus.atDropoff, OrderStatus.enRouteToDropOff]
     // Note: SwiftData properties do not support willSet or didSet property observers, unless they have @Transient so had to make a transient prop, update this when status is updated. @Transient does not persist the data, so status is not persisted, so this is a workaround
     // https://www.hackingwithswift.com/quick-start/swiftdata/how-to-create-derived-attributes-with-swiftdata
-    @Transient var transientStatus: OrderStatus = .unassinged {
+    @Transient var transientStatus: OrderStatus = .unassigned {
         didSet {
             // In Swift, didSet is a property observer that executes a block of code immediately after the value of a property changes. Property observers are used to monitor changes in a property’s value, which allows you to respond to changes in state or value without the need to explicitly call a method or function.
             statusDidChange()
@@ -66,7 +66,7 @@ class Order {
         orderNumber: String?,
         pay: Double,
         customer: Customer,
-        status: OrderStatus = OrderStatus.unassinged,
+        status: OrderStatus = OrderStatus.unassigned,
         driver: Driver? = nil,
         pickup: Pickup,
         dropoff: Dropoff
@@ -143,7 +143,7 @@ class Order {
     }
 
     func unassigned() -> Bool {
-        return status == .unassinged
+        return status == .unassigned
     }
 
     func assigned() -> Bool {
@@ -179,7 +179,6 @@ class Order {
     }
 
     func inProgess() -> Bool {
-        print(inProgressStatuses.contains(status), status)
         return inProgressStatuses.contains(status)
     }
 

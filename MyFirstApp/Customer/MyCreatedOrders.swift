@@ -20,24 +20,9 @@ struct MyCreatedOrders: View {
                 if loggedInCustomer.orders.count > 0 {
                     List {
                         ForEach(loggedInCustomer.orders, id: \.id) { order in
-                            let labelAndSytemImage = getLabelAndSystemImage(order: order)
-
                             NavigationLink(destination: ViewOrder(order: order)) {
-                                VStack {
-                                    HStack {
-                                        Text("Pickup Address:")
-                                        Spacer()
-                                        Text(order.pickup.fullAddress)
-                                    }
-                                    HStack {
-                                        Text("Drop-Off Address:")
-                                        Spacer()
-                                        Text(order.dropoff.fullAddress)
-                                    }
-
-                                    Label(labelAndSytemImage.text, systemImage: labelAndSytemImage.image).foregroundColor(.green)
-                                }
-                            }
+                                CustomerOrderCard(order: order)
+                            }.buttonStyle(PlainButtonStyle())
                         }
                     }
                 } else {

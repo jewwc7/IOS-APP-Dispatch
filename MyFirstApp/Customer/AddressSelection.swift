@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+// convert pay to currency
+// Make better available Order cards
+// Clean up that screens UI/ Remove the toogle and put the shopping cart as a tab view?
+// What happens when I decline an order?
+// Then add sorting and filtering to list(CUstomer order list, etc) review the youtube vid
 struct AddressSelection: View {
     @State var locationSearchService = LocationSearchService()
     @Binding var address: LocationResult

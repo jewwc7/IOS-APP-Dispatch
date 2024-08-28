@@ -19,6 +19,8 @@
 		051AB4EE2C7D3333004F5677 /* MyDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4ED2C7D3333004F5677 /* MyDatePicker.swift */; };
 		051AB4F02C7E80F9004F5677 /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4EF2C7E80F9004F5677 /* ErrorManager.swift */; };
 		051AB4F22C7EB173004F5677 /* ExpandedCustomerStopCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4F12C7EB173004F5677 /* ExpandedCustomerStopCard.swift */; };
+		051AB4F42C7F9A11004F5677 /* TextChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4F32C7F9A11004F5677 /* TextChip.swift */; };
+		051AB4F62C7FD223004F5677 /* CustomerOrderCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4F52C7FD223004F5677 /* CustomerOrderCard.swift */; };
 		0551878E2BE98BEC00BA0A8A /* MyFirstAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */; };
 		055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878F2BE98BEC00BA0A8A /* ContentView.swift */; };
 		055187922BE98BED00BA0A8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 055187912BE98BED00BA0A8A /* Assets.xcassets */; };
@@ -31,7 +33,6 @@
 		05632E542BFBF2A800BBDD89 /* CreateOrderScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05632E532BFBF2A800BBDD89 /* CreateOrderScreen.swift */; };
 		05632E572BFC034000BBDD89 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05632E562BFC034000BBDD89 /* Order.swift */; };
 		05B99ED02C6D6E3700D8B876 /* Seeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B99ECF2C6D6E3700D8B876 /* Seeds.swift */; };
-		05B99ED22C6D74CA00D8B876 /* CustomerStopCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B99ED12C6D74CA00D8B876 /* CustomerStopCard.swift */; };
 		05B99ED42C6E415200D8B876 /* MyNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B99ED32C6E415200D8B876 /* MyNotification.swift */; };
 		05E125F42BFD48B9009F2415 /* CustomerMainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */; };
 		05E125F62BFD5047009F2415 /* MyCreatedOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125F52BFD5047009F2415 /* MyCreatedOrders.swift */; };
@@ -85,6 +86,8 @@
 		051AB4ED2C7D3333004F5677 /* MyDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDatePicker.swift; sourceTree = "<group>"; };
 		051AB4EF2C7E80F9004F5677 /* ErrorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
 		051AB4F12C7EB173004F5677 /* ExpandedCustomerStopCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedCustomerStopCard.swift; sourceTree = "<group>"; };
+		051AB4F32C7F9A11004F5677 /* TextChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextChip.swift; sourceTree = "<group>"; };
+		051AB4F52C7FD223004F5677 /* CustomerOrderCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerOrderCard.swift; sourceTree = "<group>"; };
 		0551878A2BE98BEC00BA0A8A /* MyFirstApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFirstApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFirstAppApp.swift; sourceTree = "<group>"; };
 		0551878F2BE98BEC00BA0A8A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -101,7 +104,6 @@
 		05632E532BFBF2A800BBDD89 /* CreateOrderScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateOrderScreen.swift; sourceTree = "<group>"; };
 		05632E562BFC034000BBDD89 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		05B99ECF2C6D6E3700D8B876 /* Seeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Seeds.swift; sourceTree = "<group>"; };
-		05B99ED12C6D74CA00D8B876 /* CustomerStopCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerStopCard.swift; sourceTree = "<group>"; };
 		05B99ED32C6E415200D8B876 /* MyNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNotification.swift; sourceTree = "<group>"; };
 		05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerMainScreen.swift; sourceTree = "<group>"; };
 		05E125F52BFD5047009F2415 /* MyCreatedOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCreatedOrders.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				05E1261C2C5D85AF009F2415 /* MyChip.swift */,
 				05B99ED32C6E415200D8B876 /* MyNotification.swift */,
 				051AB4ED2C7D3333004F5677 /* MyDatePicker.swift */,
+				051AB4F32C7F9A11004F5677 /* TextChip.swift */,
 			);
 			path = "UI components";
 			sourceTree = "<group>";
@@ -271,7 +274,7 @@
 			children = (
 				05E126162C5D42A3009F2415 /* AvailableOrderCard.swift */,
 				05E126262C6190C7009F2415 /* DriveStopCard.swift */,
-				05B99ED12C6D74CA00D8B876 /* CustomerStopCard.swift */,
+				051AB4F52C7FD223004F5677 /* CustomerOrderCard.swift */,
 				051AB4EB2C7D0883004F5677 /* ExpandedDriverStopCard.swift */,
 				051AB4F12C7EB173004F5677 /* ExpandedCustomerStopCard.swift */,
 			);
@@ -463,7 +466,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05B99ED22C6D74CA00D8B876 /* CustomerStopCard.swift in Sources */,
+				051AB4F62C7FD223004F5677 /* CustomerOrderCard.swift in Sources */,
 				051AB4DB2C753E56004F5677 /* MapView.swift in Sources */,
 				05E125F82BFD5966009F2415 /* ViewOrder.swift in Sources */,
 				05E1261D2C5D85AF009F2415 /* MyChip.swift in Sources */,
@@ -493,6 +496,7 @@
 				051AB4EE2C7D3333004F5677 /* MyDatePicker.swift in Sources */,
 				051AB4E42C769245004F5677 /* ModelPreview.swift in Sources */,
 				051AB4E22C7690B9004F5677 /* PreviewSampleData.swift in Sources */,
+				051AB4F42C7F9A11004F5677 /* TextChip.swift in Sources */,
 				05E126132C5AF182009F2415 /* Route.swift in Sources */,
 				05E126012C52F54E009F2415 /* CustomerList.swift in Sources */,
 				05E125FD2C51AA14009F2415 /* AppState.swift in Sources */,

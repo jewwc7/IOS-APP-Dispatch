@@ -7,16 +7,99 @@
 
 import SwiftUI
 
-// WHere I left off
-// works, but is there a way for me to update the actual order permanetly
-// when I naivgate far enough back the order goes back to it's orginal state.
-// idk if this observable object is what I want for a consistent state,
-// seems more like an intermediate state
 struct ViewOrder: View {
     var order: Order /* ? = createOrders(customer: Customer(name: "Jackie")) */
-
+    var pickup: Pickup
+    var dropoff: Dropoff
+    
+    init(order: Order) {
+        self.order = order
+        self.pickup = order.pickup
+        self.dropoff = order.dropoff
+    }
+    
     var body: some View {
-        CustomerStopCard(order: order)
+        let c: Color = order.inProgess() ? .green : order.claimed() ? .blue : .red
+        NavigationView {
+            List {
+                Section(header: Text("Driver status").font(.subheadline)) {
+                    VStack {
+                        TextChip(title: order.statusTexts[order.status.rawValue] ?? "missing key", bgColor: c, font: .subheadline)
+                    }
+                }
+     
+                Section(header: TextChip(title: "Pickup", font: .subheadline)) {
+                    VStack(alignment: .leading) {
+                        Text("Organization")
+                        Text(pickup.company).bold()
+                    }.padding(.vertical, 2)
+                    
+                    VStack(alignment: .leading) {
+                        Text("Address")
+                        Text(pickup.fullAddress).bold()
+                    }.padding(.vertical, 2)
+                    
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Contact name")
+                            Text(pickup.contactName).bold()
+                        }
+                        VStack(alignment: .leading) {
+                            Text("Phone")
+                            Text(pickup.phoneNumber).bold()
+                        }
+                    }
+                    .padding(.vertical, 2)
+                    .padding(.vertical, 2)
+                    VStack(alignment: .leading) {
+                        Text("Delivers by")
+                        Text(formattedDate(order.pickup.dueAt)).font(.subheadline).bold()
+                    }
+                }
+                
+                Section(header: TextChip(title: "Dropoff", font: .subheadline)) {
+                    VStack(alignment: .leading) {
+                        Text("Organization")
+                        Text(dropoff.company).bold()
+                    }.padding(.vertical, 2)
+                    
+                    VStack(alignment: .leading) {
+                        Text("Address")
+                        Text(dropoff.fullAddress).bold()
+                    }.padding(.vertical, 2)
+                    
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Contact name")
+                            Text(dropoff.contactName).bold()
+                        }
+                        VStack(alignment: .leading) {
+                            Text("Phone")
+                            Text(dropoff.phoneNumber).bold()
+                        }
+                    }
+                    .padding(.vertical, 2)
+                    VStack(alignment: .leading) {
+                        Text("Delivers by")
+                        Text(formattedDate(order.dropoff.dueAt)).font(.subheadline).bold()
+                    }
+                }
+            }
+            .listStyle(GroupedListStyle())
+         
+        }.toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("", systemImage: "plus") {
+                    print("Edit order!!")
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("", systemImage: "xmark") {
+                    print("Cancel order!!")
+                }
+            }
+        }
+        .navigationTitle("Order Details")
     }
 }
 

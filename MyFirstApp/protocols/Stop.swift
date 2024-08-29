@@ -18,6 +18,7 @@ protocol Stop {
     var contactName: String { get set }
     var company: String { get set }
     var fullAddress: String { get }
+    var fullAddressSpaced: String { get }
     var stopType: StopType.RawValue { get }
     var deliveredAt: Date? { get set }
     var dueAt: Date { get set }

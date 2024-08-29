@@ -14,11 +14,15 @@ func createSeeds(modelContext: ModelContext) {
     do {
         modelContext.insert(driver)
         modelContext.insert(customer)
+        try modelContext.save()
         let order = createOrders(customer: customer)
         let unclaimedOrder = createOrders(customer: customer)
         modelContext.insert(order)
         modelContext.insert(unclaimedOrder)
+        try modelContext.save()
         acceptOrder(driver: driver, order: order)
+    } catch {
+        print("There was an error creating seeds", error.localizedDescription)
     }
 }
 

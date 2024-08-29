@@ -11,14 +11,20 @@ import SwiftUI
 struct DriverStopCard: View {
     @State private var isExpanded: Bool = false
     var stop: Stop
-    
+    var stopViewModel: StopViewModel
+    init(stop: Stop) {
+        self.stop = stop
+        self.stopViewModel = StopViewModel(stop)
+    }
+   
     var body: some View {
+        let buttonUI = stopViewModel.buttonForStopType()
         VStack(alignment: .leading) {
             // Header
             HStack {
                 VStack(alignment: .leading) {
                     VStack(alignment: .leading) {
-                        textForStopType(stop)
+                        stopViewModel.textForDriverStopType()
                             .font(.subheadline)
                         Text(stop.fullAddress)
                             .font(.headline)
@@ -42,7 +48,9 @@ struct DriverStopCard: View {
             
             // Content
             if isExpanded {
-                ExpandedDriverStopCard(stop: stop).transition(.opacity) // Transition effect when expanding/collapsing
+                ExpandedDriverStopCard(stop: stop, buttonContent: {
+                    MyButton(title: buttonUI.buttonTitle, onPress: handleOnPress, backgroundColor: Color.blue, image: "checkmark", frame: Frame(height: 40, width: 200), isDisabled: buttonUI.isButtonDisabled).frame(maxWidth: .infinity).disabled(buttonUI.isButtonDisabled)
+                }).transition(.opacity) // Transition effect when expanding/collapsing
                     .background(Color.white)
                     .cornerRadius(10)
                     .shadow(radius: 5)
@@ -54,21 +62,13 @@ struct DriverStopCard: View {
 //        .shadow(radius: 5)
     }
     
-    @ViewBuilder
-    func textForStopType(_ stop: Stop) -> some View {
-        switch StopType(rawValue: stop.stopType) {
-        case .pickup:
-            Text("Pickup by \(formattedDate(stop.dueAt))")
-                .font(.headline)
-                .foregroundColor(.green)
-        // Use pickup properties if needed
-        case .dropoff:
-            Text("Dropoff by \(formattedDate(stop.dueAt))")
-                .font(.headline)
-                .foregroundColor(.blue)
-        // Use dropoff properties if needed
-        case .none:
-            ContentUnavailableView("Not a pickup or dropoff", systemImage: "xmark")
+    func handleOnPress() {
+        withAnimation(.smooth) {
+            if let order = stop.order {
+                order.handleStatusTransition()
+            } else {
+                print("stop has no associated order")
+            }
         }
     }
 }

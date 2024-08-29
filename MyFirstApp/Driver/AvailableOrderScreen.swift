@@ -16,7 +16,7 @@ struct AvailableOrderScreen: View {
     
     @Environment(\.modelContext) private var context // how to CRUD state
     @Query private var ordersFromModel: [Order]
-    @EnvironmentObject var appState: AppStateModel
+    @EnvironmentObject var appState: AppStateManager
     
     var body: some View {
         let unclaimedOrders = ordersFromModel.filter { $0.driver == nil }
@@ -89,5 +89,5 @@ struct AvailableOrderScreen: View {
 }
 
 // #Preview {
-//    AvailableOrderScreen().modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateModel())
+//    AvailableOrderScreen().modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateManager())
 // }

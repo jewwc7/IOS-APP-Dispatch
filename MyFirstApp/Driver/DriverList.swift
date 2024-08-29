@@ -15,7 +15,7 @@ struct DriverList: View {
     @State private var isPopupPresented: Bool = false
     @State var shouldNavigate: Bool = false
     //   @State private var customerListConfig = CustomerListConfig()
-    @EnvironmentObject var appState: AppStateModel
+    @EnvironmentObject var appState: AppStateManager
 
     var body: some View {
         NavigationStack {
@@ -102,5 +102,5 @@ struct DriverPopupView: View {
 }
 
 #Preview {
-    DriverList().modelContainer(for: [Customer.self, Order.self, Driver.self], inMemory: true).environmentObject(AppStateModel())
+    DriverList().modelContainer(for: [Customer.self, Order.self, Driver.self], inMemory: true).environmentObject(AppStateManager())
 }

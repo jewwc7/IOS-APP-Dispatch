@@ -10,7 +10,7 @@ import SwiftUI
 
 struct RouteScreen: View {
     @Environment(\.modelContext) private var context // how to CRUD state
-    @EnvironmentObject var appState: AppStateModel
+    @EnvironmentObject var appState: AppStateManager
     //    @State private var orderNumber: String = "123"
     //    @State private var pickupLocation: String = "1234 main st"
     //    @State private var pickupPhoneNumber: String = "1234 main st"
@@ -45,5 +45,5 @@ struct RouteScreen: View {
 }
 
 #Preview {
-    RouteScreen().modelContainer(for: [Order.self, Customer.self, Driver.self], inMemory: true).environmentObject(AppStateModel())
+    RouteScreen().modelContainer(for: [Order.self, Customer.self, Driver.self], inMemory: true).environmentObject(AppStateManager())
 }

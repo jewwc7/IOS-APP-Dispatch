@@ -17,7 +17,7 @@ struct ModelPreview<Model: PersistentModel, Content: View>: View {
     }
 
     var body: some View {
-        PrviewContentView(content: content).modelContainer(previewContainer).environmentObject(AppStateModel())
+        PrviewContentView(content: content).modelContainer(previewContainer).environmentObject(AppStateManager())
     }
 
     struct PrviewContentView: View {

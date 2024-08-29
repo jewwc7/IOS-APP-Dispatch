@@ -166,6 +166,6 @@ struct StepperProgressViewStyle: ProgressViewStyle {
 }
 
 // #Preview {
-//    ViewOrder().modelContainer(for: [Order.self, Customer.self, Driver.self], inMemory: true).environmentObject(AppStateModel()) // needs to be added to insert the modelContext, making it possible to CRUD state
+//    ViewOrder().modelContainer(for: [Order.self, Customer.self, Driver.self], inMemory: true).environmentObject(AppStateManager()) // needs to be added to insert the modelContext, making it possible to CRUD state
 //    // https://developer.apple.com/tutorials/develop-in-swift/save-data
 // }

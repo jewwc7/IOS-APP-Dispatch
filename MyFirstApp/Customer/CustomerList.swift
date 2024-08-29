@@ -28,7 +28,7 @@ struct CustomerList: View {
     @State private var isPopupPresented: Bool = false
     @State var shouldNavigate: Bool = false
     //   @State private var customerListConfig = CustomerListConfig()
-    @EnvironmentObject var appState: AppStateModel
+    @EnvironmentObject var appState: AppStateManager
 
     var body: some View {
         NavigationStack {
@@ -72,7 +72,8 @@ struct PopupView: View {
     @Binding var isPopupPresented: Bool
     @Environment(\.modelContext) private var context // how to CRUD state
     @State private var nameInput: String = ""
-    @EnvironmentObject var appState: AppStateModel
+    @EnvironmentObject var appState: AppStateManager
+    var notificationManager = NotificationManager()
 
     var body: some View {
         VStack {
@@ -108,8 +109,8 @@ struct PopupView: View {
         do {
             try context.save()
             isPopupPresented = false
-            appState.displayNotificationTwo {
-                Text("\(newCustomer.name) created!")
+            notificationManager.displayNotification {
+                Text("\(newCustomer.name) created!").foregroundColor(.white).font(.footnote).padding()
             }
         } catch {
             print("Error creating customer: \(newCustomer.name)")
@@ -118,5 +119,5 @@ struct PopupView: View {
 }
 
 #Preview {
-    CustomerList().modelContainer(for: [Customer.self, Order.self], inMemory: true).environmentObject(AppStateModel())
+    CustomerList().modelContainer(for: [Customer.self, Order.self], inMemory: true).environmentObject(AppStateManager())
 }

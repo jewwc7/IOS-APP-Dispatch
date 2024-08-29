@@ -15,7 +15,7 @@ struct CustomerMainScreen: View {
     ]
     var customer: Customer
     @State private var waitedToShowIssue = false
-    @EnvironmentObject var appState: AppStateModel
+    @EnvironmentObject var appState: AppStateManager
 
     var body: some View {
         // how to unwrap values safely, in ui.

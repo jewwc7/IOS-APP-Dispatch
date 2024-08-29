@@ -76,5 +76,5 @@ struct DriverStopCard: View {
 // #Preview {
 //    ModelPreview { order in
 //        DriverStopCard(order: order)
-//    }.environmentObject(AppStateModel())
+//    }.environmentObject(AppStateManager())
 // }

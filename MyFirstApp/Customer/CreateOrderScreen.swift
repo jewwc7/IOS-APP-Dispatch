@@ -11,7 +11,7 @@ import SwiftUI
 struct CreateOrderScreen: View {
     @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context // how to CRUD state
-    @EnvironmentObject var appState: AppStateModel
+    @EnvironmentObject var appState: AppStateManager
     @Environment(\.presentationMode) var presentationMode // auto avaialble
     let errorManager = ErrorManager()
 
@@ -32,6 +32,7 @@ struct CreateOrderScreen: View {
     @State private var dropoffDueAt: Date = .init()
 
     @State private var isLoading: Bool = false
+    var notificationManager = NotificationManager()
 
     var body: some View {
         VStack {
@@ -125,24 +126,10 @@ struct CreateOrderScreen: View {
         dropoffCompanyOrOrg = "Diamond Boys"
     }
 
-    // make this reusable somewhere, maybe add to AppState?
     func orderCreatedMessage() {
-        UIApplication.shared.inAppNotification(adaptForDynmaicIsland: false, timeout: 5, swipeToClose: true) {
-            Text("Order created!").padding().background(.white)
+        notificationManager.displayNotification {
+            Text("Order created!").foregroundColor(.white).font(.footnote).padding()
         }
-        UIApplication.shared.inAppNotification(adaptForDynmaicIsland: false, timeout: 2, swipeToClose: true) {
-            GeometryReader { geometry in
-                VStack(content: {
-                    Text("Order created!").padding().background(.white)
-                }).frame(width: geometry.size.width, height: 60) // .overlay(  //looks funny, think because some UI is controlled withinAppNotification
-//                    RoundedRectangle(cornerRadius: 10)
-//                        .stroke(Color.red, lineWidth: 0.5)
-//                )
-                    .background(.black)
-                // .shadow(color: .black, radius: 10, x: 0, y: 5)
-            }
-        }
-        // Alternatively, you could call a delegate method, execute a closure, etc.
     }
 
     private func concatenatedBinding(_ first: Binding<String>, _ second: Binding<String>) -> Binding<String> {
@@ -160,6 +147,6 @@ struct CreateOrderScreen: View {
 }
 
 #Preview {
-    CreateOrderScreen().modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateModel()) // needs to be added to insert the modelContext, making it possible to CRUD state
+    CreateOrderScreen().modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateManager()) // needs to be added to insert the modelContext, making it possible to CRUD state
     // https://developer.apple.com/tutorials/develop-in-swift/save-data
 }

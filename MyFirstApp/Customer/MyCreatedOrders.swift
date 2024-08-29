@@ -11,7 +11,7 @@ import SwiftUI
 struct MyCreatedOrders: View {
     @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context // how to CRUD state
-    @EnvironmentObject var appState: AppStateModel
+    @EnvironmentObject var appState: AppStateManager
 
     var body: some View {
         // let filteredOrders = orderModelOrders.filter { $0.customer?.id == appState.loggedInCustomer?.id }
@@ -51,7 +51,7 @@ struct MyCreatedOrders: View {
 }
 
 #Preview {
-    MyCreatedOrders().modelContainer(for: [Customer.self, Order.self], inMemory: true).environmentObject(AppStateModel())
+    MyCreatedOrders().modelContainer(for: [Customer.self, Order.self], inMemory: true).environmentObject(AppStateManager())
 }
 
 /// The current reading progress for a specific book.

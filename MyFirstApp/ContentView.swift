@@ -13,9 +13,9 @@ import SwiftUI
 struct ContentView: View {
     @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context // how to CRUD state
-    @StateObject private var appState = AppStateModel() // this is
+    @StateObject private var appState = AppStateManager() // this is
 
-    @State var vm = LocationSearchService()
+    @State var notificationManager = NotificationManager()
 
 //    let modelContainer: ModelContainer
 //
@@ -36,8 +36,8 @@ struct ContentView: View {
                 FirstPage()
                 VStack {
                     Button("Show Notification") {
-                        appState.displayNotificationTwo {
-                            Text("Test Notification")
+                        notificationManager.displayNotification {
+                            Text("Test Notification").foregroundColor(.white).font(.footnote).padding()
                         }
                     }
                 }
@@ -50,7 +50,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: [Order.self, Customer.self, Driver.self, Route.self], inMemory: true).environmentObject(AppStateModel())
+        .modelContainer(for: [Order.self, Customer.self, Driver.self, Route.self], inMemory: true).environmentObject(AppStateManager())
     // add this to access state and persist making it possible to CRUD state
     // https://developer.apple.com/tutorials/develop-in-swift/save-data
 }

@@ -11,7 +11,7 @@ import SwiftUI
 @main
 struct MyFirstAppApp: App {
     let modelContainer: ModelContainer
-    @StateObject private var appState = AppStateModel() // this is
+    @StateObject private var appState = AppStateManager() // this is
     @State private var overlayWindow: PassThroughWindow?
 
     init() {

@@ -237,8 +237,8 @@ class Order {
     }
 
     func statusDidChange() {
-        AppStateModel().displayNotificationTwo {
-            Text("Hi \(self.customer?.name ?? "") your order is now \(self.statusTexts[self.status] ?? "missing key")").padding().background(.white)
+        NotificationManager().displayNotification {
+            Text("Hi \(self.customer?.name ?? "") your order is now \(self.statusTexts[self.status] ?? "missing key")").foregroundStyle(.white).padding().font(.footnote)
         }
         // Alternatively, you could call a delegate method, execute a closure, etc.
     }

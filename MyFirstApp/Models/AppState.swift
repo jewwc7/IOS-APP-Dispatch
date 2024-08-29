@@ -41,4 +41,19 @@ class AppStateModel: ObservableObject {
             viewBuilder().padding().background(.white)
         }
     }
+
+    func displayNotificationTwo<Content: View>(viewBuilder: @escaping () -> Content) {
+        UIApplication.shared.inAppNotification(adaptForDynmaicIsland: false, timeout: 2, swipeToClose: true) {
+            GeometryReader { geometry in
+                VStack(content: {
+                    viewBuilder()
+                }).frame(width: geometry.size.width, height: 40) // .overlay(  //looks funny, think because some UI is controlled withinAppNotification
+//                    RoundedRectangle(cornerRadius: 10)
+//                        .stroke(Color.red, lineWidth: 0.5)
+//                )
+                    .background(.black)
+                // .shadow(color: .black, radius: 10, x: 0, y: 5)
+            }
+        }
+    }
 }

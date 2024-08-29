@@ -130,6 +130,18 @@ struct CreateOrderScreen: View {
         UIApplication.shared.inAppNotification(adaptForDynmaicIsland: false, timeout: 5, swipeToClose: true) {
             Text("Order created!").padding().background(.white)
         }
+        UIApplication.shared.inAppNotification(adaptForDynmaicIsland: false, timeout: 2, swipeToClose: true) {
+            GeometryReader { geometry in
+                VStack(content: {
+                    Text("Order created!").padding().background(.white)
+                }).frame(width: geometry.size.width, height: 60) // .overlay(  //looks funny, think because some UI is controlled withinAppNotification
+//                    RoundedRectangle(cornerRadius: 10)
+//                        .stroke(Color.red, lineWidth: 0.5)
+//                )
+                    .background(.black)
+                // .shadow(color: .black, radius: 10, x: 0, y: 5)
+            }
+        }
         // Alternatively, you could call a delegate method, execute a closure, etc.
     }
 

@@ -21,6 +21,7 @@
 		051AB4F22C7EB173004F5677 /* ExpandedCustomerStopCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4F12C7EB173004F5677 /* ExpandedCustomerStopCard.swift */; };
 		051AB4F42C7F9A11004F5677 /* TextChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4F32C7F9A11004F5677 /* TextChip.swift */; };
 		051AB4F62C7FD223004F5677 /* CustomerOrderCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4F52C7FD223004F5677 /* CustomerOrderCard.swift */; };
+		0548073D2C80FDDA00DAF89B /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0548073C2C80FDDA00DAF89B /* OrderViewModel.swift */; };
 		0551878E2BE98BEC00BA0A8A /* MyFirstAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */; };
 		055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551878F2BE98BEC00BA0A8A /* ContentView.swift */; };
 		055187922BE98BED00BA0A8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 055187912BE98BED00BA0A8A /* Assets.xcassets */; };
@@ -88,6 +89,7 @@
 		051AB4F12C7EB173004F5677 /* ExpandedCustomerStopCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedCustomerStopCard.swift; sourceTree = "<group>"; };
 		051AB4F32C7F9A11004F5677 /* TextChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextChip.swift; sourceTree = "<group>"; };
 		051AB4F52C7FD223004F5677 /* CustomerOrderCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerOrderCard.swift; sourceTree = "<group>"; };
+		0548073C2C80FDDA00DAF89B /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		0551878A2BE98BEC00BA0A8A /* MyFirstApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFirstApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551878D2BE98BEC00BA0A8A /* MyFirstAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFirstAppApp.swift; sourceTree = "<group>"; };
 		0551878F2BE98BEC00BA0A8A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 		051AB4D52C7533E1004F5677 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				0548073C2C80FDDA00DAF89B /* OrderViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -173,6 +176,20 @@
 				051AB4E82C793335004F5677 /* Stop.swift */,
 			);
 			path = protocols;
+			sourceTree = "<group>";
+		};
+		0548073E2C8109D200DAF89B /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		0548073F2C810A0900DAF89B /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		055187812BE98BEC00BA0A8A = {
@@ -200,6 +217,8 @@
 		0551878C2BE98BEC00BA0A8A /* MyFirstApp */ = {
 			isa = PBXGroup;
 			children = (
+				0548073F2C810A0900DAF89B /* Managers */,
+				0548073E2C8109D200DAF89B /* New Group */,
 				051AB4E72C7932F0004F5677 /* protocols */,
 				051AB4E02C76909B004F5677 /* preview helpers */,
 				051AB4D52C7533E1004F5677 /* ViewModels */,
@@ -499,6 +518,7 @@
 				051AB4F42C7F9A11004F5677 /* TextChip.swift in Sources */,
 				05E126132C5AF182009F2415 /* Route.swift in Sources */,
 				05E126012C52F54E009F2415 /* CustomerList.swift in Sources */,
+				0548073D2C80FDDA00DAF89B /* OrderViewModel.swift in Sources */,
 				05E125FD2C51AA14009F2415 /* AppState.swift in Sources */,
 				05E125F42BFD48B9009F2415 /* CustomerMainScreen.swift in Sources */,
 				05E125F62BFD5047009F2415 /* MyCreatedOrders.swift in Sources */,

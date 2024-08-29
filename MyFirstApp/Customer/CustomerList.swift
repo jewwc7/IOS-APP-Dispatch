@@ -108,7 +108,7 @@ struct PopupView: View {
         do {
             try context.save()
             isPopupPresented = false
-            appState.displayNotification {
+            appState.displayNotificationTwo {
                 Text("\(newCustomer.name) created!")
             }
         } catch {

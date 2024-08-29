@@ -14,9 +14,15 @@ let testOrderTwo = createOrders(customer: Customer(name: "Jake"))
 struct CustomerOrderCard: View {
     @State private var isExpanded: Bool = false
     var order: Order
+    var orderViewModel: OrderViewModel
+
+    init(order: Order) {
+        self.order = order
+        self.orderViewModel = OrderViewModel(order)
+    }
 
     var body: some View {
-        let c: Color = order.inProgess() ? .green : order.claimed() ? .blue : .red
+        let chipColor: Color = orderViewModel.chipColor()
         VStack {
             VStack(alignment: .leading) {
                 // Header
@@ -24,23 +30,23 @@ struct CustomerOrderCard: View {
                     VStack(alignment: .leading) {
                         VStack {
                             HStack {
-                                TextChip(title: "Pickup", font: .subheadline)
+                                TextChip(title: "Pickup", bgColor: .gray, font: .footnote)
                                 Spacer()
                                 Text(order.pickup.fullAddressSpaced)
-                                    .font(.headline).bold()
+                                    .font(.subheadline).bold()
                             }
                             HStack {
-                                TextChip(title: "Dropoff", bgColor: .orange, font: .subheadline)
+                                TextChip(title: "Dropoff", bgColor: .gray, font: .footnote)
                                 Spacer()
                                 Text(order.dropoff.fullAddressSpaced)
-                                    .font(.headline).bold()
+                                    .font(.subheadline).bold()
                             }.padding(.top, 6)
                         }
 
                         HStack {
-                            Text(formattedDate(order.dropoff.dueAt)).font(.subheadline).bold()
+                            Text(formattedDate(order.dropoff.dueAt)).font(.footnote).bold()
                             Spacer()
-                            TextChip(title: order.statusTexts[order.status] ?? "missing key", bgColor: c, font: .subheadline)
+                            TextChip(title: order.statusTexts[order.status] ?? "missing key", bgColor: chipColor, font: .footnote)
                         }.padding(.vertical, 12)
                     }
                 }

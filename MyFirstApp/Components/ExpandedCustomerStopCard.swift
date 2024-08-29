@@ -84,9 +84,8 @@ struct ExpandedCustomerStopCard: View {
             let enRouteToDropoffText = statusTexts["enRouteToDropoff"] ?? missingKey
             let atDropoffText = statusTexts["atDropoff"] ?? missingKey
             let deliveredText = statusTexts["delivered"] ?? missingKey
-            let pickedUpText = statusTexts["pickedUp"] ?? missingKey
-            let completeDeliveryText = statusTexts["completeDelivery"] ?? missingKey
-              
+            let pickedUpText = "Picked up"
+          
             if order.claimed() {
                 return UIInfo(pickup: StopUI(buttonTitle: enRouteText, isButtonDisabled: false), dropoff: StopUI(buttonTitle: atDropoffText, isButtonDisabled: true))
             }
@@ -103,7 +102,7 @@ struct ExpandedCustomerStopCard: View {
                 return UIInfo(pickup: StopUI(buttonTitle: pickedUpText, isButtonDisabled: true), dropoff: StopUI(buttonTitle: "Complete Delivery", isButtonDisabled: false))
             }
             if order.delivered() {
-                return UIInfo(pickup: StopUI(buttonTitle: deliveredText, isButtonDisabled: true), dropoff: StopUI(buttonTitle: deliveredText, isButtonDisabled: true))
+                return UIInfo(pickup: StopUI(buttonTitle: pickedUpText, isButtonDisabled: true), dropoff: StopUI(buttonTitle: deliveredText, isButtonDisabled: true))
             }
         }
         return UIInfo(pickup: StopUI(buttonTitle: "Invalid transition", isButtonDisabled: true), dropoff: StopUI(buttonTitle: "Invalid transition", isButtonDisabled: false))

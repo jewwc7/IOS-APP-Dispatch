@@ -12,7 +12,7 @@ struct MyNotification: View {
     // I like to use enum, but boolean value is enough
     enum AnimationStateType: Double {
         case hide = 0
-        case show =  1
+        case show = 1
     }
     
     // @Binding var text: String?
@@ -47,7 +47,7 @@ struct MyNotification: View {
 //        }
         
         Button("Press me") {
-           // appState.isShowingMyNotification = true
+            // appState.isShowingMyNotification = true
             appState.toggleNotification()
         }
     }
@@ -63,8 +63,6 @@ struct MyNotification: View {
         }
     }
     
-    
-   
     // Simple implementation of animation
     func animate() {
         Task {
@@ -103,24 +101,22 @@ struct MyNotification: View {
             }
         }
     }
-    
 }
 
-
 // https://www.youtube.com/watch?v=MPp7b9bIUPY
-//https://youtu.be/MPp7b9bIUPY?t=918 explains how to make it prettier with the status bar, I didn;t implement this
+// https://youtu.be/MPp7b9bIUPY?t=918 explains how to make it prettier with the status bar, I didn;t implement this
 extension UIApplication {
-    func inAppNotification<Content: View>(adaptForDynmaicIsland: Bool = false, timeout: CGFloat = 5, swipeToClose: Bool = true, @ViewBuilder content: @escaping () -> Content){
+    func inAppNotification<Content: View>(adaptForDynmaicIsland: Bool = false, timeout: CGFloat = 5, swipeToClose: Bool = true, @ViewBuilder content: @escaping () -> Content) {
         /// Fetcgug Active Window Via WindowScene. The current window excepting input, thus the window that the user is on
-        if let activeWindow = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first(where:  {$0.isKeyWindow}) {
+        if let activeWindow = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first(where: { $0.isKeyWindow }) {
             // Frame and SafeArea Values
             let frame = activeWindow.frame
             let safeArea = activeWindow.safeAreaInsets
             
-            var tag: Int = 1009
+            var tag = 1009
             let checkForDynamicIsland = adaptForDynmaicIsland && safeArea.top >= 51
             
-            //After animation is finsihed view must be removed from the window https://youtu.be/MPp7b9bIUPY?t=446
+            // After animation is finsihed view must be removed from the window https://youtu.be/MPp7b9bIUPY?t=446
             if let previousTag = UserDefaults.standard.value(forKey: "in_app_notification_tag") as? Int {
                 tag = previousTag + 1
             }
@@ -128,7 +124,7 @@ extension UIApplication {
             UserDefaults.standard.setValue(tag, forKey: "in_app_notification_tag")
             /// Creating UIView from from swiftUIView using UIHosting Config
             let config = UIHostingConfiguration {
-                AnimatedNotificationView(content: content(),safeArea: safeArea, tag:tag, adaptForDynamicIsalnd: checkForDynamicIsland, timeout: timeout, swipeToClose: swipeToClose).frame(width: frame.width - (checkForDynamicIsland ? 20 : 30), height: 120, alignment: .top).contentShape(.rect)
+                AnimatedNotificationView(content: content(), safeArea: safeArea, tag: tag, adaptForDynamicIsalnd: checkForDynamicIsland, timeout: timeout, swipeToClose: swipeToClose).frame(width: frame.width - (checkForDynamicIsland ? 20 : 30), height: 120, alignment: .top).contentShape(.capsule)
             }
             /// Creating UIView
             let view = config.makeContentView()
@@ -142,16 +138,13 @@ extension UIApplication {
                 
                 // Layout Contraints
                 view.centerXAnchor.constraint(equalTo: rootView.centerXAnchor).isActive = true
-                view.centerYAnchor.constraint(equalTo: rootView.centerYAnchor, constant: (-(frame.height - safeArea.top) / 2) + (checkForDynamicIsland ? 11 : safeArea.top)).isActive = true
+                view.centerYAnchor.constraint(equalTo: rootView.centerYAnchor, constant: (-(frame.height - safeArea.top)/2) + (checkForDynamicIsland ? 11 : safeArea.top)).isActive = true
             }
-           
-     
         }
-   
     }
 }
 
-fileprivate struct AnimatedNotificationView<Content: View>: View {
+private struct AnimatedNotificationView<Content: View>: View {
     var content: Content
     var safeArea: UIEdgeInsets
     var tag: Int
@@ -161,26 +154,26 @@ fileprivate struct AnimatedNotificationView<Content: View>: View {
     @State private var animateNotification: Bool = false
     
     var body: some View {
-        content   //this is like passing childrent in react
+        content // this is like passing childrent in react
             .blur(radius: animateNotification ? 0 : 10)
             .disabled(!animateNotification)
             .mask {
                 if adaptForDynamicIsalnd {
-                    RoundedRectangle(cornerRadius: 50, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/)
-                }else {
+                    RoundedRectangle(cornerRadius: 50, style: /*@START_MENU_TOKEN@*/ .continuous/*@END_MENU_TOKEN@*/)
+                } else {
                     Rectangle()
                 }
             }
-        // SCaling animation only for Dynamic Island Notification
+            // SCaling animation only for Dynamic Island Notification
             .scaleEffect(adaptForDynamicIsalnd ? (animateNotification ? 1 : 0.01) : 1, anchor: .init(x: 0.5, y: 0.01))
-        // Offset for non Dynamic Island Notifcation
+            // Offset for non Dynamic Island Notifcation
             .offset(y: offsetY)
             .gesture(
-                DragGesture().onEnded({value in
-                    if -value.translation.height > 50 && swipeToClose {
+                DragGesture().onEnded { value in
+                    if -value.translation.height > 50, swipeToClose {
                         goAway()
                     }
-                })
+                }
             )
             .onAppear(perform: {
                 Task {
@@ -190,43 +183,41 @@ fileprivate struct AnimatedNotificationView<Content: View>: View {
                     }
                     
                     // Timeout for Notifcation
-                    try await Task.sleep(for: .seconds(timeout < 1 ? 1: timeout))
+                    try await Task.sleep(for: .seconds(timeout < 1 ? 1 : timeout))
                     
                     guard animateNotification else { return }
                     
-                 
                     goAway()
                 }
             })
-        
-   
     }
     
     var offsetY: CGFloat {
         if adaptForDynamicIsalnd {
             return 0
         }
-        return animateNotification ? 10 : -( safeArea.top + 130 )
+        return animateNotification ? 10 : -(safeArea.top + 130)
     }
     
-    func goAway(){
-      return  withAnimation(.smooth, completionCriteria: .logicallyComplete){
+    func goAway() {
+        return withAnimation(.smooth, completionCriteria: .logicallyComplete) {
             animateNotification = false
         } completion: {
             removeNotifcationViewFromWindow()
         }
     }
-    func removeNotifcationViewFromWindow(){
-        if let activeWindow = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first(where:  {$0.isKeyWindow}){
-            if let view = activeWindow.viewWithTag(tag){
+
+    func removeNotifcationViewFromWindow() {
+        if let activeWindow = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first(where: { $0.isKeyWindow }) {
+            if let view = activeWindow.viewWithTag(tag) {
                 print("Removed View with \(tag)")
                 view.removeFromSuperview()
             }
         }
     }
-    
 }
+
 #Preview {
     ContentView()
-  //  MyNotification(text: "Successfuly created order").environmentObject(AppStateModel())
+    //  MyNotification(text: "Successfuly created order").environmentObject(AppStateModel())
 }

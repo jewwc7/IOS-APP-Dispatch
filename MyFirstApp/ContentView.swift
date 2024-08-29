@@ -36,7 +36,7 @@ struct ContentView: View {
                 FirstPage()
                 VStack {
                     Button("Show Notification") {
-                        appState.displayNotification {
+                        appState.displayNotificationTwo {
                             Text("Test Notification")
                         }
                     }

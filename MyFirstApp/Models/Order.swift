@@ -119,9 +119,7 @@ class Order {
     var matchingTransition: IOrderTransitionState {
         let matchingTransition: IOrderTransitionState = { switch comparableStatus {
         case .unassigned:
-            ClaimedConcreteState(self)
-        case .canceled:
-            CanceledConcreteState(self)
+            UnassignedConcreteState(self)
         case .claimed:
             ClaimedConcreteState(self)
         case .enRouteToPickup:
@@ -134,6 +132,8 @@ class Order {
             AtDropoffConcreteState(self)
         case .delivered:
             DeliveredConcreteState(self)
+        case .canceled:
+            CanceledConcreteState(self)
         }
         }()
         return matchingTransition
@@ -164,12 +164,12 @@ class Order {
     //        return dueAt > Date()
     //    }
     
-    func unassign(driver: Driver) -> TransitionResult {
+    func unassign() -> TransitionResult {
         let orderContext = OrderContext(state: matchingTransition)
         let transition = orderContext.transisitionToUnassigned()
         //    let isClaimable = self.isClaimable()
         if transition.result == .success {
-            self.driver = nil
+            driver = nil
         }
         return transition
     }
@@ -177,10 +177,9 @@ class Order {
     func claim(driver: Driver) -> TransitionResult {
         let orderContext = OrderContext(state: matchingTransition)
         let transition = orderContext.transitionToClaimed()
-        //    let isClaimable = self.isClaimable()
+
         if transition.result == .success {
             self.driver = driver
-            statusDidChange()
         }
         return transition
     }
@@ -188,14 +187,9 @@ class Order {
     func transitionToNextStatus() {
         let orderContext = OrderContext(state: matchingTransition)
         let result = orderContext.transitionToNextState()
-        if result.result == .success {
-            statusDidChange()
-            // don't tthink I need this success message
-//           try modelContext?.save()
-        }
+        if result.result == .success {}
     }
     
-    // don't think I need this transient status anymore either, think I can just call this here or in the transistions. Can do diff Notification depending on the state
     func statusDidChange() {
         NotificationManager().displayNotification {
             Text("Hi \(self.customer?.name ?? "") your order is now \(self.statusTexts[self.status] ?? "missing key")").foregroundStyle(.white).padding().font(.footnote)
@@ -210,7 +204,7 @@ class Order {
     }
     
     func cancel() {
-        var o = OrderContext(state: matchingTransition)
+        let o = OrderContext(state: matchingTransition)
         let transition = o.transitionToCancel()
         if transition.result == .success {
             // do some other stuff, send out a notfication

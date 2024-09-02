@@ -65,6 +65,7 @@ class OrderContext {
 
     private func updateOrderStatus(with newStatus: OrderStatus) {
         state.order.status = newStatus.rawValue
+        state.order.transientStatus = newStatus.rawValue
     }
 }
 

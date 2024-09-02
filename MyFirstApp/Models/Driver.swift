@@ -45,33 +45,16 @@ class Driver {
         case DriverOrderAction.claim:
             self.claimOrder(order: order)
         case DriverOrderAction.release:
-            self.cancelOrder()
+            return
         }
     }
 
     private func claimOrder(order: Order) {
         print(self.name, "request to claim an order")
-        let orderContext = OrderContext(state: UnassignedConcreteState(order))
-        let response = orderContext.transitionToNextState()
-        // let response = order.claim(driver: self) // I think the transisitions removes the need for this
-        if response.result == .success {
-            self.orders.append(order)
-            let route = self.addOrderToRoute(order: order)
-            do {
-                try order.modelContext?.save()
-                try self.modelContext?.save()
-            } catch {
-                print("order couldn't be claimed", error)
-            }
 
-        } else {
-            print(response.message)
-        }
-        do {
-            try order.modelContext?.save()
-            try self.modelContext?.save()
-        } catch {
-            print("order couldn't be claimed", error)
+        let response = order.claim(driver: self)
+        if response.result == .success {
+            _ = self.addOrderToRoute(order: order)
         }
     }
 
@@ -90,9 +73,10 @@ class Driver {
         }
     }
 
-    private func cancelOrder() {
-        print(self.name, "canceled an order")
-        self.numberOfOrdersPlaced += 1
+    private func releaseOrder(order: Order) {
+        print(self.name, "request to claim an order")
+        let response = order.unassign()
+        if response.result == .success {}
     }
 
     func login() -> Result {

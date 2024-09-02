@@ -77,11 +77,11 @@ struct AvailableOrderCard: View {
 
             // Content
             if isExpanded { // needs to be it's on expanded card?
-                ExpandedDriverStopCard(stop: order.pickup) {}.transition(.opacity) // Transition effect when expanding/collapsing
+                ExpandedDriverStopCard(stop: order.pickup, driver: driver) {}.transition(.opacity) // Transition effect when expanding/collapsing
                     .background(Color.white)
                     .cornerRadius(10)
                     .shadow(radius: 5)
-                ExpandedDriverStopCard(stop: order.dropoff) {}.transition(.opacity) // Transition effect when expanding/collapsing
+                ExpandedDriverStopCard(stop: order.dropoff, driver: driver) {}.transition(.opacity) // Transition effect when expanding/collapsing
                     .background(Color.white)
                     .cornerRadius(10)
                     .shadow(radius: 5)

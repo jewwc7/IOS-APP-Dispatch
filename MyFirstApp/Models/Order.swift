@@ -50,17 +50,63 @@ class Order {
         "atDropoff": "At dropoff",
         "delivered": "Delivered"
     ]
-
+    
     var comparableStatus: OrderStatus { // this is needed for switch statements, anytime I want to compare OrderStatus directly
         return OrderStatus(rawValue: status)! // unwrap because status is guaranteed
     }
-
+    
     let inProgressStatuses: Set<OrderStatus> = [OrderStatus.enRouteToPickup, OrderStatus.atPickup, OrderStatus.atDropoff, OrderStatus.enRouteToDropoff]
-
+    
     var claimedStatuses: [OrderStatus] {
         return OrderStatus.allCases.filter { $0 != .canceled && $0 != .unassigned }
     }
-
+    
+    var claimed: Bool {
+        // commented out for testing
+        return comparableStatus == .claimed && driver != nil
+        // return true
+    }
+    
+    var unassigned: Bool {
+        return comparableStatus == .unassigned
+    }
+    
+    var assigned: Bool {
+        return comparableStatus == .claimed && driver != nil
+    }
+    
+    var started: Bool {
+        return startedAt != nil
+    }
+    
+    var canceled: Bool {
+        return comparableStatus == .canceled
+    }
+    
+    var delivered: Bool {
+        return comparableStatus == .delivered
+    }
+    
+    var enrouteToPickup: Bool {
+        return comparableStatus == .enRouteToPickup
+    }
+    
+    var atPickup: Bool {
+        return comparableStatus == .atPickup
+    }
+    
+    var enrouteToDropoff: Bool {
+        return comparableStatus == .enRouteToDropoff
+    }
+    
+    var atDropoff: Bool {
+        return comparableStatus == .atDropoff
+    }
+    
+    var inProgess: Bool {
+        return inProgressStatuses.contains(comparableStatus)
+    }
+    
     // Note: SwiftData properties do not support willSet or didSet property observers, unless they have @Transient so had to make a transient prop, update this when status is updated. @Transient does not persist the data, so status is not persisted, so this is a workaround
     // https://www.hackingwithswift.com/quick-start/swiftdata/how-to-create-derived-attributes-with-swiftdata
     @Transient var transientStatus: OrderStatus.RawValue = OrderStatus.unassigned.rawValue {
@@ -69,7 +115,30 @@ class Order {
             statusDidChange()
         }
     }
-
+    
+    var matchingTransition: IOrderTransitionState {
+        let matchingTransition: IOrderTransitionState = { switch comparableStatus {
+        case .unassigned:
+            ClaimedConcreteState(self)
+        case .canceled:
+            CanceledConcreteState(self)
+        case .claimed:
+            ClaimedConcreteState(self)
+        case .enRouteToPickup:
+            EnrouteToPickupConcreteState(self)
+        case .atPickup:
+            AtPickupConcreteState(self)
+        case .enRouteToDropoff:
+            EnRouteToDropoffConcreteState(self)
+        case .atDropoff:
+            AtDropoffConcreteState(self)
+        case .delivered:
+            DeliveredConcreteState(self)
+        }
+        }()
+        return matchingTransition
+    }
+    
     init(
         orderNumber: String?,
         pay: Double,
@@ -89,167 +158,64 @@ class Order {
         self.pickup = pickup
         self.dropoff = dropoff
     }
-
+    
     // check if pickup or dropOff is late
-//    func late() -> Bool {
-//        return dueAt > Date()
-//    }
-
-    func claim(driver: Driver) -> ResultWithMessage {
-        let isClaimable = self.isClaimable()
-        if isClaimable.result == .success {
+    //    func late() -> Bool {
+    //        return dueAt > Date()
+    //    }
+    
+    func unassign(driver: Driver) -> TransitionResult {
+        let orderContext = OrderContext(state: matchingTransition)
+        let transition = orderContext.transisitionToUnassigned()
+        //    let isClaimable = self.isClaimable()
+        if transition.result == .success {
+            self.driver = nil
+        }
+        return transition
+    }
+    
+    func claim(driver: Driver) -> TransitionResult {
+        let orderContext = OrderContext(state: matchingTransition)
+        let transition = orderContext.transitionToClaimed()
+        //    let isClaimable = self.isClaimable()
+        if transition.result == .success {
             self.driver = driver
-            status = OrderStatus.claimed.rawValue
-            return isClaimable
-        } else {
-            return isClaimable
+            statusDidChange()
+        }
+        return transition
+    }
+    
+    func transitionToNextStatus() {
+        let orderContext = OrderContext(state: matchingTransition)
+        let result = orderContext.transitionToNextState()
+        if result.result == .success {
+            statusDidChange()
+            // don't tthink I need this success message
+//           try modelContext?.save()
         }
     }
-
-    private func isClaimable() -> ResultWithMessage {
-        if assigned() {
-            return ResultWithMessage(result: .failure, message: "Driver already assigned")
-        }
-        if canceled() {
-            return ResultWithMessage(result: .failure, message: "Order was canceled")
-        } else {
-            return ResultWithMessage(result: .success)
-        }
-    }
-
-    func handleStatusTransition() {
-        if delivered() {
-            return print("Order already delivered")
-        } else if canceled() {
-            return print("Canceled order cant be delivered")
-        } else if unassigned() {
-            status = OrderStatus.claimed.rawValue
-        } else if claimed() { // unassigned only here for testing purposes
-            setEnRouteToPickup()
-        } else if isEnrouteToPickup() {
-            setAtPickup()
-        } else if isAtPickup() {
-            setEnrouteToDropoff()
-        } else if isEnrouteToDropoff() {
-            setAtDropoff()
-        } else if isAtDropOff() {
-            setDelivered()
-        }
-
-        do {
-            try modelContext?.save()
-            transientStatus = status
-        } catch {
-            print(error)
-        }
-    }
-
-    func claimed() -> Bool {
-        // commented out for testing
-        return comparableStatus == .claimed && driver != nil
-        // return true
-    }
-
-    func unassigned() -> Bool {
-        return comparableStatus == .unassigned
-    }
-
-    func assigned() -> Bool {
-        return comparableStatus == .claimed && driver != nil
-    }
-
-    func started() -> Bool {
-        return startedAt != nil
-    }
-
-    func canceled() -> Bool {
-        return comparableStatus == .canceled
-    }
-
-    func delivered() -> Bool {
-        return comparableStatus == .delivered
-    }
-
-    func isEnrouteToPickup() -> Bool {
-        return comparableStatus == .enRouteToPickup
-    }
-
-    func isAtPickup() -> Bool {
-        return comparableStatus == .atPickup
-    }
-
-    func isEnrouteToDropoff() -> Bool {
-        return comparableStatus == .enRouteToDropoff
-    }
-
-    func isAtDropOff() -> Bool {
-        return comparableStatus == .atDropoff
-    }
-
-    func inProgess() -> Bool {
-        return inProgressStatuses.contains(comparableStatus)
-    }
-
-    private func setEnRouteToPickup() {
-        if !claimed() {
-            print("order has no driver or is not set to claimed")
-        } else {
-            print("setting @ setEnRouteToPickup")
-            status = OrderStatus.enRouteToPickup.rawValue
-            startedAt = Date()
-        }
-    }
-
-    private func setAtPickup() {
-        print("setting @ pickup")
-        if comparableStatus != .enRouteToPickup {
-            print("please set enroute to pickup first")
-        } else {
-            status = OrderStatus.atPickup.rawValue
-        }
-    }
-
-    private func setEnrouteToDropoff() {
-        print("setting @ enrouteToDropoff")
-        if comparableStatus != .atPickup {
-            print("please complete pickup first")
-        } else {
-            status = OrderStatus.enRouteToDropoff.rawValue
-        }
-    }
-
-    private func setAtDropoff() {
-        print("setting @ dropoff")
-        if comparableStatus != .enRouteToDropoff {
-            print("please setEnRouteToDroppoff first pickup first")
-        } else {
-            status = OrderStatus.atDropoff.rawValue
-        }
-    }
-
-    private func setDelivered() {
-        print("setting @ delivered")
-        if comparableStatus != .atDropoff {
-            print("please setAtDropoff first")
-        } else {
-            status = OrderStatus.delivered.rawValue
-        }
-    }
-
+    
+    // don't think I need this transient status anymore either, think I can just call this here or in the transistions. Can do diff Notification depending on the state
     func statusDidChange() {
         NotificationManager().displayNotification {
             Text("Hi \(self.customer?.name ?? "") your order is now \(self.statusTexts[self.status] ?? "missing key")").foregroundStyle(.white).padding().font(.footnote)
         }
         // Alternatively, you could call a delegate method, execute a closure, etc.
     }
-
-    func chipColor() -> Color { // look to move this somewhere else,
-        return inProgess() || delivered() ? .green : claimed() ? .blue : .red
-    }
-
+    
     func validatePickupAndDropOff(
     ) throws {
         try pickup.validateFields()
         try dropoff.validateFields()
+    }
+    
+    func cancel() {
+        var o = OrderContext(state: matchingTransition)
+        let transition = o.transitionToCancel()
+        if transition.result == .success {
+            // do some other stuff, send out a notfication
+        } else {
+            // send out a sepearte notifcation, or change the ui somehow?
+        }
     }
 }

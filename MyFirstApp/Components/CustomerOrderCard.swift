@@ -23,6 +23,7 @@ struct CustomerOrderCard: View {
 
     var body: some View {
         let chipColor: Color = orderViewModel.chipColor()
+
         VStack {
             VStack(alignment: .leading) {
                 // Header

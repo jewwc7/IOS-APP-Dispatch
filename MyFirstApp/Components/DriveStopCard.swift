@@ -11,9 +11,11 @@ import SwiftUI
 struct DriverStopCard: View {
     @State private var isExpanded: Bool = false
     var stop: Stop
+    var driver: Driver
     var stopViewModel: StopViewModel
-    init(stop: Stop) {
+    init(stop: Stop, driver: Driver) {
         self.stop = stop
+        self.driver = driver
         self.stopViewModel = StopViewModel(stop)
     }
    
@@ -48,7 +50,7 @@ struct DriverStopCard: View {
             
             // Content
             if isExpanded {
-                ExpandedDriverStopCard(stop: stop, buttonContent: {
+                ExpandedDriverStopCard(stop: stop, driver: driver, buttonContent: {
                     MyButton(title: buttonUI.buttonTitle, onPress: handleOnPress, backgroundColor: Color.blue, image: "checkmark", frame: Frame(height: 40, width: 200), isDisabled: buttonUI.isButtonDisabled).frame(maxWidth: .infinity).disabled(buttonUI.isButtonDisabled)
                 }).transition(.opacity) // Transition effect when expanding/collapsing
                     .background(Color.white)
@@ -65,7 +67,7 @@ struct DriverStopCard: View {
     func handleOnPress() {
         withAnimation(.smooth) {
             if let order = stop.order {
-                order.handleStatusTransition()
+                order.transitionToNextStatus()
             } else {
                 print("stop has no associated order")
             }

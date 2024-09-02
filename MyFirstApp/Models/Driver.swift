@@ -41,7 +41,6 @@ class Driver {
 
     func handleOrderAction(action: DriverOrderAction, order: Order) {
         print(action, "performed")
-
         switch action {
         case DriverOrderAction.claim:
             self.claimOrder(order: order)
@@ -52,7 +51,9 @@ class Driver {
 
     private func claimOrder(order: Order) {
         print(self.name, "request to claim an order")
-        let response = order.claim(driver: self)
+        let orderContext = OrderContext(state: UnassignedConcreteState(order))
+        let response = orderContext.transitionToNextState()
+        // let response = order.claim(driver: self) // I think the transisitions removes the need for this
         if response.result == .success {
             self.orders.append(order)
             let route = self.addOrderToRoute(order: order)
@@ -65,6 +66,12 @@ class Driver {
 
         } else {
             print(response.message)
+        }
+        do {
+            try order.modelContext?.save()
+            try self.modelContext?.save()
+        } catch {
+            print("order couldn't be claimed", error)
         }
     }
 

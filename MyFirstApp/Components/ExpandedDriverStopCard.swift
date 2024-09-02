@@ -9,10 +9,12 @@ import SwiftUI
 
 struct ExpandedDriverStopCard<Content: View>: View {
     var stop: Stop
+    var driver: Driver
     var buttonContent: (() -> Content?)? = nil
 
-    init(stop: Stop, @ViewBuilder buttonContent: @escaping () -> Content? = { nil }) {
+    init(stop: Stop, driver: Driver, @ViewBuilder buttonContent: @escaping () -> Content? = { nil }) {
         self.stop = stop
+        self.driver = driver
         self.buttonContent = buttonContent
     }
 
@@ -55,7 +57,9 @@ struct ExpandedDriverStopCard<Content: View>: View {
     func handleOnPress() {
         withAnimation(.smooth) {
             if let order = stop.order {
-                order.handleStatusTransition()
+                order.claim(driver: driver) // should be claim as that;s all I you should be able to do here
+                // probably need to pass the driver to this
+                //  order.transitionToNextStatus()
             } else {
                 print("stop has no associated order")
             }

@@ -32,7 +32,7 @@ struct RouteScreen: View {
                 ForEach(loggedInDriver.routes) { route in
                     Section(header: Text(convertDateToDateOnlyString(day: route.startDate)).bold().font(/*@START_MENU_TOKEN@*/ .title/*@END_MENU_TOKEN@*/)) {
                         ForEach(route.makeStops(), id: \.id) { stop in
-                            DriverStopCard(stop: stop)
+                            DriverStopCard(stop: stop, driver: loggedInDriver)
                         }
                     }
                 }

@@ -33,21 +33,6 @@ struct MyCreatedOrders: View {
             }
         }
     }
-
-    func getLabelAndSystemImage(order: Order) -> LabelAndSystemImage {
-        if order.delivered() {
-            return LabelAndSystemImage(text: "Delivered", image: "checkmark")
-        }
-        if order.inProgess() {
-            return LabelAndSystemImage(text: humanizeCamelCase(order.status), image: "car")
-        }
-        if order.claimed() {
-            return LabelAndSystemImage(text: "Claimed", image: "person.fill.checkmark")
-            // car and status
-        } else {
-            return LabelAndSystemImage(text: "Unassigned", image: "magnifyingglass")
-        }
-    }
 }
 
 #Preview {

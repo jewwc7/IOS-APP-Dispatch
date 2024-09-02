@@ -19,6 +19,7 @@ func createSeeds(modelContext: ModelContext) {
         let unclaimedOrder = createOrders(customer: customer)
         modelContext.insert(order)
         modelContext.insert(unclaimedOrder)
+        try order.modelContext?.save()
         try modelContext.save()
         acceptOrder(driver: driver, order: order)
     } catch {

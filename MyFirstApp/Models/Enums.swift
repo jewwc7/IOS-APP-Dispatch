@@ -16,7 +16,6 @@ enum Result {
 struct ResultWithMessage {
     var result: Result
     var message: String = ""
-    var error: Error? = nil
 }
 
 /////////////////////////////////UI

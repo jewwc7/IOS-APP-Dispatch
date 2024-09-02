@@ -20,6 +20,8 @@
 		051AB4F42C7F9A11004F5677 /* TextChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4F32C7F9A11004F5677 /* TextChip.swift */; };
 		051AB4F62C7FD223004F5677 /* CustomerOrderCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB4F52C7FD223004F5677 /* CustomerOrderCard.swift */; };
 		05251D592C81315D00B6DAB0 /* StopViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251D582C81315D00B6DAB0 /* StopViewModel.swift */; };
+		05251D5C2C8273D200B6DAB0 /* OrderTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251D5B2C8273D200B6DAB0 /* OrderTransitions.swift */; };
+		05251D5E2C828B8500B6DAB0 /* OrderTransitionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251D5D2C828B8500B6DAB0 /* OrderTransitionsTest.swift */; };
 		0548073D2C80FDDA00DAF89B /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0548073C2C80FDDA00DAF89B /* OrderViewModel.swift */; };
 		054807412C81119100DAF89B /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054807402C81119100DAF89B /* NotificationManager.swift */; };
 		054807432C8115B500DAF89B /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054807422C8115B500DAF89B /* ErrorManager.swift */; };
@@ -89,6 +91,8 @@
 		051AB4F32C7F9A11004F5677 /* TextChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextChip.swift; sourceTree = "<group>"; };
 		051AB4F52C7FD223004F5677 /* CustomerOrderCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerOrderCard.swift; sourceTree = "<group>"; };
 		05251D582C81315D00B6DAB0 /* StopViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopViewModel.swift; sourceTree = "<group>"; };
+		05251D5B2C8273D200B6DAB0 /* OrderTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTransitions.swift; sourceTree = "<group>"; };
+		05251D5D2C828B8500B6DAB0 /* OrderTransitionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTransitionsTest.swift; sourceTree = "<group>"; };
 		0548073C2C80FDDA00DAF89B /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		054807402C81119100DAF89B /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		054807422C8115B500DAF89B /* ErrorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
@@ -181,6 +185,14 @@
 			path = protocols;
 			sourceTree = "<group>";
 		};
+		05251D5A2C82734600B6DAB0 /* Interactors */ = {
+			isa = PBXGroup;
+			children = (
+				05251D5B2C8273D200B6DAB0 /* OrderTransitions.swift */,
+			);
+			path = Interactors;
+			sourceTree = "<group>";
+		};
 		0548073F2C810A0900DAF89B /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -216,6 +228,7 @@
 		0551878C2BE98BEC00BA0A8A /* MyFirstApp */ = {
 			isa = PBXGroup;
 			children = (
+				05251D5A2C82734600B6DAB0 /* Interactors */,
 				0548073F2C810A0900DAF89B /* Managers */,
 				051AB4E72C7932F0004F5677 /* protocols */,
 				051AB4E02C76909B004F5677 /* preview helpers */,
@@ -250,6 +263,7 @@
 			isa = PBXGroup;
 			children = (
 				0551879F2BE98BED00BA0A8A /* MyFirstAppTests.swift */,
+				05251D5D2C828B8500B6DAB0 /* OrderTransitionsTest.swift */,
 			);
 			path = MyFirstAppTests;
 			sourceTree = "<group>";
@@ -503,6 +517,7 @@
 				05E126232C614FB6009F2415 /* DriverList.swift in Sources */,
 				05E126172C5D42A3009F2415 /* AvailableOrderCard.swift in Sources */,
 				05E126272C6190C7009F2415 /* DriveStopCard.swift in Sources */,
+				05251D5C2C8273D200B6DAB0 /* OrderTransitions.swift in Sources */,
 				051AB4DD2C757F52004F5677 /* Pickup.swift in Sources */,
 				055187902BE98BEC00BA0A8A /* ContentView.swift in Sources */,
 				054807432C8115B500DAF89B /* ErrorManager.swift in Sources */,
@@ -531,6 +546,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				055187A02BE98BED00BA0A8A /* MyFirstAppTests.swift in Sources */,
+				05251D5E2C828B8500B6DAB0 /* OrderTransitionsTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 let testOrderTwo = createOrders(customer: Customer(name: "Jake"))
-// Fix the ViewOrder screen
+// Fix the OrderDetails screen
 // Then work on sorting/filtering these based on status
 struct CustomerOrderCard: View {
     @State private var isExpanded: Bool = false
@@ -22,8 +22,6 @@ struct CustomerOrderCard: View {
     }
 
     var body: some View {
-        let chipColor: Color = orderViewModel.chipColor()
-
         VStack {
             VStack(alignment: .leading) {
                 // Header
@@ -47,7 +45,7 @@ struct CustomerOrderCard: View {
                         HStack {
                             Text(formattedDate(order.dropoff.dueAt)).font(.footnote).bold()
                             Spacer()
-                            TextChip(title: order.statusTexts[order.status] ?? "missing key", bgColor: chipColor, font: .footnote)
+                            TextChip(title: order.statusTexts[order.status] ?? "missing key", bgColor: orderViewModel.chipColor, font: .footnote)
                         }.padding(.vertical, 12)
                     }
                 }

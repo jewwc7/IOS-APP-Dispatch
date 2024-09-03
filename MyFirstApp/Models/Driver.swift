@@ -51,7 +51,6 @@ class Driver {
 
     private func claimOrder(order: Order) {
         print(self.name, "request to claim an order")
-
         let response = order.claim(driver: self)
         if response.result == .success {
             _ = self.addOrderToRoute(order: order)

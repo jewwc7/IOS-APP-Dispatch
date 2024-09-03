@@ -23,6 +23,7 @@ protocol IOrderTransitionState {
     func update(context: OrderContext)
     func canTransitionTo(state: IOrderTransitionState) -> Bool
     func nextState(for order: Order) -> IOrderTransitionState
+    func updateOrderStatus() -> Void
 }
 
 class OrderContext {
@@ -38,7 +39,7 @@ class OrderContext {
     private func transitionTo(newState: IOrderTransitionState) -> TransitionResult {
         if state.canTransitionTo(state: newState) {
             state = newState
-            updateOrderStatus(with: newState.currentStatus)
+            state.updateOrderStatus()
             state.update(context: self)
             return TransitionResult(.success)
         }
@@ -62,11 +63,6 @@ class OrderContext {
     func transisitionToUnassigned() -> TransitionResult {
         return transitionTo(newState: UnassignedConcreteState(state.order))
     }
-
-    private func updateOrderStatus(with newStatus: OrderStatus) {
-        state.order.status = newStatus.rawValue
-        state.order.transientStatus = newStatus.rawValue
-    }
 }
 
 class OrderTransitionsBaseState: IOrderTransitionState {
@@ -84,6 +80,7 @@ class OrderTransitionsBaseState: IOrderTransitionState {
     }
 
     func canTransitionTo(state: IOrderTransitionState) -> Bool {
+        logBaseWarning("canTransitionTo")
         return true // Default implementation, can be overridden by subclasses
     }
 
@@ -91,7 +88,13 @@ class OrderTransitionsBaseState: IOrderTransitionState {
         return order.comparableStatus
     }
 
+    func updateOrderStatus() {
+        logBaseWarning("updateOrderStatus")
+        return order.status = currentStatus.rawValue // do nothing
+    }
+
     func nextState(for order: Order) -> IOrderTransitionState {
+        logBaseWarning("nextState")
         let nextState: IOrderTransitionState = { switch currentStatus {
         case .unassigned:
             ClaimedConcreteState(order)
@@ -113,6 +116,10 @@ class OrderTransitionsBaseState: IOrderTransitionState {
         }()
         return nextState
     }
+
+    func logBaseWarning(_ method: String) {
+        Logger.log(.warning, "Implemented base behavior \(self), #\(method)")
+    }
 }
 
 class UnassignedConcreteState: OrderTransitionsBaseState { // extends
@@ -126,6 +133,10 @@ class UnassignedConcreteState: OrderTransitionsBaseState { // extends
 
     override func nextState(for order: Order) -> IOrderTransitionState {
         return ClaimedConcreteState(order)
+    }
+
+    override func updateOrderStatus() {
+        order.status = currentStatus.rawValue
     }
 }
 
@@ -141,6 +152,10 @@ class ClaimedConcreteState: OrderTransitionsBaseState {
     override func nextState(for order: Order) -> IOrderTransitionState {
         return EnrouteToPickupConcreteState(order)
     }
+
+    override func updateOrderStatus() {
+        order.status = currentStatus.rawValue
+    }
 }
 
 class EnrouteToPickupConcreteState: OrderTransitionsBaseState {
@@ -154,6 +169,10 @@ class EnrouteToPickupConcreteState: OrderTransitionsBaseState {
 
     override func nextState(for order: Order) -> IOrderTransitionState {
         return AtPickupConcreteState(order)
+    }
+
+    override func updateOrderStatus() {
+        order.status = currentStatus.rawValue
     }
 }
 
@@ -169,6 +188,10 @@ class AtPickupConcreteState: OrderTransitionsBaseState {
     override func nextState(for order: Order) -> IOrderTransitionState {
         return EnRouteToDropoffConcreteState(order)
     }
+
+    override func updateOrderStatus() {
+        order.status = currentStatus.rawValue
+    }
 }
 
 class EnRouteToDropoffConcreteState: OrderTransitionsBaseState {
@@ -182,6 +205,11 @@ class EnRouteToDropoffConcreteState: OrderTransitionsBaseState {
 
     override func nextState(for order: Order) -> IOrderTransitionState {
         return AtDropoffConcreteState(order)
+    }
+
+    override func updateOrderStatus() {
+        order.status = currentStatus.rawValue
+        order.pickup.deliveredAt = .now
     }
 }
 
@@ -197,6 +225,10 @@ class AtDropoffConcreteState: OrderTransitionsBaseState {
     override func nextState(for order: Order) -> IOrderTransitionState {
         return DeliveredConcreteState(order)
     }
+
+    override func updateOrderStatus() {
+        order.status = currentStatus.rawValue
+    }
 }
 
 class DeliveredConcreteState: OrderTransitionsBaseState {
@@ -211,14 +243,27 @@ class DeliveredConcreteState: OrderTransitionsBaseState {
     override func nextState(for order: Order) -> IOrderTransitionState {
         return DeliveredConcreteState(order) // do nothing
     }
+
+    override func updateOrderStatus() {
+        order.status = currentStatus.rawValue
+        order.dropoff.deliveredAt = .now
+    }
 }
 
 class CanceledConcreteState: OrderTransitionsBaseState {
+    override var currentStatus: OrderStatus {
+        return OrderStatus.canceled
+    }
+
     override func canTransitionTo(state: IOrderTransitionState) -> Bool {
         return false
     }
 
     override func nextState(for order: Order) -> IOrderTransitionState {
         return CanceledConcreteState(order) // do nothing
+    }
+
+    override func updateOrderStatus() {
+        order.status = currentStatus.rawValue
     }
 }

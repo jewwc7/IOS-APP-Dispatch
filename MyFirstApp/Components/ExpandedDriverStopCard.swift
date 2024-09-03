@@ -57,9 +57,7 @@ struct ExpandedDriverStopCard<Content: View>: View {
     func handleOnPress() {
         withAnimation(.smooth) {
             if let order = stop.order {
-                order.claim(driver: driver) // should be claim as that;s all I you should be able to do here
-                // probably need to pass the driver to this
-                //  order.transitionToNextStatus()
+                _ = order.claim(driver: driver)
             } else {
                 print("stop has no associated order")
             }

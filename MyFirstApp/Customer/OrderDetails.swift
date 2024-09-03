@@ -1,17 +1,21 @@
 //
-//  ViewOrder.swift
+//  OrderDetails.swift
 //  MyFirstApp
 //
-//  Created by Joshua Wilson on 5/21/24.
+//  Created by Joshua Wilson on 9/3/24.
 //
 
+import Foundation
 import SwiftUI
 
-struct ViewOrder: View {
+struct OrderDetails: View {
     var order: Order /* ? = createOrders(customer: Customer(name: "Jackie")) */
     var pickup: Pickup
     var dropoff: Dropoff
+    var errorManager = ErrorManager()
     @State private var currentStatus: OrderStatus = .unassigned
+    @State private var popIsPresented: Bool = false
+    
     var orderViewModel: OrderViewModel
     
     init(order: Order) {
@@ -22,13 +26,11 @@ struct ViewOrder: View {
     }
     
     var body: some View {
-        let claimedStatuses = order.claimedStatuses
-        let chipColor: Color = orderViewModel.chipColor()
         VStack {
-            ProgressView(value: progressValue, total: 1.0)
-                .progressViewStyle(StepperProgressViewStyle(stepCount: claimedStatuses.count))
+            ProgressView(value: orderViewModel.progressValue, total: 1.0)
+                .progressViewStyle(StepperProgressViewStyle(stepCount: order.claimedStatuses.count))
 
-            TextChip(title: order.statusTexts[order.status] ?? "missing key", bgColor: chipColor, font: .subheadline)
+            TextChip(title: order.statusTexts[order.status] ?? "missing key", bgColor: orderViewModel.chipColor, font: .subheadline)
             
 //                HStack {
 //                    ForEach(OrderStatus.allCases, id: \.self) { status in
@@ -45,7 +47,57 @@ struct ViewOrder: View {
 //                }
   
             //  .padding()
-        
+            // Buttons to change order status
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 10) {
+                Button(action: {
+                    _ = order.unassign()
+                }) {
+                    Text("Unassign")
+                }
+                Button(action: {
+                    order.status = OrderStatus.claimed.rawValue
+                }) {
+                    Text("Claim")
+                }
+                Button(action: {
+                    order.status = OrderStatus.enRouteToPickup.rawValue
+                }) {
+                    Text("En Route to Pickup")
+                }
+                Button(action: {
+                    order.status = OrderStatus.atPickup.rawValue
+                }) {
+                    Text("At Pickup")
+                }
+                Button(action: {
+                    order.status = OrderStatus.enRouteToDropoff.rawValue
+                }) {
+                    Text("En Route to Dropoff")
+                }
+                Button(action: {
+                    order.status = OrderStatus.atDropoff.rawValue
+                }) {
+                    Text("At Dropoff")
+                }
+                Button(action: {
+                    order.status = OrderStatus.delivered.rawValue
+                }) {
+                    Text("Delivered")
+                }
+                Button(action: {
+                    order.status = OrderStatus.canceled.rawValue
+                }) {
+                    Text("Cancel")
+                }
+                Button(action: {
+                    order.transitionToNextStatus()
+                }) {
+                    Text("Next state")
+                }
+            }
+            .padding()
+            .buttonStyle(BorderlessButtonStyle())
+ 
             NavigationView {
                 List {
                     Section(header: TextChip(title: "Pickup", bgColor: .gray, font: .footnote)) {
@@ -108,32 +160,41 @@ struct ViewOrder: View {
                 .listStyle(GroupedListStyle())
          
             }.toolbar {
+//                ToolbarItem(placement: .navigationBarTrailing) {
+//                    Button("", systemImage: "plus") {
+//                        print("Edit order!!")
+//                    }
+//                }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("", systemImage: "plus") {
-                        print("Edit order!!")
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("", systemImage: "xmark") {
-                        print("Cancel order!!")
+                    Button(action: {
+                        popIsPresented = true
+                    }) {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
                     }
                 }
             }
             .navigationTitle("Order Details")
+            .overlay(
+                MyAlert(
+                    isPresented: $popIsPresented,
+                    title: "Cancel Order",
+                    message: "Are you sure you want to cancel the order?",
+                    onYes: {
+                        let response = order.cancel()
+                        if response.result != .success {
+                            errorManager.handleError(BaseError(type: .ValidationError, message: "Can't cancel order"))
+                        }
+                        popIsPresented = false
+                     
+                    },
+                    onNo: {
+                        popIsPresented = false
+                        print("Order not canceled")
+                    }
+                ).animation(.easeInOut, value: popIsPresented)
+            )
         }
-    }
-    
-    private var progressValue: Double {
-        // This line attempts to find the index of the currentStatus in the array of all possible OrderStatus cases (OrderStatus.allCases).
-        // If currentStatus is not found in OrderStatus.allCases, the guard statement returns 0.0, indicating no //progress.
-        // If not claimed ahould be at 0
-        let currentStatus = order.claimedStatuses.firstIndex(of: order.comparableStatus)
-      
-        guard let index = currentStatus else {
-            return 0.0
-        }
-        // I want claimed to start, index is 0 for claim, so need to add 1 to every index
-        return Double(index + 1) / Double(order.claimedStatuses.count)
     }
 }
 
@@ -153,19 +214,12 @@ struct StepperProgressViewStyle: ProgressViewStyle {
                         .fill(index < Int(configuration.fractionCompleted! * Double(stepCount)) ? Color.blue : Color.gray)
                         .frame(width: 20, height: 2)
                 }
-//                Button("print") {
-//                    h(index: index, stpeCount: stepCount, configuration: configuration)
-//                }
             }
         }
-    }
-    
-    func h(index: Int, stpeCount: Int, configuration: Configuration) {
-        print(index, stepCount, configuration)
     }
 }
 
 // #Preview {
-//    ViewOrder().modelContainer(for: [Order.self, Customer.self, Driver.self], inMemory: true).environmentObject(AppStateManager()) // needs to be added to insert the modelContext, making it possible to CRUD state
+//    OrderDetails().modelContainer(for: [Order.self, Customer.self, Driver.self], inMemory: true).environmentObject(AppStateManager()) // needs to be added to insert the modelContext, making it possible to CRUD state
 //    // https://developer.apple.com/tutorials/develop-in-swift/save-data
 // }

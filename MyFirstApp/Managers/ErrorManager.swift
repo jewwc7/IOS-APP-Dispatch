@@ -18,12 +18,12 @@ class ErrorManager: ObservableObject {
     // Step 3: Create a method to handle errors
     func handleError(_ error: BaseError) {
         currentError = error
-        displayError(currentError.message)
+        displayError()
     }
 
-    func displayError(_ message: String) {
+    func displayError() {
         notifcationManager.displayNotification {
-            Text(message).foregroundColor(.white).font(.footnote)
+            Text(self.currentError.message).foregroundColor(.white).font(.footnote).padding()
         }
     }
 }

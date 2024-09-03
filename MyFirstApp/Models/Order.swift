@@ -167,9 +167,10 @@ class Order {
     func unassign() -> TransitionResult {
         let orderContext = OrderContext(state: matchingTransition)
         let transition = orderContext.transisitionToUnassigned()
-        //    let isClaimable = self.isClaimable()
+
         if transition.result == .success {
             driver = nil
+            statusDidChange()
         }
         return transition
     }
@@ -180,6 +181,21 @@ class Order {
 
         if transition.result == .success {
             self.driver = driver
+            statusDidChange()
+        }
+        return transition
+    }
+    
+    func cancel() -> TransitionResult {
+        let orderContext = OrderContext(state: matchingTransition)
+        let transition = orderContext.transitionToCancel()
+
+        if transition.result == .success {
+            driver = nil
+            statusDidChange()
+            // send out a sepearte notifcation, or change the ui somehow?
+        } else {
+            // send out a sepearte notifcation, or change the ui somehow?
         }
         return transition
     }
@@ -187,10 +203,12 @@ class Order {
     func transitionToNextStatus() {
         let orderContext = OrderContext(state: matchingTransition)
         let result = orderContext.transitionToNextState()
-        if result.result == .success {}
+        if result.result == .success {
+            statusDidChange()
+        }
     }
     
-    func statusDidChange() {
+    func statusDidChange() { // I can move this to the orderViewModel, call when needed. Could then remove the transient state. Being here makes it appear everywhere so I can see it;s working.
         NotificationManager().displayNotification {
             Text("Hi \(self.customer?.name ?? "") your order is now \(self.statusTexts[self.status] ?? "missing key")").foregroundStyle(.white).padding().font(.footnote)
         }
@@ -201,15 +219,5 @@ class Order {
     ) throws {
         try pickup.validateFields()
         try dropoff.validateFields()
-    }
-    
-    func cancel() {
-        let o = OrderContext(state: matchingTransition)
-        let transition = o.transitionToCancel()
-        if transition.result == .success {
-            // do some other stuff, send out a notfication
-        } else {
-            // send out a sepearte notifcation, or change the ui somehow?
-        }
     }
 }

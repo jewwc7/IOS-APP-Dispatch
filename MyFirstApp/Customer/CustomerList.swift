@@ -22,21 +22,33 @@ import SwiftUI
 ////    }
 //
 // }
-struct CustomerList: View {
+
+enum CustomerSortOrder: String, Identifiable, CaseIterable {
+    case name, id
+
+    var id: Self {
+        self
+    }
+}
+
+struct CustomerListView: View {
     @Environment(\.modelContext) private var context // how to CRUD state
     @Query private var customers: [Customer]
     @State private var isPopupPresented: Bool = false
     @State var shouldNavigate: Bool = false
     //   @State private var customerListConfig = CustomerListConfig()
     @EnvironmentObject var appState: AppStateManager
+    @State private var sortOrder: CustomerSortOrder = .name
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(customers, id: \.id) { customer in
-                    CustomNavigationLink(destination: CustomerMainScreen(customer: customer), title: customer.name) {}
+            Picker("", selection: $sortOrder) {
+                ForEach(CustomerSortOrder.allCases) { sortOrder in
+                    Text("Sort by \(sortOrder.rawValue)").tag(sortOrder)
                 }
-            }.navigationTitle("Customer List")
+            }.buttonStyle(.bordered)
+            CustomerList(sortOrder: sortOrder)
+                .navigationTitle("Customer List")
                 .toolbar {
 //                    ToolbarItem(placement: .navigationBarTrailing) {
 //                        EditButton()
@@ -62,6 +74,30 @@ struct CustomerList: View {
             for index in offsets {
                 // print(customers[index])
                 context.delete(customers[index])
+            }
+        }
+    }
+}
+
+struct CustomerList: View {
+    @Environment(\.modelContext) private var context // how to CRUD state
+    @Query private var customers: [Customer]
+
+    init(sortOrder: CustomerSortOrder) {
+        let sortDescriptors: [SortDescriptor<Customer>] = switch sortOrder {
+        case .name:
+            [SortDescriptor(\Customer.name)]
+        case .id:
+            [SortDescriptor(\Customer.id)]
+        }
+
+        _customers = Query(sort: sortDescriptors)
+    }
+
+    var body: some View {
+        List {
+            ForEach(customers, id: \.id) { customer in
+                CustomNavigationLink(destination: CustomerMainScreen(customer: customer), title: customer.name) {}
             }
         }
     }
@@ -118,6 +154,6 @@ struct PopupView: View {
     }
 }
 
-#Preview {
-    CustomerList().modelContainer(for: [Customer.self, Order.self], inMemory: true).environmentObject(AppStateManager())
-}
+// #Preview {
+//    CustomerList().modelContainer(for: [Customer.self, Order.self], inMemory: true).environmentObject(AppStateManager())
+// }

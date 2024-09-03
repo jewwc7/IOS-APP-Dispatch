@@ -48,7 +48,7 @@ struct CustomNavigationLink<Destination: View>: View {
 }
 
 #Preview {
-    CustomNavigationLink(destination: CustomerList(), title: "PlaceHolderPreview") {
+    CustomNavigationLink(destination: CustomerListView(), title: "PlaceHolderPreview") {
         print("preview tapped")
     }
 }

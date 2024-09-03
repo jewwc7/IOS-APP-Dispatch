@@ -19,8 +19,21 @@ class OrderViewModel {
         self.order = order
     }
 
-    func chipColor() -> Color {
-        return order.inProgess || order.delivered ? .green : order.claimed ? .blue : .red
+    var chipColor: Color {
+        return order.inProgess ? .blue : order.claimed ? .orange : order.delivered ? .green : .red
+    }
+
+    var progressValue: Double {
+        // This line attempts to find the index of the currentStatus in the array of all possible OrderStatus cases (OrderStatus.allCases).
+        // If currentStatus is not found in OrderStatus.allCases, the guard statement returns 0.0, indicating no //progress.
+        // If not claimed ahould be at 0
+        let currentStatus = order.claimedStatuses.firstIndex(of: order.comparableStatus)
+
+        guard let index = currentStatus else {
+            return 0.0
+        }
+        // I want claimed to start, index is 0 for claim, so need to add 1 to every index
+        return Double(index + 1) / Double(order.claimedStatuses.count)
     }
 
     func claimedTransitionButtonUI() -> StopUIInfo {

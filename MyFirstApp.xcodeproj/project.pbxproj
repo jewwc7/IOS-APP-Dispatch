@@ -22,6 +22,10 @@
 		05251D592C81315D00B6DAB0 /* StopViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251D582C81315D00B6DAB0 /* StopViewModel.swift */; };
 		05251D5C2C8273D200B6DAB0 /* OrderTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251D5B2C8273D200B6DAB0 /* OrderTransitions.swift */; };
 		05251D5E2C828B8500B6DAB0 /* OrderTransitionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251D5D2C828B8500B6DAB0 /* OrderTransitionsTest.swift */; };
+		05251D602C8796B500B6DAB0 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251D5F2C8796B500B6DAB0 /* Logger.swift */; };
+		05251D622C87A56000B6DAB0 /* OrderUITransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251D612C87A55F00B6DAB0 /* OrderUITransitions.swift */; };
+		05251D642C87AABF00B6DAB0 /* OrderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251D632C87AABF00B6DAB0 /* OrderDetails.swift */; };
+		05251D662C87ABD300B6DAB0 /* MyAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251D652C87ABD300B6DAB0 /* MyAlert.swift */; };
 		0548073D2C80FDDA00DAF89B /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0548073C2C80FDDA00DAF89B /* OrderViewModel.swift */; };
 		054807412C81119100DAF89B /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054807402C81119100DAF89B /* NotificationManager.swift */; };
 		054807432C8115B500DAF89B /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054807422C8115B500DAF89B /* ErrorManager.swift */; };
@@ -41,7 +45,6 @@
 		05B99ED42C6E415200D8B876 /* MyNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B99ED32C6E415200D8B876 /* MyNotification.swift */; };
 		05E125F42BFD48B9009F2415 /* CustomerMainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */; };
 		05E125F62BFD5047009F2415 /* MyCreatedOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125F52BFD5047009F2415 /* MyCreatedOrders.swift */; };
-		05E125F82BFD5966009F2415 /* ViewOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125F72BFD5966009F2415 /* ViewOrder.swift */; };
 		05E125FB2C51A84C009F2415 /* FirstPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125FA2C51A84C009F2415 /* FirstPage.swift */; };
 		05E125FF2C52EE04009F2415 /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125FE2C52EE04009F2415 /* Customer.swift */; };
 		05E126012C52F54E009F2415 /* CustomerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E126002C52F54E009F2415 /* CustomerList.swift */; };
@@ -93,6 +96,10 @@
 		05251D582C81315D00B6DAB0 /* StopViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopViewModel.swift; sourceTree = "<group>"; };
 		05251D5B2C8273D200B6DAB0 /* OrderTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTransitions.swift; sourceTree = "<group>"; };
 		05251D5D2C828B8500B6DAB0 /* OrderTransitionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTransitionsTest.swift; sourceTree = "<group>"; };
+		05251D5F2C8796B500B6DAB0 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		05251D612C87A55F00B6DAB0 /* OrderUITransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderUITransitions.swift; sourceTree = "<group>"; };
+		05251D632C87AABF00B6DAB0 /* OrderDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetails.swift; sourceTree = "<group>"; };
+		05251D652C87ABD300B6DAB0 /* MyAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAlert.swift; sourceTree = "<group>"; };
 		0548073C2C80FDDA00DAF89B /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		054807402C81119100DAF89B /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		054807422C8115B500DAF89B /* ErrorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
@@ -116,7 +123,6 @@
 		05B99ED32C6E415200D8B876 /* MyNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNotification.swift; sourceTree = "<group>"; };
 		05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerMainScreen.swift; sourceTree = "<group>"; };
 		05E125F52BFD5047009F2415 /* MyCreatedOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCreatedOrders.swift; sourceTree = "<group>"; };
-		05E125F72BFD5966009F2415 /* ViewOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewOrder.swift; sourceTree = "<group>"; };
 		05E125FA2C51A84C009F2415 /* FirstPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPage.swift; sourceTree = "<group>"; };
 		05E125FE2C52EE04009F2415 /* Customer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customer.swift; sourceTree = "<group>"; };
 		05E126002C52F54E009F2415 /* CustomerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerList.swift; sourceTree = "<group>"; };
@@ -189,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				05251D5B2C8273D200B6DAB0 /* OrderTransitions.swift */,
+				05251D612C87A55F00B6DAB0 /* OrderUITransitions.swift */,
 			);
 			path = Interactors;
 			sourceTree = "<group>";
@@ -291,6 +298,7 @@
 			isa = PBXGroup;
 			children = (
 				055187BF2BEC306A00BA0A8A /* MyButton.swift */,
+				05251D652C87ABD300B6DAB0 /* MyAlert.swift */,
 				05E1260C2C5AA3C5009F2415 /* CustomNavigationLink.swift */,
 				05E1261C2C5D85AF009F2415 /* MyChip.swift */,
 				05B99ED32C6E415200D8B876 /* MyNotification.swift */,
@@ -318,7 +326,7 @@
 				05E126002C52F54E009F2415 /* CustomerList.swift */,
 				05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */,
 				05E125F52BFD5047009F2415 /* MyCreatedOrders.swift */,
-				05E125F72BFD5966009F2415 /* ViewOrder.swift */,
+				05251D632C87AABF00B6DAB0 /* OrderDetails.swift */,
 				051AB4D12C73F95B004F5677 /* AddressSelection.swift */,
 			);
 			path = Customer;
@@ -343,6 +351,7 @@
 			isa = PBXGroup;
 			children = (
 				05B99ECF2C6D6E3700D8B876 /* Seeds.swift */,
+				05251D5F2C8796B500B6DAB0 /* Logger.swift */,
 			);
 			path = DB;
 			sourceTree = "<group>";
@@ -496,7 +505,6 @@
 			files = (
 				051AB4F62C7FD223004F5677 /* CustomerOrderCard.swift in Sources */,
 				051AB4DB2C753E56004F5677 /* MapView.swift in Sources */,
-				05E125F82BFD5966009F2415 /* ViewOrder.swift in Sources */,
 				05E1261D2C5D85AF009F2415 /* MyChip.swift in Sources */,
 				051AB4DF2C75807D004F5677 /* Dropoff.swift in Sources */,
 				054807452C81177D00DAF89B /* AppStateManager.swift in Sources */,
@@ -513,6 +521,7 @@
 				054807412C81119100DAF89B /* NotificationManager.swift in Sources */,
 				05B99ED02C6D6E3700D8B876 /* Seeds.swift in Sources */,
 				051AB4D22C73F95B004F5677 /* AddressSelection.swift in Sources */,
+				05251D622C87A56000B6DAB0 /* OrderUITransitions.swift in Sources */,
 				05E126152C5C44D1009F2415 /* Driver.swift in Sources */,
 				05E126232C614FB6009F2415 /* DriverList.swift in Sources */,
 				05E126172C5D42A3009F2415 /* AvailableOrderCard.swift in Sources */,
@@ -531,9 +540,12 @@
 				05E126012C52F54E009F2415 /* CustomerList.swift in Sources */,
 				0548073D2C80FDDA00DAF89B /* OrderViewModel.swift in Sources */,
 				05E125F42BFD48B9009F2415 /* CustomerMainScreen.swift in Sources */,
+				05251D662C87ABD300B6DAB0 /* MyAlert.swift in Sources */,
 				05E125F62BFD5047009F2415 /* MyCreatedOrders.swift in Sources */,
 				0551878E2BE98BEC00BA0A8A /* MyFirstAppApp.swift in Sources */,
 				05E1260B2C585534009F2415 /* Enums.swift in Sources */,
+				05251D642C87AABF00B6DAB0 /* OrderDetails.swift in Sources */,
+				05251D602C8796B500B6DAB0 /* Logger.swift in Sources */,
 				05251D592C81315D00B6DAB0 /* StopViewModel.swift in Sources */,
 				05E1260D2C5AA3C5009F2415 /* CustomNavigationLink.swift in Sources */,
 				055187C02BEC306A00BA0A8A /* MyButton.swift in Sources */,

@@ -5,14 +5,13 @@
 //  Created by Joshua Wilson on 7/24/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct FirstPage: View {
     @Environment(\.modelContext) private var context
     
     var body: some View {
-        
         VStack {
             HStack {
                 Button("Create seed") {
@@ -20,10 +19,9 @@ struct FirstPage: View {
                 }
             }
             
-            
             HStack {
                 // the order od modifieres matters
-                NavigationLink(destination: CustomerList()) {
+                NavigationLink(destination: CustomerListView()) {
                     Text("Customer")
                 }.frame(width: buttonFrame.width, height: buttonFrame.height).padding().background(.blue, in: RoundedRectangle(cornerRadius: 8)).foregroundColor(.white)
                 
@@ -35,11 +33,7 @@ struct FirstPage: View {
                     Text("Driver")
                 }.frame(width: buttonFrame.width, height: buttonFrame.height).padding().background(.blue, in: RoundedRectangle(cornerRadius: 8)).foregroundColor(.white)
                 
-                
             }.frame(width: 180)
-            
         }
     }
 }
-
-

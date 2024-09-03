@@ -20,7 +20,7 @@ struct MyCreatedOrders: View {
                 if loggedInCustomer.orders.count > 0 {
                     List {
                         ForEach(loggedInCustomer.orders, id: \.id) { order in
-                            NavigationLink(destination: ViewOrder(order: order)) {
+                            NavigationLink(destination: OrderDetails(order: order)) {
                                 CustomerOrderCard(order: order)
                             }.buttonStyle(PlainButtonStyle())
                         }

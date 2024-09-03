@@ -46,7 +46,7 @@ class StopViewModel {
         if let order = stop.order {
             return OrderViewModel(order).claimedTransitionButtonUI()
         } else {
-            return StopUIInfo(pickup: StopUI(buttonTitle: "Invalid transition", isButtonDisabled: true), dropoff: StopUI(buttonTitle: "Invalid transition", isButtonDisabled: false))
+            return StopUIInfo(pickup: StopUI(buttonTitle: "Invalid transition", isButtonDisabled: false), dropoff: StopUI(buttonTitle: "Invalid transition", isButtonDisabled: false))
         }
     }
 

@@ -103,10 +103,10 @@ struct CreateOrderScreen: View {
             } catch let error as BaseError { // Swift checks if the error thrown conforms to the BaseError type or is a
                 isLoading = false
                 errorManager.handleError(error)
-                print(["message": error.message, "type": error.type])
+                Logger.log(.error, ["message": error.message, "type": error.type])
             } catch {
                 isLoading = false
-                print(error.localizedDescription)
+                Logger.log(.error, error.localizedDescription)
             }
         } else {
             isLoading = false

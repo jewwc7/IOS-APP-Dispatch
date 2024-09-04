@@ -67,6 +67,10 @@ class Route: BaseModel {
         }
     }
 
+    func removeOrder(_ order: Order) {
+        self.orders.removeAll { $0.id == order.id }
+    }
+
     // PersistentIdentifier because of the id, UUID
     func createRoute() -> [PersistentIdentifier: [String: Stop]] {
         let routeDictionary = self.orders.reduce(into: [PersistentIdentifier: [String: Stop]]()) { result, order in

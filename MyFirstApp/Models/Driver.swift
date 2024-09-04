@@ -54,9 +54,11 @@ class Driver: BaseModel {
     }
 
     private func claimOrder(order: Order) {
-        print(self.name, "request to claim an order")
+        Logger.log(.action, "\(self.name) requested to claim an order")
+
         let response = order.claim(driver: self)
         if response.result == .success {
+            order.driver = self
             _ = self.addOrderToRoute(order: order)
         }
     }

@@ -31,6 +31,11 @@ struct DriverStopCard: View {
                         Text(stop.fullAddress)
                             .font(.headline)
                     }
+                    if stop.comparableStopType == .pickup {
+                        Button("Release order") {
+                            stop.releaseOrder()
+                        }
+                    }
                    
                 }.padding()
             

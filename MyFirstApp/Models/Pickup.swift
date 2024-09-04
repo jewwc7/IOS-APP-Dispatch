@@ -36,6 +36,10 @@ class Pickup: BaseModel, Stop {
         return "\(address)\n\(cityStateZip)"
     }
 
+    var comparableStopType: StopType {
+        return StopType.pickup
+    }
+
     init(
         address: String,
         cityStateZip: String,
@@ -76,5 +80,11 @@ class Pickup: BaseModel, Stop {
         }
 
         // return ResultWithMessage(result: .success, message: "success") // .failure(.emptyField(message: "\(fieldName) is empty"))
+    }
+
+    func releaseOrder() {
+        if let order = order {
+            _ = order.unassign()
+        }
     }
 }

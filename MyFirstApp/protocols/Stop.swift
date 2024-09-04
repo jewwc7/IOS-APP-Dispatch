@@ -19,9 +19,12 @@ protocol Stop {
     var company: String { get set }
     var fullAddress: String { get }
     var fullAddressSpaced: String { get }
+    var comparableStopType: StopType { get }
     var stopType: StopType.RawValue { get }
     var deliveredAt: Date? { get set }
     var dueAt: Date { get set }
+    func releaseOrder() -> Void
+    func validateFields() throws
 }
 
 enum StopType: String, Codable {

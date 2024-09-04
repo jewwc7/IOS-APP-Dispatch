@@ -44,6 +44,7 @@ class Order: BaseModel {
     var driver: Driver?
     var pickup: Pickup
     var dropoff: Dropoff
+    var route: Route?
     var status: OrderStatus.RawValue
     var createdAt: Date
     var updatedAt: Date
@@ -180,6 +181,9 @@ class Order: BaseModel {
 
         if transition.result == .success {
             driver = nil
+            if let onROute = route {
+                onROute.removeOrder(self)
+            }
             statusDidChange()
         }
         return transition

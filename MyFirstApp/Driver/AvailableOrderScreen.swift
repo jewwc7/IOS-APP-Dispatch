@@ -70,20 +70,13 @@ struct AvailableOrderScreen: View {
             }
         } else {
             ContentUnavailableView("No logged in customer", systemImage: "xmark").onAppear(perform: {
-                logIn(driver: driver)
+                appState.loginDriver(driver: driver)
             }).opacity(waitedToShowIssue ? 1 : 0).task {
                 Task {
                     try await Task.sleep(for: .seconds(1))
                     waitedToShowIssue = true
                 }
             }
-        }
-    }
-
-    func logIn(driver: Driver) {
-        let result = driver.login()
-        if result == .success {
-            appState.loginDriver(driver: driver)
         }
     }
 }

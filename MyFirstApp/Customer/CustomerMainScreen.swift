@@ -35,20 +35,13 @@ struct CustomerMainScreen: View {
 
         } else {
             ContentUnavailableView("No logged in customer", systemImage: "xmark").onAppear(perform: {
-                logIn(customer: customer)
+                appState.login(customer: customer)
             }).opacity(waitedToShowIssue ? 1 : 0).task {
                 Task {
                     try await Task.sleep(for: .seconds(1))
                     waitedToShowIssue = true
                 }
             }
-        }
-    }
-
-    func logIn(customer: Customer) {
-        let result = customer.login()
-        if result == .success {
-            appState.login(customer: customer)
         }
     }
 }

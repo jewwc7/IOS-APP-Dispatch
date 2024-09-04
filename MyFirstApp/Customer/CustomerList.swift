@@ -24,7 +24,7 @@ import SwiftUI
 // }
 
 enum CustomerSortOrder: String, Identifiable, CaseIterable {
-    case name, id
+    case name, id, totalNumberOfOrders
 
     var id: Self {
         self
@@ -86,9 +86,11 @@ struct CustomerList: View {
     init(sortOrder: CustomerSortOrder) {
         let sortDescriptors: [SortDescriptor<Customer>] = switch sortOrder {
         case .name:
-            [SortDescriptor(\Customer.name)]
+            [SortDescriptor(\Customer.name), SortDescriptor(\Customer.totalNumberOfOrders, order: .reverse)]
         case .id:
-            [SortDescriptor(\Customer.id)]
+            [SortDescriptor(\Customer.id), SortDescriptor(\Customer.totalNumberOfOrders, order: .reverse)]
+        case .totalNumberOfOrders:
+            [SortDescriptor(\Customer.totalNumberOfOrders, order: .reverse)]
         }
 
         _customers = Query(sort: sortDescriptors)
@@ -97,7 +99,30 @@ struct CustomerList: View {
     var body: some View {
         List {
             ForEach(customers, id: \.id) { customer in
-                CustomNavigationLink(destination: CustomerMainScreen(customer: customer), title: customer.name) {}
+                NavigationLink(destination: CustomerMainScreen(customer: customer)) {
+                    CustomNavigationLinkLabel(number: customer.totalNumberOfOrders, name: customer.name)
+                }
+//                CustomNavigationLink(destination: CustomerMainScreen(customer: customer), title: customer.name) {}
+            }
+        }
+    }
+}
+
+struct CustomNavigationLinkLabel: View {
+    var number: Int
+    var name: String
+
+    var body: some View {
+        HStack {
+            Text(name)
+            Spacer()
+            VStack(alignment: .trailing) {
+                Text("# orders")
+                    .font(.caption2)
+                    .foregroundColor(.gray)
+                ZStack {
+                    TextChip(title: String(number))
+                }
             }
         }
     }

@@ -24,10 +24,12 @@ class Driver {
     // Properties
     var id: String?
     var name: String
-    var numberOfOrdersPlaced: Int
-    var isLoggedIn: Bool
     var orders = [Order]() // this and below are the same thing.
     var routes: [Route] = []
+    var totalNumberOfOrders: Int {
+        return self.orders.count
+    }
+
     // Initializer
     init(
         name: String = ""
@@ -35,8 +37,6 @@ class Driver {
     ) {
         self.id = UUID().uuidString
         self.name = name
-        self.numberOfOrdersPlaced = 0
-        self.isLoggedIn = false
     }
 
     func handleOrderAction(action: DriverOrderAction, order: Order) {
@@ -76,20 +76,5 @@ class Driver {
         print(self.name, "request to claim an order")
         let response = order.unassign()
         if response.result == .success {}
-    }
-
-    func login() -> Result {
-        do {
-            self.isLoggedIn = true
-            print("logging in", self.isLoggedIn)
-            try self.modelContext?.save()
-            return .success
-        }
-
-        catch {
-            print(error)
-            print("Could not login \(self.name)")
-            return .failure
-        }
     }
 }

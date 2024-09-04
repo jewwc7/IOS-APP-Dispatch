@@ -24,9 +24,8 @@ class Customer {
     // Properties
     var id: String?
     var name: String
-    var numberOfOrdersPlaced: Int
-    var isLoggedIn: Bool
     var orders = [Order]()
+    var totalNumberOfOrders: Int
 
     // Initializer
     init(
@@ -35,8 +34,7 @@ class Customer {
     ) {
         self.id = UUID().uuidString
         self.name = name
-        self.numberOfOrdersPlaced = 0
-        self.isLoggedIn = false
+        self.totalNumberOfOrders = 0
     }
 
     func handleOrderAction(action: CustomerOrderAction, order: Order) throws {
@@ -45,7 +43,7 @@ class Customer {
             case CustomerOrderAction.place:
                 try self.placeOrder(order: order)
             case CustomerOrderAction.cancel:
-                self.cancelOrder()
+                self.cancelOrder(order)
             }
         } catch let error as BaseError { // Swift checks if the error thrown conforms to the BaseError type or is a subclass of BaseError
             print(self, ["message": error.message, "type": error.type])
@@ -58,31 +56,17 @@ class Customer {
 
     private func placeOrder(order: Order) throws {
         print(self.name, "requested to place an order")
-
         try order.validatePickupAndDropOff() // don't include do-catch so error can bubble up
         self.orders.append(order)
-        self.numberOfOrdersPlaced += 1
-        print(self.name, "placed an order!")
-        // FInd the order and run some comandds on it
+        self.totalNumberOfOrders += 1
+        Logger.log(.action, "#placeOrder")
     }
 
-    private func cancelOrder() {
-        print(self.name, "canceled an order")
-        self.numberOfOrdersPlaced += 1
-    }
-
-    func login() -> Result {
-        do {
-            self.isLoggedIn = true
-            print("logging in", self.isLoggedIn)
-            try self.modelContext?.save()
-            return .success
-        }
-
-        catch {
-            print(error)
-            print("Could not login \(self.name)")
-            return .failure
+    private func cancelOrder(_ order: Order) {
+        let response = order.cancel()
+        if response.result != .success {
+            Logger.log(.action, " \(response.message ?? "") in \(#function)")
+            return // throw an error
         }
     }
 }

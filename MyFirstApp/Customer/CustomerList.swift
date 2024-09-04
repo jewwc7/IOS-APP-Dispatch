@@ -102,7 +102,6 @@ struct CustomerList: View {
                 NavigationLink(destination: CustomerMainScreen(customer: customer)) {
                     CustomNavigationLinkLabel(number: customer.totalNumberOfOrders, name: customer.name)
                 }
-//                CustomNavigationLink(destination: CustomerMainScreen(customer: customer), title: customer.name) {}
             }
         }
     }

@@ -13,14 +13,12 @@ struct AvailableOrderScreen: View {
     @State private var waitedToShowIssue = false
     @State private var isLoggedOn = true
     @State private var numberOfOrdersInCart = 0
+    @State private var sortOrder: AvailableOrderSortOrder = .pay
 
     @Environment(\.modelContext) private var context // how to CRUD state
-    @Query private var ordersFromModel: [Order]
     @EnvironmentObject var appState: AppStateManager
-    
+
     var body: some View {
-        let unclaimedOrders = ordersFromModel.filter { $0.driver == nil }
-        
         if let loggedInDriver = appState.loggedInDriver {
             NavigationView {
                 VStack {
@@ -32,44 +30,33 @@ struct AvailableOrderScreen: View {
                                     .scaledToFit()
                                     .frame(width: 30, height: 30)
                             }
-                     
-                            if loggedInDriver.orders.count == 0 {
-                                EmptyView()
-                            } else {
-                                withAnimation {
-                                    Text("\(loggedInDriver.numberOfOrders())") // Display your floating number
-                                        .font(.system(size: 16)) // Set the font size
-                                        .fontWeight(.bold) // Set the font weight if needed
-                                        .foregroundColor(.white) // Set the text color
-                                        .padding(8) // Add padding around the text
-                                        .background(Color.blue) // Set the background color
-                                        .clipShape(Circle()) // Clip the text into a circle shape
-                                        .offset(x: 16, y: -16) // Offset the text position relative to the image
-                                }
+
+                            withAnimation {
+                                Text("\(loggedInDriver.numberOfOrders())") // Display your floating number
+                                    .font(.system(size: 16)) // Set the font size
+                                    .fontWeight(.bold) // Set the font weight if needed
+                                    .foregroundColor(.white) // Set the text color
+                                    .padding(8) // Add padding around the text
+                                    .background(Color.blue) // Set the background color
+                                    .clipShape(Circle()) // Clip the text into a circle shape
+                                    .offset(x: 16, y: -16) // Offset the text position relative to the image
                             }
                         }
-                    
-                        Toggle("", isOn: $isLoggedOn).toggleStyle(SwitchToggleStyle(tint: .blue))
+
+                        // Toggle("", isOn: $isLoggedOn).toggleStyle(SwitchToggleStyle(tint: .blue))
                     }
-                
-                    Text("Available Orders")
-                        .font(.title)
-                        .fontWeight(.semibold).frame(maxWidth: .infinity, alignment: .leading)
-                
-                    ScrollView {
-                        VStack {
-                            // ForEach needs to identify its contents in order to perform layout, successfully delegate gestures to child views and other tasks.
-                            // https://stackoverflow.com/questions/69393430/referencing-initializer-init-content-on-foreach-requires-that-planet-c
-                            ForEach(unclaimedOrders, id: \.id) { order in
-                                AvailableOrderCard(order: order, driver: loggedInDriver) // This is the view returned for each item in the array
-                            }
+
+                    Picker("", selection: $sortOrder) {
+                        ForEach(AvailableOrderSortOrder.allCases) { sortOrder in
+                            Text("Sort by \(sortOrder.rawValue)").tag(sortOrder)
                         }
-                    }
-                
-                }.padding(16)
+                    }.buttonStyle(.bordered)
+
+                    AvailableOrderList(loggedInDriver: driver, sortOrder: sortOrder)
+                } // .padding(16)
             }.onAppear(perform: {
                 appState.loginDriver(driver)
-            })
+            }).navigationTitle("Available Orders")
         } else {
             ContentUnavailableView("No logged in customer", systemImage: "xmark").onAppear(perform: {
                 appState.loginDriver(driver)

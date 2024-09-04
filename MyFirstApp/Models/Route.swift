@@ -72,7 +72,6 @@ class Route: BaseModel {
         if self.orders.count == 0 {
             self.driver = nil
         }
-        
     }
 
     // PersistentIdentifier because of the id, UUID
@@ -90,6 +89,6 @@ class Route: BaseModel {
     // flatmap makes into on dictionary/array and the closure just tells it what to put into the array, the stops in this case
 
     func makeStops() -> [Stop] {
-        return self.createRoute().values.flatMap { $0.values }
+        return self.createRoute().values.flatMap { $0.values }.sorted { $0.dueAt < $1.dueAt }
     }
 }

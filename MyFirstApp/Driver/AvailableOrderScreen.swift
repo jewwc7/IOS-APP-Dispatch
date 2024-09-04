@@ -13,7 +13,7 @@ struct AvailableOrderScreen: View {
     @State private var waitedToShowIssue = false
     @State private var isLoggedOn = true
     @State private var numberOfOrdersInCart = 0
-    
+
     @Environment(\.modelContext) private var context // how to CRUD state
     @Query private var ordersFromModel: [Order]
     @EnvironmentObject var appState: AppStateManager
@@ -67,10 +67,12 @@ struct AvailableOrderScreen: View {
                     }
                 
                 }.padding(16)
-            }
+            }.onAppear(perform: {
+                appState.loginDriver(driver)
+            })
         } else {
             ContentUnavailableView("No logged in customer", systemImage: "xmark").onAppear(perform: {
-                appState.loginDriver(driver: driver)
+                appState.loginDriver(driver)
             }).opacity(waitedToShowIssue ? 1 : 0).task {
                 Task {
                     try await Task.sleep(for: .seconds(1))

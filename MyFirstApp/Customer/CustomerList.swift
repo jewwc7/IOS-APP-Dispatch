@@ -121,7 +121,7 @@ struct CustomNavigationLinkLabel: View {
                     .font(.caption2)
                     .foregroundColor(.gray)
                 ZStack {
-                    TextChip(title: String(number))
+                    TextChip(title: String(number), font: .footnote)
                 }
             }
         }

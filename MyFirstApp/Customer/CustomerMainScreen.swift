@@ -31,7 +31,9 @@ struct CustomerMainScreen: View {
 
                     }.navigationTitle("Hi \(loggedInCustomer.name)").listStyle(.insetGrouped)
                 }
-            }
+            }.onAppear(perform: {
+                appState.login(customer: customer)
+            })
 
         } else {
             ContentUnavailableView("No logged in customer", systemImage: "xmark").onAppear(perform: {

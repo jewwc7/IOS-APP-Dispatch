@@ -19,7 +19,7 @@ class AppStateManager: ObservableObject {
     }
 
     // not in use yet, but will be the same thing as the customers just with drivers
-    func loginDriver(driver: Driver) {
+    func loginDriver(_ driver: Driver) {
         loggedInDriver = driver
     }
 }

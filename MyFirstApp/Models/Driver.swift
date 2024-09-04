@@ -20,12 +20,14 @@ enum DriverOrderAction {
 // these are run in migrations,
 // will get error if default values missing https://forums.developer.apple.com/forums/thread/746577
 @Model
-class Driver {
+class Driver: BaseModel {
     // Properties
     var id: String?
     var name: String
     var orders = [Order]() // this and below are the same thing.
     var routes: [Route] = []
+    var createdAt: Date
+    var updatedAt: Date
     var totalNumberOfOrders: Int {
         return self.orders.count
     }
@@ -37,6 +39,8 @@ class Driver {
     ) {
         self.id = UUID().uuidString
         self.name = name
+        self.createdAt = .now
+        self.updatedAt = .now
     }
 
     func handleOrderAction(action: DriverOrderAction, order: Order) {

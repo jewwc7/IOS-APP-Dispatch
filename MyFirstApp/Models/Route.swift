@@ -30,7 +30,7 @@ enum RouteStatus {
 // will get error if default values missing https://forums.developer.apple.com/forums/thread/746577
 // Not in use
 @Model
-class Route {
+class Route: BaseModel {
     // Properties
     var id: String?
 //    var orders: [Order]
@@ -38,19 +38,24 @@ class Route {
     var driver: Driver?
     var orders = [Order]()
     var startDate = Date()
+    var createdAt: Date
+    var updatedAt: Date
 
     // Initializer
     init(
         orders: [Order] = [],
         startDate: Date = Date(),
         driver: Driver? = nil
+
     ) {
         self.id = UUID().uuidString
         self.orders = []
         self.driver = driver
         self.status = "Inactive" // RouteStatus.inactive
-        self.orders = orders
         self.startDate = startDate
+        self.createdAt = .now
+        self.updatedAt = .now
+        self.orders = orders // make sure that the replationships are last in the init, so I don't get reandom errors
     }
 
     func addOrder(order: Order) {

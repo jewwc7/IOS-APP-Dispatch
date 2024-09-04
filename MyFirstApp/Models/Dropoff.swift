@@ -12,7 +12,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-class Dropoff: Stop {
+class Dropoff: BaseModel, Stop {
     // Properties
     var id: String
     var order: Order?
@@ -25,6 +25,8 @@ class Dropoff: Stop {
     var stopType: StopType.RawValue
     var deliveredAt: Date?
     var dueAt: Date
+    var createdAt: Date
+    var updatedAt: Date
     // Computed property for fullAddress
     var fullAddress: String {
         return "\(address), \(cityStateZip)"
@@ -44,6 +46,7 @@ class Dropoff: Stop {
         dueAt: Date
     ) { // 7 days from now or right now
         self.id = UUID().uuidString
+
         self.address = address
         self.cityStateZip = cityStateZip
         self.locationId = locationId
@@ -52,8 +55,10 @@ class Dropoff: Stop {
         self.company = company
         self.dueAt = dueAt
         self.stopType = StopType.dropoff.rawValue
-        self.order = order
         self.deliveredAt = nil
+        self.createdAt = .now
+        self.updatedAt = .now
+        self.order = order
     }
 
     func validateFields(

@@ -20,13 +20,14 @@ enum CustomerOrderAction {
 // these are run in migrations,
 // will get error if default values missing https://forums.developer.apple.com/forums/thread/746577
 @Model
-class Customer {
+class Customer: BaseModel {
     // Properties
     var id: String?
     var name: String
     var orders = [Order]()
     var totalNumberOfOrders: Int
-
+    var createdAt: Date
+    var updatedAt: Date
     // Initializer
     init(
         name: String = ""
@@ -35,6 +36,8 @@ class Customer {
         self.id = UUID().uuidString
         self.name = name
         self.totalNumberOfOrders = 0
+        self.createdAt = .now
+        self.updatedAt = .now
     }
 
     func handleOrderAction(action: CustomerOrderAction, order: Order) throws {

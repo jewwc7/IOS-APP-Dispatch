@@ -24,7 +24,7 @@ import SwiftUI
 // }
 
 enum CustomerSortOrder: String, Identifiable, CaseIterable {
-    case name, id, totalNumberOfOrders
+    case name, createdAt, totalNumberOfOrders
 
     var id: Self {
         self
@@ -87,8 +87,8 @@ struct CustomerList: View {
         let sortDescriptors: [SortDescriptor<Customer>] = switch sortOrder {
         case .name:
             [SortDescriptor(\Customer.name), SortDescriptor(\Customer.totalNumberOfOrders, order: .reverse)]
-        case .id:
-            [SortDescriptor(\Customer.id), SortDescriptor(\Customer.totalNumberOfOrders, order: .reverse)]
+        case .createdAt:
+            [SortDescriptor(\Customer.createdAt), SortDescriptor(\Customer.totalNumberOfOrders, order: .reverse)]
         case .totalNumberOfOrders:
             [SortDescriptor(\Customer.totalNumberOfOrders, order: .reverse)]
         }

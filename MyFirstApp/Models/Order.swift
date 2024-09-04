@@ -28,8 +28,13 @@ enum OrderStatus: String, Codable, CaseIterable { //
 //    case invalidDriver
 // }
 
+protocol BaseModel {
+    var createdAt: Date { get }
+    var updatedAt: Date { get set }
+}
+
 @Model
-class Order {
+class Order: BaseModel {
     // Properties
     var id: String
     var orderNumber: String?
@@ -40,6 +45,9 @@ class Order {
     var pickup: Pickup
     var dropoff: Dropoff
     var status: OrderStatus.RawValue
+    var createdAt: Date
+    var updatedAt: Date
+    
     let statusTexts: [OrderStatus.RawValue: String] = [
         "canceled": "Canceled",
         "unassigned": "Unassigned",
@@ -157,6 +165,8 @@ class Order {
         self.driver = driver
         self.pickup = pickup
         self.dropoff = dropoff
+        self.createdAt = .now
+        self.updatedAt = .now
     }
     
     // check if pickup or dropOff is late

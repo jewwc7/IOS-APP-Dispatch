@@ -12,7 +12,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-class Pickup: Stop {
+class Pickup: BaseModel, Stop {
     // Properties
     var id: String
     var order: Order?
@@ -25,6 +25,9 @@ class Pickup: Stop {
     var stopType: StopType.RawValue
     var deliveredAt: Date? = nil
     var dueAt: Date
+    var createdAt: Date
+    var updatedAt: Date
+
     var fullAddress: String {
         return "\(address), \(cityStateZip)"
     }
@@ -51,8 +54,10 @@ class Pickup: Stop {
         self.company = company
         self.dueAt = dueAt
         self.stopType = StopType.pickup.rawValue
-        self.order = order
         self.deliveredAt = nil
+        self.createdAt = .now
+        self.updatedAt = .now
+        self.order = order
     }
 
     func validateFields(

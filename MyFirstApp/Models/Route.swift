@@ -69,6 +69,10 @@ class Route: BaseModel {
 
     func removeOrder(_ order: Order) {
         self.orders.removeAll { $0.id == order.id }
+        if self.orders.count == 0 {
+            self.driver = nil
+        }
+        
     }
 
     // PersistentIdentifier because of the id, UUID

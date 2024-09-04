@@ -25,7 +25,7 @@ class Driver: BaseModel {
     var id: String?
     var name: String
     var orders = [Order]() // this and below are the same thing.
-    var routes: [Route] = []
+    var routes: [Route] = [] // if relation is an array you have to append,
     var createdAt: Date
     var updatedAt: Date
     var totalNumberOfOrders: Int {
@@ -59,7 +59,10 @@ class Driver: BaseModel {
         let response = order.claim(driver: self)
         if response.result == .success {
             order.driver = self
-            _ = self.addOrderToRoute(order: order)
+            let route = self.addOrderToRoute(order: order)
+            if route.isNew {
+                self.routes.append(route.route)
+            }
         }
     }
 
@@ -69,12 +72,13 @@ class Driver: BaseModel {
         }
     }
 
-    private func addOrderToRoute(order: Order) -> Route {
+    private func addOrderToRoute(order: Order) -> AddOrderToRoute {
         if let routeForOrder = self.routes.first(where: { isSameDay(first: order.pickup.dueAt, second: $0.startDate) }) {
             routeForOrder.addOrder(order: order)
-            return routeForOrder
+            return AddOrderToRoute(route: routeForOrder, isNew: false)
         } else {
-            return Route(orders: [order], startDate: onlyDate(date: order.pickup.dueAt), driver: self)
+            let newRoute = Route(orders: [order], startDate: onlyDate(date: order.pickup.dueAt), driver: self)
+            return AddOrderToRoute(route: newRoute, isNew: true)
         }
     }
 
@@ -83,4 +87,9 @@ class Driver: BaseModel {
         let response = order.unassign()
         if response.result == .success {}
     }
+}
+
+struct AddOrderToRoute {
+    var route: Route
+    var isNew: Bool
 }

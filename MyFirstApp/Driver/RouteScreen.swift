@@ -29,6 +29,9 @@ struct RouteScreen: View {
 
         ScrollView {
             if let loggedInDriver = appState.loggedInDriver {
+                if loggedInDriver.routes.count == 0 {
+                    ContentUnavailableView("No Routes", systemImage: "truck.box")
+                }
                 ForEach(loggedInDriver.routes) { route in
                     Section(header: Text(convertDateToDateOnlyString(day: route.startDate)).bold().font(/*@START_MENU_TOKEN@*/ .title/*@END_MENU_TOKEN@*/)) {
                         ForEach(route.makeStops(), id: \.id) { stop in

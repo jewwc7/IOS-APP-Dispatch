@@ -63,9 +63,9 @@ func pickRandomElement(for key: String, from dictionary: [String: [String]]) -> 
     return elements.randomElement()
 }
 
-func createPickupDropoffData() -> [String: String] {
-    let streetAddress = pickRandomElement(for: "pickupStreet", from: addressesDictionary) ?? "Default street address"
-    let cityStateZip = pickRandomElement(for: "pickupCityStateZip", from: addressesDictionary) ?? "Default Pickup City, State, Zip"
+func createPickupDropoffData(type: StopType? = .pickup) -> [String: String] {
+    let streetAddress = pickRandomElement(for: type == .pickup ? "pickupStreet" : "dropoffStreet", from: addressesDictionary) ?? "Default street address"
+    let cityStateZip = pickRandomElement(for: type == .pickup ? "pickupCityStateZip" : "dropoffCityStateZip", from: addressesDictionary) ?? "Default Pickup City, State, Zip"
     let contactName = pickRandomElement(for: "customer", from: namesDictionary) ?? "Default Contact"
     let organization = pickRandomElement(for: "organization", from: organizationDictionary) ?? "Default Org"
     return [
@@ -79,4 +79,3 @@ func createPickupDropoffData() -> [String: String] {
 func randomPay() -> Double {
     return Double.random(in: 1.00 ... 100.90)
 }
-

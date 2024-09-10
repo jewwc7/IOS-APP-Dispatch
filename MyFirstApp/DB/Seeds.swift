@@ -60,3 +60,32 @@ func createOrders(_ numOfOrders: Int = 1, customer: Customer, pickup: Pickup? = 
 func acceptOrder(driver: Driver, order: Order) {
     driver.handleOrderAction(action: DriverOrderAction.claim, order: order)
 }
+
+func prepoluateOrder() throws -> [String: String] {
+    let pickupDueAt = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+    let dropoffDueAt = Calendar.current.date(byAdding: .day, value: 8, to: Date()) ?? Date()
+    let pickupDropoffData = createPickupDropoffData()
+    let dropoffData = createPickupDropoffData()
+    if
+        let streetAddress = pickupDropoffData["streetAddress"],
+        let cityStateZip = pickupDropoffData["cityStateZip"],
+        let contactName = pickupDropoffData["contactName"],
+        let organization = pickupDropoffData["organization"],
+        let dostreetAddress = dropoffData["streetAddress"],
+        let docityStateZip = dropoffData["cityStateZip"],
+        let docontactName = dropoffData["contactName"],
+        let doorganization = dropoffData["organization"]
+    {
+        return [
+            "streetAddress": streetAddress,
+            "cityStateZip": cityStateZip,
+            "contactName": contactName,
+            "organization": organization,
+            "dropoffStreetAddress": dostreetAddress,
+            "dropoffCityStateZip": docityStateZip,
+            "dropoffContactName": docontactName,
+            "dropoffOrganization": doorganization
+        ]
+    }
+    throw BaseError(type: .DeveloperError, message: "I messed up \(#function)")
+}

@@ -32,4 +32,5 @@ struct BaseError: Error {
 
 enum BaseErrorType {
     case ValidationError
+    case DeveloperError
 }

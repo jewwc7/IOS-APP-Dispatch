@@ -117,15 +117,33 @@ struct CreateOrderScreen: View {
     }
 
     func prePopulate() {
-        orderNumber = "123"
-        pickupLocation = LocationResult(id: UUID(), title: "1234 main st", subtitle: "Kansas City, MO 64127")
-        pickupPhoneNumber = "281-330-8004"
-        pickupContactName = "Mike Jones"
-        pickupCompanyOrOrg = "Swishahouse"
-        dropoffLocation = LocationResult(id: UUID(), title: "6789 broadway st", subtitle: "Kansas City, MO 64111")
-        dropoffPhoneNumber = "904-490-7777"
-        dropoffContactName = "Johnny"
-        dropoffCompanyOrOrg = "Diamond Boys"
+        do {
+            let prepopulatedData = try prepoluateOrder()
+
+            if
+                let streetAddress = prepopulatedData["streetAddress"],
+                let cityStateZip = prepopulatedData["cityStateZip"],
+                let contactName = prepopulatedData["contactName"],
+                let organization = prepopulatedData["organization"],
+                let dostreetAddress = prepopulatedData["dropoffStreetAddress"],
+                let docityStateZip = prepopulatedData["dropoffCityStateZip"],
+                let docontactName = prepopulatedData["dropoffContactName"],
+                let doorganization = prepopulatedData["dropoffOrganization"]
+            {
+                orderNumber = String(Int.random(in: 1 ... 5000))
+                pickupLocation = LocationResult(id: UUID(), title: streetAddress, subtitle: cityStateZip)
+                pickupPhoneNumber = "281-330-8004"
+                pickupContactName = contactName
+                pickupCompanyOrOrg = organization
+                dropoffLocation = LocationResult(id: UUID(), title: dostreetAddress, subtitle: docityStateZip)
+                dropoffPhoneNumber = "904-490-7777"
+                dropoffContactName = docontactName
+                dropoffCompanyOrOrg = doorganization
+            }
+
+        } catch {
+            Logger.log(.error, "prepopulate failed")
+        }
     }
 
     func orderCreatedMessage() {
@@ -137,7 +155,7 @@ struct CreateOrderScreen: View {
     private func concatenatedBinding(_ first: Binding<String>, _ second: Binding<String>) -> Binding<String> {
         return Binding<String>(
             get: {
-                first.wrappedValue + second.wrappedValue
+                first.wrappedValue + " " + second.wrappedValue
             },
             set: { newValue in
                 let components = newValue.split(separator: " ", maxSplits: 1, omittingEmptySubsequences: false)

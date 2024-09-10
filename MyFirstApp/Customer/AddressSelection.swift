@@ -39,9 +39,10 @@ struct AddressSelection: View {
     }
 
     private func handleResultSelection(_ result: LocationResult) {
-        DispatchQueue.main.async { // "modifying state during view update", some reason assigning the address causes this. Looked up but didn;t find anything that worked, wrapping it in this doesn;t work. https://stackoverflow.com/questions/71953853/swiftui-map-causes-modifying-state-during-view-update
-            address = result
-        }
+//        DispatchQueue.main.async { // "modifying state during view update", some reason assigning the address causes this. Looked up but didn;t find anything that worked, wrapping it in this doesn;t work. https://stackoverflow.com/questions/71953853/swiftui-map-causes-modifying-state-during-view-update
+//            address = result
+//        }
+        address = result
         presentationMode.wrappedValue.dismiss() // Go back after selecting an address
     }
 }

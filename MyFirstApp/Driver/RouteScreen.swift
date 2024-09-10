@@ -32,7 +32,8 @@ struct RouteScreen: View {
                 if loggedInDriver.routes.count == 0 {
                     ContentUnavailableView("No Routes", systemImage: "truck.box")
                 }
-                ForEach(loggedInDriver.routes) { route in
+
+                ForEach(loggedInDriver.sortRoutes()) { route in
                     Section(header: Text(convertDateToDateOnlyString(day: route.startDate)).bold().font(/*@START_MENU_TOKEN@*/ .title/*@END_MENU_TOKEN@*/)) {
                         ForEach(route.makeStops(), id: \.id) { stop in
                             DriverStopCard(stop: stop, driver: loggedInDriver)

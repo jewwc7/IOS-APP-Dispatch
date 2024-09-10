@@ -21,6 +21,6 @@ struct TextChip: View {
     }
 }
 
-// #Preview {
-//    TextChip()
-// }
+#Preview {
+    TextChip(title: "3 orders")
+}

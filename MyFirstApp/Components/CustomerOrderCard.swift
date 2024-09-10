@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-let testOrderTwo = createOrders(customer: Customer(name: "Jake"))
+// let testOrderTwo = createOrders(customer: Customer(name: "Jake"))
 // Fix the OrderDetails screen
 // Then work on sorting/filtering these based on status
 struct CustomerOrderCard: View {
@@ -55,7 +55,7 @@ struct CustomerOrderCard: View {
     }
 }
 
-#Preview {
-    CustomerOrderCard(order: testOrderTwo).modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateManager()) // needs to be added to insert the modelContext, making it possible to CRUD state
-    // https://developer.apple.com/tutorials/develop-in-swift/save-data
-}
+// #Preview {
+//    CustomerOrderCard(order: testOrderTwo).modelContainer(for: [Order.self, Customer.self], inMemory: true).environmentObject(AppStateManager()) // needs to be added to insert the modelContext, making it possible to CRUD state
+//    // https://developer.apple.com/tutorials/develop-in-swift/save-data
+// }

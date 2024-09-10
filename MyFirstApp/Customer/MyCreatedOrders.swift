@@ -12,21 +12,16 @@ struct MyCreatedOrders: View {
     @Query private var orderModelOrders: [Order]
     @Environment(\.modelContext) private var context // how to CRUD state
     @EnvironmentObject var appState: AppStateManager
+    @State var sortOrder: MyCreatedOrderSortOrder = .pay
 
     var body: some View {
         // let filteredOrders = orderModelOrders.filter { $0.customer?.id == appState.loggedInCustomer?.id }
         NavigationView {
             if let loggedInCustomer = appState.loggedInCustomer {
                 if loggedInCustomer.orders.count > 0 {
-                    List {
-                        ForEach(loggedInCustomer.orders, id: \.id) { order in
-                            NavigationLink(destination: OrderDetails(order: order)) {
-                                CustomerOrderCard(order: order)
-                            }.buttonStyle(PlainButtonStyle())
-                        }
-                    }
+                    MyCreatedOrdersList(loggedInCustomer: loggedInCustomer, sortOrder: sortOrder)
                 } else {
-                    Text("No created orders")
+                    ContentUnavailableView("No created orders", systemImage: "truck.box")
                 }
             } else {
                 Text("No logged in customer")

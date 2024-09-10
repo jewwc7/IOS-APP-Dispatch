@@ -16,7 +16,7 @@ import Foundation // how I use random number
 import SwiftData
 import SwiftUI
 
-let testOrder = createOrders(customer: Customer(name: "Frank"))
+// let testOrder = createOrders(customer: Customer(name: "Frank"))
 let testDriver = Driver(name: "Hank")
 
 struct AvailableOrderCard: View {

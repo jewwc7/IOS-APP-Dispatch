@@ -100,7 +100,7 @@ struct CustomerList: View {
         List {
             ForEach(customers, id: \.id) { customer in
                 NavigationLink(destination: CustomerMainScreen(customer: customer)) {
-                    CustomNavigationLinkLabel(number: customer.totalNumberOfOrders, name: customer.name)
+                    CustomNavigationLinkLabel(number: customer.orders.count, name: customer.name)
                 }
             }
         }
@@ -116,11 +116,8 @@ struct CustomNavigationLinkLabel: View {
             Text(name)
             Spacer()
             VStack(alignment: .trailing) {
-                Text("# orders")
-                    .font(.caption2)
-                    .foregroundColor(.gray)
                 ZStack {
-                    TextChip(title: String(number), font: .footnote)
+                    TextChip(title: "\(String(number)) orders", font: .footnote)
                 }
             }
         }

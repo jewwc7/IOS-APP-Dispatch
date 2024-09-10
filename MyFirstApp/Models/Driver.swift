@@ -87,6 +87,14 @@ class Driver: BaseModel {
         let response = order.unassign()
         if response.result == .success {}
     }
+
+    func sortRoutes() -> [Route] {
+        return self.routes.sorted { route1, route2 in
+            let dueAt1 = route1.orders.first?.pickup.dueAt ?? .now
+            let dueAt2 = route2.orders.first?.pickup.dueAt ?? .now
+            return dueAt1 < dueAt2
+        }
+    }
 }
 
 struct AddOrderToRoute {

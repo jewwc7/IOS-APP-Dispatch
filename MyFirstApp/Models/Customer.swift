@@ -25,7 +25,7 @@ class Customer: BaseModel {
     var id: String?
     var name: String
     var orders = [Order]()
-    var totalNumberOfOrders: Int
+    var totalNumberOfOrders: Int // this is here because sorting only works with column fields
     var createdAt: Date
     var updatedAt: Date
     // Initializer

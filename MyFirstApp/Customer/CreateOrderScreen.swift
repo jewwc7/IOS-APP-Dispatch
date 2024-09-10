@@ -36,17 +36,6 @@ struct CreateOrderScreen: View {
 
     var body: some View {
         VStack {
-            HStack {
-                Text("Place An Order").bold().font(.title).multilineTextAlignment(.center).padding().shadow(radius: 8)
-                Spacer()
-                HStack {
-                    MyButton(title: "Create", titleColor: .blue, onPress: create, image: "plus", isLoading: isLoading, buttonType: ButtonType.clear)
-
-                    Button("Auto") {
-                        prePopulate()
-                    }
-                }
-            }
             // The updating UI error is caused by the map. Reporduce by prepopulating or entering address
             MapView(addresses: [pickupLocation, dropoffLocation])
 
@@ -74,19 +63,32 @@ struct CreateOrderScreen: View {
                     MyDatePicker(date: $dropoffDueAt, title: "Dropoff by")
                 }
             }
-        }
+        }.toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: create) {
+                    Image(systemName: "plus")
+                    //  .foregroundColor(.green)
+                    Text("Create")
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: prePopulate) {
+                    Text("Auto")
+//                    Image(systemName: "trash")
+//                        .foregroundColor(.red)
+                }
+            }
+        }.navigationTitle("Place Order").toolbarRole(.editor)
     }
 
     // remove the uncessary data from orders
     func create() {
         isLoading = true
         if let customer = appState.loggedInCustomer {
-            let randomDouble = Double.random(in: 1.00 ... 100.90)
-
             let pickup = Pickup(address: pickupLocation.title, cityStateZip: pickupLocation.subtitle, locationId: pickupLocation.id, phoneNumber: pickupPhoneNumber, contactName: pickupContactName, company: pickupCompanyOrOrg, dueAt: pickupDueAt)
             let dropoff = Dropoff(address: dropoffLocation.title, cityStateZip: dropoffLocation.subtitle, locationId: dropoffLocation.id, phoneNumber: dropoffPhoneNumber, contactName: dropoffContactName, company: dropoffCompanyOrOrg, dueAt: dropoffDueAt)
 
-            let newOrder = Order(orderNumber: orderNumber, pay: randomDouble, customer: customer, pickup: pickup, dropoff: dropoff)
+            let newOrder = Order(orderNumber: orderNumber, pay: randomPay(), customer: customer, pickup: pickup, dropoff: dropoff)
             context.insert(newOrder)
             // don't need to insert p/u and d/o because they are inserted when I insert the order
 

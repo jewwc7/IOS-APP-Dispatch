@@ -8,6 +8,7 @@
 import MapKit
 import SwiftUI
 
+// TODO: Modifying state during view update, this will cause undefined behavior. easy to reproduce prepopulate or select addresses
 struct MapView: View {
     //  @Binding var address: LocationResult
     var addresses: [LocationResult]
@@ -34,16 +35,17 @@ struct MapView: View {
             }
         )
         .onAppear {
-            // print("address", address)
-            //  getPlace(from: addresses.first)
-        }.onChange(of: addresses) { _, _ in // _, _ oldvalue, newValue
-            //   print("onChange address", addresses)
+            annotationItems = []
             for address in addresses {
                 getPlace(from: address)
             }
         }
         .edgesIgnoringSafeArea(.bottom)
         .frame(height: 400)
+//        Button("Check address count") {
+//            Logger.log(.action, addresses.count)
+//            Logger.log(.action, addresses)
+//        }
     }
 
     func getPlace(from address: LocationResult) {

@@ -66,9 +66,15 @@ struct CreateOrderScreen: View {
         }.toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: create) {
-                    Image(systemName: "plus")
                     //  .foregroundColor(.green)
                     Text("Create")
+                    if isLoading {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .padding(.leading, 8)
+                    } else {
+                        Image(systemName: "plus")
+                    }
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {

@@ -40,6 +40,18 @@ class LocationSearchService: NSObject {
             self.results = []
         }
     }
+
+    func getPlace(from address: LocationResult) async throws -> MKLocalSearch.Response {
+        let request = MKLocalSearch.Request()
+        let title = address.title
+        let subTitle = address.subtitle
+
+        request.naturalLanguageQuery = subTitle.contains(title)
+            ? subTitle : title + ", " + subTitle
+
+        let response = try await MKLocalSearch(request: request).start()
+        return response
+    }
 }
 
 extension LocationSearchService: MKLocalSearchCompleterDelegate {

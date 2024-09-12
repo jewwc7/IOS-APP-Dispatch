@@ -44,6 +44,9 @@
 		058B97372C891B1F00182DF3 /* AvailableOrderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B97362C891B1F00182DF3 /* AvailableOrderList.swift */; };
 		058B973A2C89242E00182DF3 /* MyCreatedOrdersList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B97392C89242E00182DF3 /* MyCreatedOrdersList.swift */; };
 		058B973C2C8FAEAF00182DF3 /* dummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B973B2C8FAEAF00182DF3 /* dummyData.swift */; };
+		058B973E2C90F6F000182DF3 /* MapViewWithRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B973D2C90F6F000182DF3 /* MapViewWithRoute.swift */; };
+		058B97402C924FA400182DF3 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B973F2C924FA400182DF3 /* LocationManager.swift */; };
+		058B97442C93999D00182DF3 /* request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B97432C93999D00182DF3 /* request.swift */; };
 		05B99ED02C6D6E3700D8B876 /* Seeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B99ECF2C6D6E3700D8B876 /* Seeds.swift */; };
 		05B99ED42C6E415200D8B876 /* MyNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B99ED32C6E415200D8B876 /* MyNotification.swift */; };
 		05E125F42BFD48B9009F2415 /* CustomerMainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */; };
@@ -125,6 +128,9 @@
 		058B97362C891B1F00182DF3 /* AvailableOrderList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableOrderList.swift; sourceTree = "<group>"; };
 		058B97392C89242E00182DF3 /* MyCreatedOrdersList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCreatedOrdersList.swift; sourceTree = "<group>"; };
 		058B973B2C8FAEAF00182DF3 /* dummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dummyData.swift; sourceTree = "<group>"; };
+		058B973D2C90F6F000182DF3 /* MapViewWithRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewWithRoute.swift; sourceTree = "<group>"; };
+		058B973F2C924FA400182DF3 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		058B97432C93999D00182DF3 /* request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = request.swift; sourceTree = "<group>"; };
 		05B99ECF2C6D6E3700D8B876 /* Seeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Seeds.swift; sourceTree = "<group>"; };
 		05B99ED32C6E415200D8B876 /* MyNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNotification.swift; sourceTree = "<group>"; };
 		05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerMainScreen.swift; sourceTree = "<group>"; };
@@ -210,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				054807402C81119100DAF89B /* NotificationManager.swift */,
+				058B973F2C924FA400182DF3 /* LocationManager.swift */,
 				054807422C8115B500DAF89B /* ErrorManager.swift */,
 				054807442C81177D00DAF89B /* AppStateManager.swift */,
 			);
@@ -241,6 +248,7 @@
 		0551878C2BE98BEC00BA0A8A /* MyFirstApp */ = {
 			isa = PBXGroup;
 			children = (
+				058B97422C93998200182DF3 /* Api */,
 				05251D5A2C82734600B6DAB0 /* Interactors */,
 				0548073F2C810A0900DAF89B /* Managers */,
 				051AB4E72C7932F0004F5677 /* protocols */,
@@ -371,6 +379,14 @@
 			path = List;
 			sourceTree = "<group>";
 		};
+		058B97422C93998200182DF3 /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				058B97432C93999D00182DF3 /* request.swift */,
+			);
+			path = Api;
+			sourceTree = "<group>";
+		};
 		05B99ECE2C6D6E2900D8B876 /* DB */ = {
 			isa = PBXGroup;
 			children = (
@@ -386,6 +402,7 @@
 			children = (
 				05E125FA2C51A84C009F2415 /* FirstPage.swift */,
 				051AB4DA2C753E56004F5677 /* MapView.swift */,
+				058B973D2C90F6F000182DF3 /* MapViewWithRoute.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -534,12 +551,14 @@
 				051AB4DF2C75807D004F5677 /* Dropoff.swift in Sources */,
 				054807452C81177D00DAF89B /* AppStateManager.swift in Sources */,
 				05E125FB2C51A84C009F2415 /* FirstPage.swift in Sources */,
+				058B97442C93999D00182DF3 /* request.swift in Sources */,
 				058B973C2C8FAEAF00182DF3 /* dummyData.swift in Sources */,
 				05E1261B2C5D642F009F2415 /* RouteScreen.swift in Sources */,
 				05E1261F2C5D8997009F2415 /* Helpers.swift in Sources */,
 				05632E572BFC034000BBDD89 /* Order.swift in Sources */,
 				05E125FF2C52EE04009F2415 /* Customer.swift in Sources */,
 				05B99ED42C6E415200D8B876 /* MyNotification.swift in Sources */,
+				058B97402C924FA400182DF3 /* LocationManager.swift in Sources */,
 				05632E542BFBF2A800BBDD89 /* CreateOrderScreen.swift in Sources */,
 				055187BC2BEC1CFD00BA0A8A /* AvailableOrderScreen.swift in Sources */,
 				05E126112C5AE954009F2415 /* DataFlowVids.swift in Sources */,
@@ -559,6 +578,7 @@
 				051AB4D02C73EC85004F5677 /* LocationSearchService.swift in Sources */,
 				058B97372C891B1F00182DF3 /* AvailableOrderList.swift in Sources */,
 				05E126042C530277009F2415 /* components.swift in Sources */,
+				058B973E2C90F6F000182DF3 /* MapViewWithRoute.swift in Sources */,
 				051AB4EE2C7D3333004F5677 /* MyDatePicker.swift in Sources */,
 				051AB4E42C769245004F5677 /* ModelPreview.swift in Sources */,
 				051AB4E22C7690B9004F5677 /* PreviewSampleData.swift in Sources */,

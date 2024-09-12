@@ -25,6 +25,13 @@ struct MapViewWithRoute: View {
     @Binding var routeDestination: MKMapItem?
     @Binding var route: MKRoute?
     @Binding var annotationItems: [MKMapItem]
+    let newYorkPolyline = [
+        (latitude: 40.7128, longitude: -74.0060), // New York City
+        (latitude: 40.730610, longitude: -73.935242), // East Village
+        (latitude: 40.748817, longitude: -73.985428), // Empire State Building
+        (latitude: 40.758896, longitude: -73.985130), // Times Square
+        (latitude: 40.706192, longitude: -74.009160) // Wall Street
+    ]
 
     var body: some View {
         Map(position: $cameraPosition) { // selection: $selectedPlacemark
@@ -32,10 +39,10 @@ struct MapViewWithRoute: View {
             ForEach(annotationItems, id: \.self) { item in
                 Group {
                     Marker(coordinate: item.placemark.coordinate) {
-                        Label("Placemarker", systemImage: "star")
+                        Label(item.name ?? "", systemImage: "star")
                     }
                     .tint(.yellow)
-                } // .tag(placemark)
+                }.tag(item)
             }
             if let route, shouldShowRoute {
                 MapPolyline(route.polyline)
@@ -59,22 +66,7 @@ struct MapViewWithRoute: View {
         //            await fetchRoute()
         //        }
     }
-//
-//    func addAnnotationItems(_ response: MKLocalSearch.Response) {
-//        let newAnnotation: [AnnotationItem] = response.mapItems.map {
-//            AnnotationItem(
-//                latitude: $0.placemark.coordinate.latitude,
-//                longitude: $0.placemark.coordinate.longitude
-//            )
-//        }
-//        // TODO: bug where all entered addresses will appear on map. COme back later and filter out based on tpye(pu or droppff, would need to add a new struct that like Locationtype
-//        // print(annotationItems.count)
-//
-//        if let firstAn = newAnnotation.first {
-//            annotationItems.append(firstAn)
-//        }
-//    }
-//
+
     // zoom map out to see both addresses
 //    func updateRegionToFitAllAnnotations() {
 //        guard !annotationItems.isEmpty else { return }
@@ -102,10 +94,6 @@ struct MapViewWithRoute: View {
 //        )
 //    }
 }
-
-// #Preview {
-//    MapView()
-// }
 
 // #Preview {
 //    MapViewWithRoute()

@@ -38,9 +38,9 @@ struct RouteScreen: View {
                         await fetchRoute()
                     }
                 }
-//                Button("Toggle show route") {
-//                    shouldShowRoute.toggle()
-//                }
+                Button("Toggle show route") {
+                    shouldShowRoute.toggle()
+                }
                 ForEach(loggedInDriver.sortRoutes()) { route in
                     Section(header: Text(convertDateToDateOnlyString(day: route.startDate)).bold().font(/*@START_MENU_TOKEN@*/ .title/*@END_MENU_TOKEN@*/)) {
                         ForEach(route.makeStops(), id: \.id) { stop in
@@ -69,6 +69,8 @@ struct RouteScreen: View {
                     let sourcePlacemark = MKPlacemark(coordinate: sourceMapItem.placemark.coordinate)
                     let routeSource = MKMapItem(placemark: sourcePlacemark)
                     request.source = routeSource
+
+                    sourceMapItem.name = "pickup"
                     annotationItems.append(sourceMapItem)
                 }
                 if let destinationItem = secondStopPlace.mapItems.first {
@@ -76,6 +78,8 @@ struct RouteScreen: View {
                     let routeDestination = MKMapItem(placemark: destinationPlacemark)
                     routeDestination.name = lastStop?.address
                     request.destination = routeDestination
+
+                    destinationItem.name = "dropoff"
                     annotationItems.append(destinationItem)
                 }
 

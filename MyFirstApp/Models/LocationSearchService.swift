@@ -52,6 +52,20 @@ class LocationSearchService: NSObject {
         let response = try await MKLocalSearch(request: request).start()
         return response
     }
+
+    func createMapMarker(from place: MKLocalSearch.Response) -> MKMapItem {
+        let mapItem = place.mapItems.first ?? MKMapItem() // watch for bugs in this
+        mapItem.name = "pickup"
+        return mapItem
+
+//        if let mapItem = place.mapItems.first {
+//            let sourcePlacemark = MKPlacemark(coordinate: mapItem.placemark.coordinate)
+//            // let routeSource = MKMapItem(placemark: mapItem)
+//            mapItem.name = "pickup" // make this dynamic
+//            return mapItem
+//            //  annotationItems.append(sourceMapItem)
+//        }
+    }
 }
 
 extension LocationSearchService: MKLocalSearchCompleterDelegate {

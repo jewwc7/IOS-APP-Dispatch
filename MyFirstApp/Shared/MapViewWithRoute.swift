@@ -9,39 +9,28 @@ import MapKit
 import SwiftData
 import SwiftUI
 
-// Where I left, How can I add markers to all the stops?
-// Don't think it's possible to add more than 2 places(source and destination)
-// In order to do that I belive I need to use corrdinates in the like https://stackoverflow.com/questions/77526711/swiftui-map-mappolyline-not-showing
-// maybe I should save the coordinates in the models when created? Or I can just get the coordinates? --getPlace line 65 in fetch ROute
+// line 34 in RouteSCreen
+// maybe refactor MapView to work with routes, so I can just have one
+// look to update plist so I can request permission and have it
 struct MapViewWithRoute: View {
     @State var region = MKCoordinateRegion()
-
-//    @Query private var listPlacemarks: [MKPlacemark]
-
     // haven;t requested the user location, will see warning in console
     @State private var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
     // Route
     @Binding var shouldShowRoute: Bool
     @Binding var routeDestination: MKMapItem?
     @Binding var route: MKRoute?
-    @Binding var annotationItems: [MKMapItem]
-    let newYorkPolyline = [
-        (latitude: 40.7128, longitude: -74.0060), // New York City
-        (latitude: 40.730610, longitude: -73.935242), // East Village
-        (latitude: 40.748817, longitude: -73.985428), // Empire State Building
-        (latitude: 40.758896, longitude: -73.985130), // Times Square
-        (latitude: 40.706192, longitude: -74.009160) // Wall Street
-    ]
+    @Binding var mapMarkers: [MKMapItem]
 
     var body: some View {
         Map(position: $cameraPosition) { // selection: $selectedPlacemark
             UserAnnotation()
-            ForEach(annotationItems, id: \.self) { item in
+            ForEach(mapMarkers, id: \.self) { item in
                 Group {
                     Marker(coordinate: item.placemark.coordinate) {
-                        Label(item.name ?? "", systemImage: "star")
+                        Label(item.name ?? "", systemImage: "truck.box")
                     }
-                    .tint(.yellow)
+                    .tint(.orange)
                 }.tag(item)
             }
             if let route, shouldShowRoute {

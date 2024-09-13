@@ -13,6 +13,7 @@ enum LogType: String {
     case success
     case action
     case canceled
+    case info
 }
 
 class Logger {
@@ -28,6 +29,8 @@ class Logger {
             print("\n📘 Action: \(message)\n")
         case LogType.canceled:
             print("\n📓 Cancelled: \(message)\n")
+        case LogType.info:
+            print("\n📓 Info: \(message)\n")
         }
     }
 }

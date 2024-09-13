@@ -22,7 +22,7 @@ struct RouteScreen: View {
     @State private var route: MKRoute?
     @State private var travelInterval: TimeInterval?
     @State private var routeDestination: MKMapItem?
-    @State private(set) var annotationItems: [MKMapItem] = []
+    @State private(set) var mapMarkers: [MKMapItem] = []
 
     var body: some View {
         ScrollView {
@@ -30,12 +30,13 @@ struct RouteScreen: View {
                 if loggedInDriver.routes.count == 0 {
                     ContentUnavailableView("No Routes", systemImage: "truck.box")
                 }
-                MapViewWithRoute(shouldShowRoute: $shouldShowRoute, routeDestination: $routeDestination, route: $route, annotationItems: $annotationItems).task {
-                    if true { // selectedPlacemark != nil
+                MapViewWithRoute(shouldShowRoute: $shouldShowRoute, routeDestination: $routeDestination, route: $route, mapMarkers: $mapMarkers).task {
+                    if true { // selectedPlacemark != nil //look at video and see what this is
                         routeDisplaying = false
                         shouldShowRoute = false
                         route = nil
                         await fetchRoute()
+                        await fetchMapMarkers()
                     }
                 }
                 Button("Toggle show route") {
@@ -54,8 +55,25 @@ struct RouteScreen: View {
         }
     }
 
+    func fetchMapMarkers() async {
+        Logger.log(.action, "Fetching markers")
+        if let loggedInDriver = appState.loggedInDriver {
+            let firstRoute = loggedInDriver.sortRoutes().first
+            let stops = firstRoute!.makeStops() // include this in the if statement
+            for stop in stops {
+                do {
+                    let response = try await locationSearchService.getPlace(from: createType(stop: stop))
+                    let marker = locationSearchService.createMapMarker(from: response)
+                    mapMarkers.append(marker)
+                } catch {
+                    Logger.log(.info, "Stop \(stop) MKLocalSearch reqyest failed ")
+                }
+            }
+            Logger.log(.success, "Fetching markers completed")
+        }
+    }
+
     func fetchRoute() async {
-        // WHere I left, this is being called but I don;t see a display on the screen, maybe because the addresses aren't real? Check for breakpoint
         Logger.log(.action, "Fetching route")
         do {
             if let loggedInDriver = appState.loggedInDriver {
@@ -71,7 +89,6 @@ struct RouteScreen: View {
                     request.source = routeSource
 
                     sourceMapItem.name = "pickup"
-                    annotationItems.append(sourceMapItem)
                 }
                 if let destinationItem = secondStopPlace.mapItems.first {
                     let destinationPlacemark = MKPlacemark(coordinate: destinationItem.placemark.coordinate)
@@ -80,7 +97,6 @@ struct RouteScreen: View {
                     request.destination = routeDestination
 
                     destinationItem.name = "dropoff"
-                    annotationItems.append(destinationItem)
                 }
 
                 let directions = MKDirections(request: request)
@@ -88,7 +104,7 @@ struct RouteScreen: View {
                 route = result?.routes.first
                 travelInterval = route?.expectedTravelTime
             }
-            Logger.log(.action, "Fetching route completed \(route?.polyline)")
+            Logger.log(.success, "Fetching route completed \(String(describing: route?.polyline))")
         } catch {
             Logger.log(.error, "error fetching route \(error) ")
         }

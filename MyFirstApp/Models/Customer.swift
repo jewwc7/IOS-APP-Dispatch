@@ -41,6 +41,7 @@ class Customer: BaseModel {
     }
 
     func handleOrderAction(action: CustomerOrderAction, order: Order) throws {
+        Logger.log(.action, "\(#function): \(action)")
         do {
             switch action {
             case CustomerOrderAction.place:
@@ -48,11 +49,13 @@ class Customer: BaseModel {
             case CustomerOrderAction.cancel:
                 self.cancelOrder(order)
             }
+            // since above is an async function will this run before it?
+            Logger.log(.success, "\(#function): \(action)")
         } catch let error as BaseError { // Swift checks if the error thrown conforms to the BaseError type or is a subclass of BaseError
-            print(self, ["message": error.message, "type": error.type])
+            Logger.log(.error, ["message": error.message, "type": error.type])
             throw error // let error bubble up
         } catch {
-            print(self, error.localizedDescription)
+            Logger.log(.error, error.localizedDescription)
             throw error
         }
     }

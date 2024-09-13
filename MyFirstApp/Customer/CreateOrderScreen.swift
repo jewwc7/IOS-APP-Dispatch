@@ -100,7 +100,7 @@ struct CreateOrderScreen: View {
 
             do {
                 try customer.handleOrderAction(action: CustomerOrderAction.place, order: newOrder)
-                // try customer.modelContext?.save()
+                try customer.modelContext?.save()
                 try context.save()
                 // used to simulat a 2second api request
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {

@@ -8,6 +8,7 @@
 import Combine
 import CoreData
 import Foundation
+import MapKit
 import SwiftData
 import SwiftUI
 
@@ -235,3 +236,4 @@ class Order: BaseModel {
         try dropoff.validateFields()
     }
 }
+

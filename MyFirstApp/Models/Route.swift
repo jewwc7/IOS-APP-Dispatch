@@ -16,6 +16,7 @@ import Foundation
 
 import CoreData
 import Foundation
+import MapKit
 import SwiftData
 
 // NSObject, NSFetchRequestResult, Identifiable
@@ -40,6 +41,7 @@ class Route: BaseModel {
     var startDate = Date()
     var createdAt: Date
     var updatedAt: Date
+    var polylines: [[String: Double]] = []
 
     // Initializer
     init(
@@ -53,6 +55,7 @@ class Route: BaseModel {
         self.driver = driver
         self.status = "Inactive" // RouteStatus.inactive
         self.startDate = startDate
+        self.polylines = []
         self.createdAt = .now
         self.updatedAt = .now
         self.orders = orders // make sure that the replationships are last in the init, so I don't get reandom errors
@@ -85,10 +88,75 @@ class Route: BaseModel {
         return routeDictionary
     }
 
+    func appendPolyline(_ polyline: MKPolyline) { // need to find a way to not continually add polylines for same stops
+        let coordinates = polyline.coordinates() // myRoute.polyline.coordinates()
+        self.polylines = coordinates.map { ["latitude": $0.latitude, "longitude": $0.longitude] }
+    }
+
     // pull out the values from each object key, results in a 2D dictionary/array,
     // flatmap makes into on dictionary/array and the closure just tells it what to put into the array, the stops in this case
 
     func makeStops() -> [Stop] {
         return self.createRoute().values.flatMap { $0.values }.sorted { $0.dueAt < $1.dueAt }
+    }
+
+    func createCLLocationCoordinate() -> [CLLocationCoordinate2D] {
+        let coordinates: [CLLocationCoordinate2D] = self.polylines.compactMap { dict in
+            if let lat = dict["latitude"], let lon = dict["longitude"] {
+                return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            }
+            return nil
+        }
+        return coordinates
+    }
+}
+
+extension MKPolyline {
+    func coordinates() -> [CLLocationCoordinate2D] {
+        var coords = [CLLocationCoordinate2D](repeating: kCLLocationCoordinate2DInvalid, count: self.pointCount)
+        self.getCoordinates(&coords, range: NSRange(location: 0, length: self.pointCount))
+        return coords
+    }
+}
+
+let fileUrl = "routePolyline.json"
+
+func searlizeCoordinates(polyline: MKPolyline) {
+    let coordinates = polyline.coordinates() // myRoute.polyline.coordinates()
+
+    let coordinateArray = coordinates.map { ["latitude": $0.latitude, "longitude": $0.longitude] }
+
+    if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+        let fileURL = documentsDirectory.appendingPathComponent(fileUrl)
+
+        do {
+            let data = try JSONSerialization.data(withJSONObject: coordinateArray, options: [])
+            try data.write(to: fileURL)
+            print("Successfully saved polyline to file.")
+        } catch {
+            print("Failed to save polyline: \(error)")
+        }
+    }
+}
+
+func fetchAndDesearilze() {
+    if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+        let fileURL = documentsDirectory.appendingPathComponent(fileUrl)
+
+        do {
+            let data = try Data(contentsOf: fileURL)
+            if let coordinateArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Double]] {
+                // Convert JSON back to CLLocationCoordinate2D array
+                let coordinates = coordinateArray.map { CLLocationCoordinate2D(latitude: $0["latitude"]!, longitude: $0["longitude"]!) }
+
+                // Create MKPolyline from the coordinates
+                let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
+
+                // Now you can use this polyline, for example, adding it to a map
+                // mapView.addOverlay(polyline)
+            }
+        } catch {
+            print("Failed to load polyline: \(error)")
+        }
     }
 }

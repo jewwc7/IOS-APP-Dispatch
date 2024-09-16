@@ -19,7 +19,7 @@ struct MapViewWithRoute: View {
     // Route
     @Binding var shouldShowRoute: Bool
     @Binding var routeDestination: MKMapItem?
-    @Binding var route: MKRoute?
+    var route: Route
     @Binding var mapMarkers: [MKMapItem]
 
     var body: some View {
@@ -33,8 +33,9 @@ struct MapViewWithRoute: View {
                     .tint(.orange)
                 }.tag(item)
             }
-            if let route, shouldShowRoute {
-                MapPolyline(route.polyline)
+            // I need to check for  route.createCLLocationCoordinate() not returning empty
+            if shouldShowRoute {
+                MapPolyline(coordinates: route.createCLLocationCoordinate())
                     .stroke(.blue, lineWidth: 6)
             }
         }

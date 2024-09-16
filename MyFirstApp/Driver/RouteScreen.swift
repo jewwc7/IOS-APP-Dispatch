@@ -30,7 +30,7 @@ struct RouteScreen: View {
                 if loggedInDriver.routes.count == 0 {
                     ContentUnavailableView("No Routes", systemImage: "truck.box")
                 }
-                MapViewWithRoute(shouldShowRoute: $shouldShowRoute, routeDestination: $routeDestination, route: $route, mapMarkers: $mapMarkers).task {
+                MapViewWithRoute(shouldShowRoute: $shouldShowRoute, routeDestination: $routeDestination, route: loggedInDriver.routes.first!, mapMarkers: $mapMarkers).task {
                     if true { // selectedPlacemark != nil //look at video and see what this is
                         routeDisplaying = false
                         shouldShowRoute = false
@@ -58,17 +58,19 @@ struct RouteScreen: View {
     func fetchMapMarkers() async {
         Logger.log(.action, "Fetching markers")
         if let loggedInDriver = appState.loggedInDriver {
-            let firstRoute = loggedInDriver.sortRoutes().first
-            let stops = firstRoute!.makeStops() // include this in the if statement
-            for stop in stops {
-                do {
-                    let response = try await locationSearchService.getPlace(from: createType(stop: stop))
-                    let marker = locationSearchService.createMapMarker(from: response)
-                    mapMarkers.append(marker)
-                } catch {
-                    Logger.log(.info, "Stop \(stop) MKLocalSearch reqyest failed ")
+            if let firstRoute = loggedInDriver.sortRoutes().first {
+                let stops = firstRoute.makeStops() // include this in the if statement
+                for stop in stops {
+                    do {
+                        let response = try await locationSearchService.getPlace(from: createType(stop: stop))
+                        let marker = locationSearchService.createMapMarker(from: response)
+                        mapMarkers.append(marker)
+                    } catch {
+                        Logger.log(.info, "Stop \(stop) MKLocalSearch reqyest failed ")
+                    }
                 }
             }
+
             Logger.log(.success, "Fetching markers completed")
         }
     }
@@ -87,7 +89,6 @@ struct RouteScreen: View {
                     let sourcePlacemark = MKPlacemark(coordinate: sourceMapItem.placemark.coordinate)
                     let routeSource = MKMapItem(placemark: sourcePlacemark)
                     request.source = routeSource
-
                     sourceMapItem.name = "pickup"
                 }
                 if let destinationItem = secondStopPlace.mapItems.first {
@@ -100,11 +101,17 @@ struct RouteScreen: View {
                 }
 
                 let directions = MKDirections(request: request)
-                let result = try? await directions.calculate()
-                route = result?.routes.first
-                travelInterval = route?.expectedTravelTime
+                let calulatedDirections = try? await directions.calculate()
+                if let calulatedRoute = calulatedDirections?.routes.first {
+                    route = calulatedRoute
+                    travelInterval = calulatedRoute.expectedTravelTime
+                    //  searlizeCoordinates(polyline: calulatedRoute.polyline)
+                    firstRoute?.appendPolyline(calulatedRoute.polyline)
+                    try firstRoute?.modelContext?.save()
+                }
             }
             Logger.log(.success, "Fetching route completed \(String(describing: route?.polyline))")
+
         } catch {
             Logger.log(.error, "error fetching route \(error) ")
         }

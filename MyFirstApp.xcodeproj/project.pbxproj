@@ -47,6 +47,7 @@
 		058B973E2C90F6F000182DF3 /* MapViewWithRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B973D2C90F6F000182DF3 /* MapViewWithRoute.swift */; };
 		058B97402C924FA400182DF3 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B973F2C924FA400182DF3 /* LocationManager.swift */; };
 		058B97442C93999D00182DF3 /* request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B97432C93999D00182DF3 /* request.swift */; };
+		058B974A2C98CB9A00182DF3 /* RouteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058B97492C98CB9A00182DF3 /* RouteViewModel.swift */; };
 		05B99ED02C6D6E3700D8B876 /* Seeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B99ECF2C6D6E3700D8B876 /* Seeds.swift */; };
 		05B99ED42C6E415200D8B876 /* MyNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B99ED32C6E415200D8B876 /* MyNotification.swift */; };
 		05E125F42BFD48B9009F2415 /* CustomerMainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */; };
@@ -94,7 +95,6 @@
 		051AB4E12C7690B9004F5677 /* PreviewSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSampleData.swift; sourceTree = "<group>"; };
 		051AB4E32C769245004F5677 /* ModelPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPreview.swift; sourceTree = "<group>"; };
 		051AB4E82C793335004F5677 /* Stop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stop.swift; sourceTree = "<group>"; };
-		051AB4EA2C7D05CF004F5677 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		051AB4EB2C7D0883004F5677 /* ExpandedDriverStopCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedDriverStopCard.swift; sourceTree = "<group>"; };
 		051AB4ED2C7D3333004F5677 /* MyDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDatePicker.swift; sourceTree = "<group>"; };
 		051AB4F32C7F9A11004F5677 /* TextChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextChip.swift; sourceTree = "<group>"; };
@@ -131,6 +131,7 @@
 		058B973D2C90F6F000182DF3 /* MapViewWithRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewWithRoute.swift; sourceTree = "<group>"; };
 		058B973F2C924FA400182DF3 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		058B97432C93999D00182DF3 /* request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = request.swift; sourceTree = "<group>"; };
+		058B97492C98CB9A00182DF3 /* RouteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteViewModel.swift; sourceTree = "<group>"; };
 		05B99ECF2C6D6E3700D8B876 /* Seeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Seeds.swift; sourceTree = "<group>"; };
 		05B99ED32C6E415200D8B876 /* MyNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNotification.swift; sourceTree = "<group>"; };
 		05E125F32BFD48B9009F2415 /* CustomerMainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerMainScreen.swift; sourceTree = "<group>"; };
@@ -182,6 +183,7 @@
 			children = (
 				0548073C2C80FDDA00DAF89B /* OrderViewModel.swift */,
 				05251D582C81315D00B6DAB0 /* StopViewModel.swift */,
+				058B97492C98CB9A00182DF3 /* RouteViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -226,7 +228,6 @@
 		055187812BE98BEC00BA0A8A = {
 			isa = PBXGroup;
 			children = (
-				051AB4EA2C7D05CF004F5677 /* TODO.md */,
 				05E126102C5AE954009F2415 /* DataFlowVids.swift */,
 				0551878C2BE98BEC00BA0A8A /* MyFirstApp */,
 				0551879E2BE98BED00BA0A8A /* MyFirstAppTests */,
@@ -556,6 +557,7 @@
 				05E1261B2C5D642F009F2415 /* RouteScreen.swift in Sources */,
 				05E1261F2C5D8997009F2415 /* Helpers.swift in Sources */,
 				05632E572BFC034000BBDD89 /* Order.swift in Sources */,
+				058B974A2C98CB9A00182DF3 /* RouteViewModel.swift in Sources */,
 				05E125FF2C52EE04009F2415 /* Customer.swift in Sources */,
 				05B99ED42C6E415200D8B876 /* MyNotification.swift in Sources */,
 				058B97402C924FA400182DF3 /* LocationManager.swift in Sources */,
@@ -762,6 +764,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need your location to show routes on the map even when the app is in the background";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show routes on the map";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -800,6 +804,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need your location to show routes on the map even when the app is in the background";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show routes on the map";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

@@ -27,30 +27,33 @@ struct RouteScreen: View {
     var body: some View {
         ScrollView {
             if let loggedInDriver = appState.loggedInDriver {
-                if loggedInDriver.routes.count == 0 {
-                    ContentUnavailableView("No Routes", systemImage: "truck.box")
-                }
-                MapViewWithRoute(shouldShowRoute: $shouldShowRoute, routeDestination: $routeDestination, route: loggedInDriver.routes.first!, mapMarkers: $mapMarkers).task {
-                    if true { // selectedPlacemark != nil //look at video and see what this is
-                        routeDisplaying = false
-                        shouldShowRoute = false
-                        route = nil
-                        await fetchRoute()
-                        await fetchMapMarkers()
-                    }
-                }
-                Button("Toggle show route") {
-                    shouldShowRoute.toggle()
-                }
-                ForEach(loggedInDriver.sortRoutes()) { route in
-                    Section(header: Text(convertDateToDateOnlyString(day: route.startDate)).bold().font(/*@START_MENU_TOKEN@*/ .title/*@END_MENU_TOKEN@*/)) {
-                        ForEach(route.makeStops(), id: \.id) { stop in
-                            DriverStopCard(stop: stop, driver: loggedInDriver)
+                if let firstRoute = appState.loggedInDriver?.routes.first {
+                    MapViewWithRoute(route: $route, shouldShowRoute: $shouldShowRoute, routeDestination: $routeDestination, mapMarkers: $mapMarkers).task {
+                        if true { // selectedPlacemark != nil //look at video and see what this is
+                            routeDisplaying = false
+                            shouldShowRoute = false
+                            route = nil
+                            await fetchRoute()
+                            await fetchMapMarkers()
                         }
                     }
+                    Button("Toggle show route") {
+                        shouldShowRoute.toggle()
+                    }
+                    ForEach(loggedInDriver.sortRoutes()) { route in
+                        Section(header: Text(convertDateToDateOnlyString(day: route.startDate)).bold().font(/*@START_MENU_TOKEN@*/ .title/*@END_MENU_TOKEN@*/)) {
+                            ForEach(route.makeStops(), id: \.id) { stop in
+                                DriverStopCard(stop: stop, driver: loggedInDriver)
+                            }
+                        }
+                    }
+
+                } else {
+                    ContentUnavailableView("No Routes", systemImage: "truck.box")
                 }
+
             } else {
-                Text("Driver not logged in")
+                ContentUnavailableView("Driver not logged in", systemImage: "xmark")
             }
         }
     }
@@ -77,27 +80,40 @@ struct RouteScreen: View {
 
     func fetchRoute() async {
         Logger.log(.action, "Fetching route")
+//        let routeCoordinates = routeVM.createCLLocationCoordinate()
+//        if let userLocation = locationManager.userLocation {
+//            let combinedCoordinates = [userLocation] + routeCoordinates
+//            MapPolyline(coordinates: combinedCoordinates)
+//                .stroke(.blue, lineWidth: 6)
+//        } else {
+//            MapPolyline(coordinates: routeCoordinates)
+//                .stroke(.blue, lineWidth: 6)
+//        }
         do {
             if let loggedInDriver = appState.loggedInDriver {
                 let firstRoute = loggedInDriver.sortRoutes().first
                 let firstStop = firstRoute?.makeStops().first
                 let lastStop = firstRoute?.makeStops().last
                 let request = MKDirections.Request()
-                let place = try await locationSearchService.getPlace(from: createType(stop: firstStop!))
+
+                let sourcePlacemark = MKPlacemark(coordinate: locationManager.userLocation!)
+                let routeSource = MKMapItem(placemark: sourcePlacemark)
+                request.source = routeSource
+
                 let secondStopPlace = try await locationSearchService.getPlace(from: createType(stop: lastStop!))
-                if let sourceMapItem = place.mapItems.first {
-                    let sourcePlacemark = MKPlacemark(coordinate: sourceMapItem.placemark.coordinate)
-                    let routeSource = MKMapItem(placemark: sourcePlacemark)
-                    request.source = routeSource
-                    sourceMapItem.name = "pickup"
-                }
+//                if let sourceMapItem = place.mapItems.first {
+//                    let sourcePlacemark = MKPlacemark(coordinate: locationManager.userLocation ?? sourceMapItem.placemark.coordinate)
+//                    let routeSource = MKMapItem(placemark: sourcePlacemark)
+//                    request.source = routeSource
+//                    sourceMapItem.name = "pickup"
+//                }
                 if let destinationItem = secondStopPlace.mapItems.first {
                     let destinationPlacemark = MKPlacemark(coordinate: destinationItem.placemark.coordinate)
                     let routeDestination = MKMapItem(placemark: destinationPlacemark)
                     routeDestination.name = lastStop?.address
                     request.destination = routeDestination
 
-                    destinationItem.name = "dropoff"
+                    destinationItem.name = lastStop?.stopType
                 }
 
                 let directions = MKDirections(request: request)
@@ -105,7 +121,6 @@ struct RouteScreen: View {
                 if let calulatedRoute = calulatedDirections?.routes.first {
                     route = calulatedRoute
                     travelInterval = calulatedRoute.expectedTravelTime
-                    //  searlizeCoordinates(polyline: calulatedRoute.polyline)
                     firstRoute?.appendPolyline(calulatedRoute.polyline)
                     try firstRoute?.modelContext?.save()
                 }

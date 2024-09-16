@@ -8,28 +8,40 @@
 import CoreLocation
 import Foundation
 
-// not in user
-class LocationManager: NSObject, CLLocationManagerDelegate {
-    private let locationManager = CLLocationManager()
+class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+    var locationManager = CLLocationManager()
+    @Published var userLocation: CLLocationCoordinate2D?
 
     override init() {
         super.init()
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.startUpdatingLocation()
     }
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
+        case .notDetermined:
+            manager.requestWhenInUseAuthorization()
+        case .restricted, .denied:
+            // Handle the case where the user denied location permissions
+            print("Location access denied")
         case .authorizedWhenInUse, .authorizedAlways:
-            locationManager.startUpdatingLocation()
-        case .denied, .restricted:
-            print("Location access denied or restricted")
-        default:
+            manager.startUpdatingLocation()
+        @unknown default:
             break
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location manager failed with error: \(error)")
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        // Handle location updates
+        if let location = locations.last {
+            Logger.log(.action, "Location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+
+            DispatchQueue.main.async {
+                self.userLocation = location.coordinate
+            }
+        }
     }
 }

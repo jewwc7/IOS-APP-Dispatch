@@ -9,18 +9,24 @@ import MapKit
 import SwiftData
 import SwiftUI
 
-// line 34 in RouteSCreen
-// maybe refactor MapView to work with routes, so I can just have one
-// look to update plist so I can request permission and have it
 struct MapViewWithRoute: View {
     @State var region = MKCoordinateRegion()
-    // haven;t requested the user location, will see warning in console
+    @State private var locationManager = LocationManager()
     @State private var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
+
     // Route
+    var previousRouteTaken: Any? // come back this will be wat's saved
+    @Binding var route: MKRoute?
     @Binding var shouldShowRoute: Bool
     @Binding var routeDestination: MKMapItem?
-    var route: Route
     @Binding var mapMarkers: [MKMapItem]
+
+    init(route: Binding<MKRoute?>, shouldShowRoute: Binding<Bool>, routeDestination: Binding<MKMapItem?>, mapMarkers: Binding<[MKMapItem]>) {
+        self._route = route
+        self._shouldShowRoute = shouldShowRoute
+        self._routeDestination = routeDestination
+        self._mapMarkers = mapMarkers
+    }
 
     var body: some View {
         Map(position: $cameraPosition) { // selection: $selectedPlacemark
@@ -33,11 +39,13 @@ struct MapViewWithRoute: View {
                     .tint(.orange)
                 }.tag(item)
             }
-            // I need to check for  route.createCLLocationCoordinate() not returning empty
-            if shouldShowRoute {
-                MapPolyline(coordinates: route.createCLLocationCoordinate())
+            if let route, shouldShowRoute {
+                MapPolyline(coordinates: route.polyline.coordinates())
                     .stroke(.blue, lineWidth: 6)
             }
+            // I need to check for  route.createCLLocationCoordinate() not returning empty
+
+            // if previousROuteTaken put the polyline
         }
         //        .onMapCameraChange { context in
         //            region = context.region
@@ -48,6 +56,9 @@ struct MapViewWithRoute: View {
         //        }
         .mapControls {
             MapUserLocationButton()
+        }
+        .onAppear {
+            locationManager.locationManager.requestWhenInUseAuthorization()
         }
 
         .edgesIgnoringSafeArea(.bottom)

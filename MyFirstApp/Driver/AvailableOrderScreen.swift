@@ -23,24 +23,28 @@ struct AvailableOrderScreen: View {
             NavigationView {
                 VStack {
                     HStack(alignment: .center) {
-                        ZStack {
-                            NavigationLink(destination: RouteScreen()) {
-                                Image(systemName: "cart.circle")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 30, height: 30)
-                            }
+                        if let hasRoute = loggedInDriver.routes.first {
+                            ZStack {
+                                NavigationLink(destination: RouteScreen()) {
+                                    Image(systemName: "cart.circle")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 30, height: 30)
+                                }
 
-                            withAnimation {
-                                Text("\(loggedInDriver.numberOfOrders())") // Display your floating number
-                                    .font(.system(size: 16)) // Set the font size
-                                    .fontWeight(.bold) // Set the font weight if needed
-                                    .foregroundColor(.white) // Set the text color
-                                    .padding(8) // Add padding around the text
-                                    .background(Color.blue) // Set the background color
-                                    .clipShape(Circle()) // Clip the text into a circle shape
-                                    .offset(x: 16, y: -16) // Offset the text position relative to the image
+                                withAnimation {
+                                    Text("\(loggedInDriver.numberOfOrders())") // Display your floating number
+                                        .font(.system(size: 16)) // Set the font size
+                                        .fontWeight(.bold) // Set the font weight if needed
+                                        .foregroundColor(.white) // Set the text color
+                                        .padding(8) // Add padding around the text
+                                        .background(Color.blue) // Set the background color
+                                        .clipShape(Circle()) // Clip the text into a circle shape
+                                        .offset(x: 16, y: -16) // Offset the text position relative to the image
+                                }
                             }
+                        } else {
+                            ContentUnavailableView("No Routes", systemImage: "truck.box")
                         }
 
                         // Toggle("", isOn: $isLoggedOn).toggleStyle(SwitchToggleStyle(tint: .blue))

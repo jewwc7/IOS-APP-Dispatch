@@ -15,17 +15,18 @@ struct MapViewWithRoute: View {
     @State private var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
 
     // Route
-    var previousRouteTaken: Any? // come back this will be wat's saved
+    var previousRouteTaken: [CLLocationCoordinate2D]? // come back this will be wat's saved
     @Binding var route: MKRoute?
     @Binding var shouldShowRoute: Bool
     @Binding var routeDestination: MKMapItem?
     @Binding var mapMarkers: [MKMapItem]
 
-    init(route: Binding<MKRoute?>, shouldShowRoute: Binding<Bool>, routeDestination: Binding<MKMapItem?>, mapMarkers: Binding<[MKMapItem]>) {
+    init(route: Binding<MKRoute?>, shouldShowRoute: Binding<Bool>, routeDestination: Binding<MKMapItem?>, mapMarkers: Binding<[MKMapItem]>, previousRouteTaken: [CLLocationCoordinate2D]? = nil) {
         self._route = route
         self._shouldShowRoute = shouldShowRoute
         self._routeDestination = routeDestination
         self._mapMarkers = mapMarkers
+        self.previousRouteTaken = previousRouteTaken
     }
 
     var body: some View {
@@ -46,6 +47,10 @@ struct MapViewWithRoute: View {
             // I need to check for  route.createCLLocationCoordinate() not returning empty
 
             // if previousROuteTaken put the polyline
+            if let previousRouteTaken = previousRouteTaken {
+                MapPolyline(coordinates: previousRouteTaken)
+                    .stroke(.orange, lineWidth: 6)
+            }
         }
         //        .onMapCameraChange { context in
         //            region = context.region
@@ -59,6 +64,15 @@ struct MapViewWithRoute: View {
         }
         .onAppear {
             locationManager.locationManager.requestWhenInUseAuthorization()
+            //   updateCameraPosition()
+        }.onChange(of: shouldShowRoute) {
+            if shouldShowRoute {
+                withAnimation {
+                    if let rect = route?.polyline.boundingMapRect {
+                        cameraPosition = .rect(rect)
+                    }
+                }
+            }
         }
 
         .edgesIgnoringSafeArea(.bottom)
@@ -68,31 +82,19 @@ struct MapViewWithRoute: View {
         //        }
     }
 
-    // zoom map out to see both addresses
-//    func updateRegionToFitAllAnnotations() {
-//        guard !annotationItems.isEmpty else { return }
-//
-//        var minLat = annotationItems[0].coordinate.latitude
-//        var maxLat = annotationItems[0].coordinate.latitude
-//        var minLon = annotationItems[0].coordinate.longitude
-//        var maxLon = annotationItems[0].coordinate.longitude
-//
-//        for annotation in annotationItems {
-//            minLat = min(minLat, annotation.coordinate.latitude)
-//            maxLat = max(maxLat, annotation.coordinate.latitude)
-//            minLon = min(minLon, annotation.coordinate.longitude)
-//            maxLon = max(maxLon, annotation.coordinate.longitude)
+//    func updateCameraPosition() {
+//        if let userLocation = locationManager.userLocation {
+//            let userRegion = MKCoordinateRegion(
+//                center: userLocation,
+//                span: MKCoordinateSpan(
+//                    latitudeDelta: 0.15,
+//                    longitudeDelta: 0.15
+//                )
+//            )
+//            withAnimation {
+//                cameraPosition = .region(userRegion)
+//            }
 //        }
-//
-//        let centerLat = (minLat + maxLat) / 2
-//        let centerLon = (minLon + maxLon) / 2
-//        let spanLat = (maxLat - minLat) * 1.2 // Add some padding
-//        let spanLon = (maxLon - minLon) * 1.2 // Add some padding
-//
-//        region = MKCoordinateRegion(
-//            center: CLLocationCoordinate2D(latitude: centerLat, longitude: centerLon),
-//            span: MKCoordinateSpan(latitudeDelta: spanLat, longitudeDelta: spanLon)
-//        )
 //    }
 }
 

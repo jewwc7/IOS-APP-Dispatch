@@ -10,15 +10,10 @@ import MapKit
 import SwiftUI
 
 class RouteVM {
-    var route: Route
     @State var locationSearchService = LocationSearchService()
 
-    init(_ route: Route) {
-        self.route = route
-    }
-
-    func createCLLocationCoordinate() -> [CLLocationCoordinate2D] {
-        let coordinates: [CLLocationCoordinate2D] = self.route.polylines.compactMap { dict in
+    func createCLLocationCoordinate(from route: Route) -> [CLLocationCoordinate2D] {
+        let coordinates: [CLLocationCoordinate2D] = route.polylines.compactMap { dict in
             if let lat = dict["latitude"], let lon = dict["longitude"] {
                 return CLLocationCoordinate2D(latitude: lat, longitude: lon)
             }
@@ -27,11 +22,11 @@ class RouteVM {
         return coordinates
     }
 
-    func fetchMapMarkers() async -> [MKMapItem] {
+    func fetchMapMarkers(for route: Route) async -> [MKMapItem] {
         Logger.log(.action, "Fetching markers")
         var mapMarkers: [MKMapItem] = []
 
-        let stops = self.route.makeStops() // include this in the if statement
+        let stops = route.makeStops() // include this in the if statement
         for stop in stops {
             do {
                 let response = try await locationSearchService.getPlace(from: self.createType(stop: stop))
@@ -49,36 +44,31 @@ class RouteVM {
 //    func fetchRoute() async {
 //        Logger.log(.action, "Fetching route")
 //        do {
-//                let firstStop = route?.makeStops().first
-//                let lastStop = route.makeStops().first
-//                let request = MKDirections.Request()
-//                let place = try await locationSearchService.getPlace(from: createType(stop: firstStop!))
-//                let secondStopPlace = try await locationSearchService.getPlace(from: createType(stop: lastStop!))
-//                if let sourceMapItem = place.mapItems.first {
-//                    let sourcePlacemark = MKPlacemark(coordinate: sourceMapItem.placemark.coordinate)
-//                    let routeSource = MKMapItem(placemark: sourcePlacemark)
-//                    request.source = routeSource
-//                    sourceMapItem.name = "pickup"
-//                }
-//                if let destinationItem = secondStopPlace.mapItems.first {
-//                    let destinationPlacemark = MKPlacemark(coordinate: destinationItem.placemark.coordinate)
-//                    let routeDestination = MKMapItem(placemark: destinationPlacemark)
-//                    routeDestination.name = lastStop?.address
-//                    request.destination = routeDestination
+//            let firstStop = self.route.makeStops().first
+//            let request = MKDirections.Request()
 //
-//                    destinationItem.name = "dropoff"
-//                }
+//            let sourcePlacemark = MKPlacemark(coordinate: locationManager.userLocation!)
+//            let routeSource = MKMapItem(placemark: sourcePlacemark)
+//            request.source = routeSource
 //
-//                let directions = MKDirections(request: request)
-//                let calulatedDirections = try? await directions.calculate()
-//                if let calulatedRoute = calulatedDirections?.routes.first {
-//               //     route = calulatedRoute
-//               //     travelInterval = calulatedRoute.expectedTravelTime
-//                //    firstRoute?.appendPolyline(calulatedRoute.polyline)
-//               //     try firstRoute?.modelContext?.save()
-//                }
+//            let secondStopPlace = try await locationSearchService.getPlace(from: self.createType(stop: firstStop!))
+//            if let destinationItem = secondStopPlace.mapItems.first {
+//                let destinationPlacemark = MKPlacemark(coordinate: destinationItem.placemark.coordinate)
+//                let routeDestination = MKMapItem(placemark: destinationPlacemark)
+//                routeDestination.name = firstStop?.address
+//                request.destination = routeDestination
+//                destinationItem.name = firstStop?.stopType
+//            }
 //
-//            Logger.log(.success, "Fetching route completed \(String(describing: route?.polyline))")
+//            let directions = MKDirections(request: request)
+//            let calulatedDirections = try? await directions.calculate()
+//            if let calulatedRoute = calulatedDirections?.routes.first {
+//                mkRoute = calulatedRoute
+//                travelInterval = calulatedRoute.expectedTravelTime
+//                self.route.appendPolyline(calulatedRoute.polyline)
+//                try self.route.modelContext?.save()
+//            }
+//            Logger.log(.success, "Fetching route completed \(String(describing: mkRoute?.polyline))")
 //
 //        } catch {
 //            Logger.log(.error, "error fetching route \(error) ")

@@ -52,6 +52,7 @@ struct RouteScreen: View {
                             if selectedRoute?.id == firstRoute.id {
                                 shouldShowRoute = false
                                 mkRoute = nil
+                                // comeback
                                 await fetchRoute(for: selectedRoute)
                                 await fetchMapMarkers(for: selectedRoute)
                             }
@@ -80,61 +81,26 @@ struct RouteScreen: View {
     }
         
     func fetchMapMarkers(for route: Route?) async {
-        Logger.log(.action, "Fetching markers")
-
         if let route = route {
-            let stops = route.makeStops() // include this in the if statement
-            for stop in stops {
-                do {
-                    let response = try await locationSearchService.getPlace(from: createType(stop: stop))
-                    let marker = locationSearchService.createMapMarker(from: response)
-                    mapMarkers.append(marker)
-                } catch {
-                    Logger.log(.info, "Stop \(stop) MKLocalSearch reqyest failed ")
-                }
-            }
-        } else {
-            Logger.log(.warning, "route was undefined \(#function)")
+            let allMapMarkers = await routeVm.fetchMapMarkers(for: route)
+            mapMarkers = allMapMarkers
         }
-                
-        Logger.log(.success, "Fetching markers completed")
     }
         
     func fetchRoute(for route: Route?) async {
         Logger.log(.action, "Fetching route")
-        do {
-            if let route = route {
-                let firstStop = route.makeStops().first
-                let request = MKDirections.Request()
-                    
-                let sourcePlacemark = MKPlacemark(coordinate: locationManager.userLocation!)
-                let routeSource = MKMapItem(placemark: sourcePlacemark)
-                request.source = routeSource
-                    
-                let secondStopPlace = try await locationSearchService.getPlace(from: createType(stop: firstStop!))
-                if let destinationItem = secondStopPlace.mapItems.first {
-                    let destinationPlacemark = MKPlacemark(coordinate: destinationItem.placemark.coordinate)
-                    let routeDestination = MKMapItem(placemark: destinationPlacemark)
-                    routeDestination.name = firstStop?.address
-                    request.destination = routeDestination
-                    destinationItem.name = firstStop?.stopType
-                }
-                    
-                let directions = MKDirections(request: request)
-                let calulatedDirections = try? await directions.calculate()
-                if let calulatedRoute = calulatedDirections?.routes.first {
+        if let route = route {
+            do {
+                let calulatedRoute = await routeVm.fetchRoute(for: route, source: locationManager.userLocation!)
+                if let calulatedRoute = calulatedRoute {
                     mkRoute = calulatedRoute
                     travelInterval = calulatedRoute.expectedTravelTime
                     route.appendPolyline(calulatedRoute.polyline)
                     try route.modelContext?.save()
                 }
-            } else {
-                Logger.log(.warning, "route was undefined \(#function)")
+            } catch {
+                Logger.log(.error, "error when fetching route \(error.localizedDescription) ")
             }
-            Logger.log(.success, "Fetching route completed \(String(describing: mkRoute?.polyline))")
-                
-        } catch {
-            Logger.log(.error, "error fetching route \(error) ")
         }
     }
         
@@ -152,7 +118,7 @@ struct RouteScreen: View {
             }
             return coordinates
         } else {
-            return [CLLocationCoordinate2D(latitude:  1.1, longitude:  1.1)] // Comeback
+            return [CLLocationCoordinate2D(latitude: 1.1, longitude: 1.1)] // Comeback
         }
     }
 }

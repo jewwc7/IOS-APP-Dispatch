@@ -41,39 +41,39 @@ class RouteVM {
         return mapMarkers
     }
 
-//    func fetchRoute() async {
-//        Logger.log(.action, "Fetching route")
-//        do {
-//            let firstStop = self.route.makeStops().first
-//            let request = MKDirections.Request()
-//
-//            let sourcePlacemark = MKPlacemark(coordinate: locationManager.userLocation!)
-//            let routeSource = MKMapItem(placemark: sourcePlacemark)
-//            request.source = routeSource
-//
-//            let secondStopPlace = try await locationSearchService.getPlace(from: self.createType(stop: firstStop!))
-//            if let destinationItem = secondStopPlace.mapItems.first {
-//                let destinationPlacemark = MKPlacemark(coordinate: destinationItem.placemark.coordinate)
-//                let routeDestination = MKMapItem(placemark: destinationPlacemark)
-//                routeDestination.name = firstStop?.address
-//                request.destination = routeDestination
-//                destinationItem.name = firstStop?.stopType
-//            }
-//
-//            let directions = MKDirections(request: request)
-//            let calulatedDirections = try? await directions.calculate()
-//            if let calulatedRoute = calulatedDirections?.routes.first {
-//                mkRoute = calulatedRoute
-//                travelInterval = calulatedRoute.expectedTravelTime
-//                self.route.appendPolyline(calulatedRoute.polyline)
-//                try self.route.modelContext?.save()
-//            }
-//            Logger.log(.success, "Fetching route completed \(String(describing: mkRoute?.polyline))")
-//
-//        } catch {
-//            Logger.log(.error, "error fetching route \(error) ")
-//        }
-//    }
+    func fetchRoute(for route: Route, source: CLLocationCoordinate2D) async -> MKRoute? {
+        Logger.log(.action, "Fetching route")
+        do {
+            let firstStop = route.makeStops().first
+            let request = MKDirections.Request()
+
+            let sourcePlacemark = MKPlacemark(coordinate: source)
+            let routeSource = MKMapItem(placemark: sourcePlacemark)
+            request.source = routeSource
+
+            let secondStopPlace = try await locationSearchService.getPlace(from: self.createType(stop: firstStop!))
+            if let destinationItem = secondStopPlace.mapItems.first {
+                let destinationPlacemark = MKPlacemark(coordinate: destinationItem.placemark.coordinate)
+                let routeDestination = MKMapItem(placemark: destinationPlacemark)
+                routeDestination.name = firstStop?.address
+                request.destination = routeDestination
+                destinationItem.name = firstStop?.stopType
+            }
+
+            let directions = MKDirections(request: request)
+            let calulatedDirections = try? await directions.calculate()
+            if let calulatedRoute = calulatedDirections?.routes.first {
+                Logger.log(.success, "Fetching route completed \(String(describing: calulatedRoute.polyline))")
+                return calulatedRoute
+            } else {
+                return nil
+            }
+
+        } catch {
+            Logger.log(.error, "error fetching route \(error) ")
+        }
+        return nil
+    }
 
     func createType(stop: Stop) -> LocationResult {
         return LocationResult(id: stop.locationId, title: stop.address, subtitle: stop.cityStateZip)

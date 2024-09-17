@@ -42,6 +42,11 @@ struct RouteScreen: View {
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
+                    .onAppear {
+                        if selectedRoute == nil {
+                            selectedRoute = firstRoute
+                        }
+                    }
                     .onChange(of: selectedRoute) { _, _ in
                         Task {
                             if selectedRoute?.id == firstRoute.id {
@@ -147,7 +152,7 @@ struct RouteScreen: View {
             }
             return coordinates
         } else {
-            return [CLLocationCoordinate2D(latitude: locationManager.userLocation?.latitude ?? 1.1, longitude: locationManager.userLocation?.longitude ?? 1.1)] // Comeback
+            return [CLLocationCoordinate2D(latitude:  1.1, longitude:  1.1)] // Comeback
         }
     }
 }

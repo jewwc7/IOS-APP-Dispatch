@@ -10,14 +10,14 @@ import SwiftData
 import SwiftUI
 
 // Where I left
+// How to update state when a stop is completed? @Published? create an observer pattern?
 // Pretty sure the previousRoute works, but I need to only appendPolyline if not already appeneded
 // how can I do that? MAybe make another model that houses these and the stops just like I did before, that way ifI already have one for the stop, don't save again.
-// THen also should change the route when stops are completed
-// first need to make destination the first not compelted stop.incomplete_stops
+
 struct RouteScreen: View {
     @Environment(\.modelContext) private var context // how to CRUD state
     @EnvironmentObject var appState: AppStateManager
-    
+
     @State var locationSearchService = LocationSearchService()
     @State private var selectedPlacemark: MKPlacemark?
     private var locationManager = LocationManager()
@@ -28,9 +28,10 @@ struct RouteScreen: View {
     @State private var mkRoute: MKRoute?
     @State private var travelInterval: TimeInterval?
     @State private var routeDestination: MKMapItem?
-    @State private(set) var mapMarkers: [MKMapItem] = []
+    @State private(set) var stopWithMapMarkers: [StopWithMapMarkers] = []
     @State private var selectedRoute: Route?
-    
+    @State private var previousNextStop: Stop? // I passed this all the way down to driverCard, so I can update this when the stop deliveredAt is set
+
     var body: some View {
         ScrollView {
             if let loggedInDriver = appState.loggedInDriver {
@@ -48,77 +49,79 @@ struct RouteScreen: View {
                         }
                     }
                     .onChange(of: selectedRoute) { _, _ in
-                        Task {
-                            if selectedRoute?.id == firstRoute.id {
-                                shouldShowRoute = false
-                                mkRoute = nil
-                                // comeback
-                                await fetchRoute(for: selectedRoute)
-                                await fetchMapMarkers(for: selectedRoute)
-                            }
+                        if let selectedRoute = selectedRoute, selectedRoute.id == firstRoute.id {
+                            updateMap(for: selectedRoute)
+                        }
+                    }
+                    .onChange(of: previousNextStop?.id) { _, _ in
+                        if let selectedRoute = selectedRoute, selectedRoute.id == firstRoute.id {
+                            updateMap(for: selectedRoute)
                         }
                     }
                     if let selectedRoute = selectedRoute {
                         if selectedRoute.id == firstRoute.id {
-                            MapViewWithRoute(route: $mkRoute, shouldShowRoute: $shouldShowRoute, routeDestination: $routeDestination, mapMarkers: $mapMarkers, previousRouteTaken: createCLLocationCoordinate(for: selectedRoute))
+                            MapViewWithRoute(route: $mkRoute, shouldShowRoute: $shouldShowRoute, routeDestination: $routeDestination, stopWithMapMarkers: $stopWithMapMarkers, previousRouteTaken: previousRouteTaken(for: selectedRoute))
                             Button("Toggle show route") {
                                 shouldShowRoute.toggle()
                             }
-                            RouteList(route: selectedRoute, loggedInDriver: loggedInDriver)
+                            RouteList(route: selectedRoute, loggedInDriver: loggedInDriver, previousNextStop: $previousNextStop)
                         } else {
-                            RouteList(route: selectedRoute, loggedInDriver: loggedInDriver)
+                            RouteList(route: selectedRoute, loggedInDriver: loggedInDriver, previousNextStop: $previousNextStop)
                         }
                     }
-               
+
                 } else {
                     ContentUnavailableView("No Routes", systemImage: "truck.box")
                 }
-                    
+
             } else {
                 ContentUnavailableView("Driver not logged in", systemImage: "xmark")
             }
         }
     }
-        
-    func fetchMapMarkers(for route: Route?) async {
-        if let route = route {
-            let allMapMarkers = await routeVm.fetchMapMarkers(for: route)
-            mapMarkers = allMapMarkers
+
+    func updateMap(for route: Route) {
+        Task {
+            if let nextStop = route.nextStop() {
+                shouldShowRoute = false
+                mkRoute = nil
+                await fetchRoute(to: nextStop, route: selectedRoute)
+                await fetchMapMarkers(for: selectedRoute)
+            }
         }
     }
-        
-    func fetchRoute(for route: Route?) async {
-        Logger.log(.action, "Fetching route")
+
+    func fetchMapMarkers(for route: Route?) async {
         if let route = route {
-            do {
-                let calulatedRoute = await routeVm.fetchRoute(for: route, source: locationManager.userLocation!)
-                if let calulatedRoute = calulatedRoute {
-                    mkRoute = calulatedRoute
-                    travelInterval = calulatedRoute.expectedTravelTime
+            let allMapMarkers = await routeVm.fetchMapMarkers(for: route.makeStops())
+            stopWithMapMarkers = allMapMarkers
+        }
+    }
+
+    func fetchRoute(to stop: Stop, route: Route?) async {
+        Logger.log(.action, "Fetching route")
+
+        do {
+            let calulatedRoute = await routeVm.fetchRoute(source: locationManager.userLocation!, destinationStop: stop)
+            if let calulatedRoute = calulatedRoute {
+                mkRoute = calulatedRoute
+                travelInterval = calulatedRoute.expectedTravelTime
+                if let route = route {
                     route.appendPolyline(calulatedRoute.polyline)
                     try route.modelContext?.save()
                 }
-            } catch {
-                Logger.log(.error, "error when fetching route \(error.localizedDescription) ")
             }
+        } catch {
+            Logger.log(.error, "error when fetching route \(error.localizedDescription) ")
         }
     }
-        
-    func createType(stop: Stop) -> LocationResult {
-        return LocationResult(id: stop.locationId, title: stop.address, subtitle: stop.cityStateZip)
-    }
-    
-    func createCLLocationCoordinate(for route: Route?) -> [CLLocationCoordinate2D] {
+
+    func previousRouteTaken(for route: Route?) -> [CLLocationCoordinate2D] {
         if let route = route {
-            let coordinates: [CLLocationCoordinate2D] = route.polylines.compactMap { dict in
-                if let lat = dict["latitude"], let lon = dict["longitude"] {
-                    return CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                }
-                return nil
-            }
+            let coordinates = routeVm.createCLLocationCoordinate(from: route)
             return coordinates
         } else {
-            return [CLLocationCoordinate2D(latitude: 1.1, longitude: 1.1)] // Comeback
+            return []
         }
     }
 }

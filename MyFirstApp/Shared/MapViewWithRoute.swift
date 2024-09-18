@@ -15,30 +15,32 @@ struct MapViewWithRoute: View {
     @State private var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
 
     // Route
-    var previousRouteTaken: [CLLocationCoordinate2D]? // come back this will be wat's saved
+    var previousRouteTaken: [CLLocationCoordinate2D] // come back this will be wat's saved
     @Binding var route: MKRoute?
     @Binding var shouldShowRoute: Bool
     @Binding var routeDestination: MKMapItem?
-    @Binding var mapMarkers: [MKMapItem]
+    @Binding var stopWithMapMarkers: [StopWithMapMarkers]
 
-    init(route: Binding<MKRoute?>, shouldShowRoute: Binding<Bool>, routeDestination: Binding<MKMapItem?>, mapMarkers: Binding<[MKMapItem]>, previousRouteTaken: [CLLocationCoordinate2D]? = nil) {
+    init(route: Binding<MKRoute?>, shouldShowRoute: Binding<Bool>, routeDestination: Binding<MKMapItem?>, stopWithMapMarkers: Binding<[StopWithMapMarkers]>, previousRouteTaken: [CLLocationCoordinate2D] = []) {
         self._route = route
         self._shouldShowRoute = shouldShowRoute
         self._routeDestination = routeDestination
-        self._mapMarkers = mapMarkers
+        self._stopWithMapMarkers = stopWithMapMarkers
         self.previousRouteTaken = previousRouteTaken
     }
 
     var body: some View {
         Map(position: $cameraPosition) { // selection: $selectedPlacemark
             UserAnnotation()
-            ForEach(mapMarkers, id: \.self) { item in
+            ForEach(stopWithMapMarkers) { item in
+                let delivered = item.stop.deliveredAt != nil
+                let systemImage = delivered ? "checkmark.rectangle.fill" : "truck.box"
                 Group {
-                    Marker(coordinate: item.placemark.coordinate) {
-                        Label(item.name ?? "", systemImage: "truck.box")
+                    Marker(coordinate: item.mapMarker.placemark.coordinate) {
+                        Label(item.mapMarker.name ?? "", systemImage: systemImage)
                     }
-                    .tint(.orange)
-                }.tag(item)
+                    .tint(delivered ? .gray : .orange)
+                }
             }
             if let route, shouldShowRoute {
                 MapPolyline(coordinates: route.polyline.coordinates())
@@ -47,7 +49,7 @@ struct MapViewWithRoute: View {
             // I need to check for  route.createCLLocationCoordinate() not returning empty
 
             // if previousROuteTaken put the polyline
-            if let previousRouteTaken = previousRouteTaken {
+            if previousRouteTaken.count > 0 {
                 MapPolyline(coordinates: previousRouteTaken)
                     .stroke(.orange, lineWidth: 6)
             }

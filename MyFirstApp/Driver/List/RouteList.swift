@@ -10,15 +10,11 @@ import SwiftUI
 struct RouteList: View {
     var route: Route
     var loggedInDriver: Driver
-
-    init(route: Route, loggedInDriver: Driver) {
-        self.route = route
-        self.loggedInDriver = loggedInDriver
-    }
+    @Binding var previousNextStop: Stop?
 
     var body: some View {
         ForEach(route.makeStops(), id: \.id) { stop in
-            DriverStopCard(stop: stop, driver: loggedInDriver)
+            DriverStopCard(stop: stop, driver: loggedInDriver, previousNextStop: $previousNextStop)
         }
     }
 }

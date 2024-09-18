@@ -99,4 +99,16 @@ class Route: BaseModel {
     func makeStops() -> [Stop] {
         return self.createRoute().values.flatMap { $0.values }.sorted { $0.dueAt < $1.dueAt }
     }
+
+    func incompleteStops() -> [Stop] {
+        return self.makeStops().filter { $0.deliveredAt == nil }
+    }
+
+    func nextStop() -> Stop? {
+        return self.incompleteStops().first
+    }
+
+    func isCompletedRoute() -> Bool {
+        return self.incompleteStops().count == 0
+    }
 }

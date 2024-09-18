@@ -13,10 +13,13 @@ struct DriverStopCard: View {
     var stop: Stop
     var driver: Driver
     var stopViewModel: StopViewModel
-    init(stop: Stop, driver: Driver) {
+    @Binding var previousNextStop: Stop?
+    
+    init(stop: Stop, driver: Driver, previousNextStop: Binding<Stop?>) {
         self.stop = stop
         self.driver = driver
         self.stopViewModel = StopViewModel(stop)
+        self._previousNextStop = previousNextStop
     }
    
     var body: some View {
@@ -73,6 +76,9 @@ struct DriverStopCard: View {
         withAnimation(.smooth) {
             if let order = stop.order {
                 order.transitionToNextStatus()
+                if stop.deliveredAt != nil {
+                    previousNextStop = stop.order?.route?.nextStop()
+                }
             } else {
                 print("stop has no associated order")
             }

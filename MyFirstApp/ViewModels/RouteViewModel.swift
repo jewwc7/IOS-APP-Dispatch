@@ -9,6 +9,12 @@ import Foundation
 import MapKit
 import SwiftUI
 
+struct StopWithMapMarkers: Identifiable {
+    var id = UUID().uuidString
+    var stop: Stop
+    var mapMarker: MKMapItem
+}
+
 class RouteVM {
     @State var locationSearchService = LocationSearchService()
 
@@ -22,16 +28,15 @@ class RouteVM {
         return coordinates
     }
 
-    func fetchMapMarkers(for route: Route) async -> [MKMapItem] {
+    func fetchMapMarkers(for stops: [Stop]) async -> [StopWithMapMarkers] {
         Logger.log(.action, "Fetching markers")
-        var mapMarkers: [MKMapItem] = []
+        var mapMarkers: [StopWithMapMarkers] = []
 
-        let stops = route.makeStops() // include this in the if statement
         for stop in stops {
             do {
                 let response = try await locationSearchService.getPlace(from: self.createType(stop: stop))
                 let marker = self.locationSearchService.createMapMarker(from: response)
-                mapMarkers.append(marker)
+                mapMarkers.append(StopWithMapMarkers(stop: stop, mapMarker: marker))
             } catch {
                 Logger.log(.info, "Stop \(stop) MKLocalSearch reqyest failed ")
             }
@@ -41,23 +46,22 @@ class RouteVM {
         return mapMarkers
     }
 
-    func fetchRoute(for route: Route, source: CLLocationCoordinate2D) async -> MKRoute? {
+    func fetchRoute(source: CLLocationCoordinate2D, destinationStop: Stop) async -> MKRoute? {
         Logger.log(.action, "Fetching route")
         do {
-            let firstStop = route.makeStops().first
             let request = MKDirections.Request()
 
             let sourcePlacemark = MKPlacemark(coordinate: source)
             let routeSource = MKMapItem(placemark: sourcePlacemark)
             request.source = routeSource
 
-            let secondStopPlace = try await locationSearchService.getPlace(from: self.createType(stop: firstStop!))
+            let secondStopPlace = try await locationSearchService.getPlace(from: self.createType(stop: destinationStop))
             if let destinationItem = secondStopPlace.mapItems.first {
                 let destinationPlacemark = MKPlacemark(coordinate: destinationItem.placemark.coordinate)
                 let routeDestination = MKMapItem(placemark: destinationPlacemark)
-                routeDestination.name = firstStop?.address
+                routeDestination.name = destinationStop.address
                 request.destination = routeDestination
-                destinationItem.name = firstStop?.stopType
+                destinationItem.name = destinationStop.stopType
             }
 
             let directions = MKDirections(request: request)

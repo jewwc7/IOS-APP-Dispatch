@@ -19,11 +19,13 @@ class RouteVM {
     @State var locationSearchService = LocationSearchService()
 
     func createCLLocationCoordinate(from route: Route) -> [CLLocationCoordinate2D] {
-        let coordinates: [CLLocationCoordinate2D] = route.polylines.compactMap { dict in
-            if let lat = dict["latitude"], let lon = dict["longitude"] {
-                return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        let coordinates: [CLLocationCoordinate2D] = route.polylines.flatMap { dict in
+            dict.value.compactMap { coordinateDict in
+                if let lat = coordinateDict["latitude"], let lon = coordinateDict["longitude"] {
+                    return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                }
+                return nil
             }
-            return nil
         }
         return coordinates
     }

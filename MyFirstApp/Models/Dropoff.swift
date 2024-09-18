@@ -76,7 +76,7 @@ class Dropoff: BaseModel, Stop {
 
         for (_fieldName, fieldValue) in fields {
             if fieldValue.isEmpty {
-                throw BaseError(type: .ValidationError, message: "Pickup has empty fields")
+                throw BaseError(type: .ValidationError, message: "Dropoff has empty fields")
             }
         }
 

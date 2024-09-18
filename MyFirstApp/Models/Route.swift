@@ -41,7 +41,7 @@ class Route: BaseModel {
     var startDate = Date()
     var createdAt: Date
     var updatedAt: Date
-    var polylines: [[String: Double]] = []
+    var polylines: [String: [[String: Double]]] = [:]
 
     // Initializer
     init(
@@ -55,7 +55,7 @@ class Route: BaseModel {
         self.driver = driver
         self.status = "Inactive" // RouteStatus.inactive
         self.startDate = startDate
-        self.polylines = []
+        self.polylines = [:]
         self.createdAt = .now
         self.updatedAt = .now
         self.orders = orders // make sure that the replationships are last in the init, so I don't get reandom errors
@@ -88,9 +88,14 @@ class Route: BaseModel {
         return routeDictionary
     }
 
-    func appendPolyline(_ polyline: MKPolyline) { // need to find a way to not continually add polylines for same stops
-        let coordinates = polyline.coordinates() // myRoute.polyline.coordinates()
-        self.polylines = coordinates.map { ["latitude": $0.latitude, "longitude": $0.longitude] }
+    func appendPolyline(_ polyline: MKPolyline, stop: Stop) {
+        if self.containsMatchingStopId(stop: stop) {
+            return
+        }
+        let coordinates = polyline.coordinates()
+        self.polylines = [
+            stop.id: coordinates.map { ["latitude": $0.latitude, "longitude": $0.longitude] }
+        ]
     }
 
     // pull out the values from each object key, results in a 2D dictionary/array,
@@ -110,5 +115,9 @@ class Route: BaseModel {
 
     func isCompletedRoute() -> Bool {
         return self.incompleteStops().count == 0
+    }
+
+    private func containsMatchingStopId(stop: Stop) -> Bool {
+        return self.polylines.keys.contains(stop.id)
     }
 }

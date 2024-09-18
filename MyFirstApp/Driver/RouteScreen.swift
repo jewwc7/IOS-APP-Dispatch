@@ -10,9 +10,7 @@ import SwiftData
 import SwiftUI
 
 // Where I left
-// How to update state when a stop is completed? @Published? create an observer pattern?
-// Pretty sure the previousRoute works, but I need to only appendPolyline if not already appeneded
-// how can I do that? MAybe make another model that houses these and the stops just like I did before, that way ifI already have one for the stop, don't save again.
+// Check that polyline is only appened if it was not before
 
 struct RouteScreen: View {
     @Environment(\.modelContext) private var context // how to CRUD state
@@ -103,24 +101,26 @@ struct RouteScreen: View {
 
     func fetchRoute(to stop: Stop, route: Route?) async -> ResultWithMessage {
         Logger.log(.action, "Fetching route")
+        if let route = route {
+            do {
+                let calulatedRoute = await routeVm.fetchRoute(source: locationManager.userLocation!, destinationStop: stop)
+                if let calulatedRoute = calulatedRoute {
+                    mkRoute = calulatedRoute
+                    travelInterval = calulatedRoute.expectedTravelTime
 
-        do {
-            let calulatedRoute = await routeVm.fetchRoute(source: locationManager.userLocation!, destinationStop: stop)
-            if let calulatedRoute = calulatedRoute {
-                mkRoute = calulatedRoute
-                travelInterval = calulatedRoute.expectedTravelTime
-                if let route = route {
-                    route.appendPolyline(calulatedRoute.polyline)
+                    route.appendPolyline(calulatedRoute.polyline, stop: stop)
                     try route.modelContext?.save()
+                    return ResultWithMessage(result: .success, message: "")
+
+                } else {
+                    return ResultWithMessage(result: .noResult, message: "Route was unable to be calculated")
                 }
-            } else {
-                return ResultWithMessage(result: .noResult, message: "Route was unable to be calculated")
+            } catch {
+                Logger.log(.error, "error when fetching route \(error.localizedDescription) ")
+                return ResultWithMessage(result: .failure, message: "error when fetching route \(error.localizedDescription) ")
             }
-        } catch {
-            Logger.log(.error, "error when fetching route \(error.localizedDescription) ")
-            return ResultWithMessage(result: .failure, message: "error when fetching route \(error.localizedDescription) ")
         }
-        return ResultWithMessage(result: .success, message: "")
+        return ResultWithMessage(result: .noResult, message: "Route was undefined")
     }
 
     func previousRouteTaken(for route: Route?) -> [CLLocationCoordinate2D] {

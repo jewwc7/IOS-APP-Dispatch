@@ -85,8 +85,11 @@ struct RouteScreen: View {
             if let nextStop = route.nextStop() {
                 shouldShowRoute = false
                 mkRoute = nil
-                await fetchRoute(to: nextStop, route: selectedRoute)
                 await fetchMapMarkers(for: selectedRoute)
+                let result = await fetchRoute(to: nextStop, route: selectedRoute)
+                if result.result == .success {
+                    shouldShowRoute = true
+                }
             }
         }
     }
@@ -98,7 +101,7 @@ struct RouteScreen: View {
         }
     }
 
-    func fetchRoute(to stop: Stop, route: Route?) async {
+    func fetchRoute(to stop: Stop, route: Route?) async -> ResultWithMessage {
         Logger.log(.action, "Fetching route")
 
         do {
@@ -110,10 +113,14 @@ struct RouteScreen: View {
                     route.appendPolyline(calulatedRoute.polyline)
                     try route.modelContext?.save()
                 }
+            } else {
+                return ResultWithMessage(result: .noResult, message: "Route was unable to be calculated")
             }
         } catch {
             Logger.log(.error, "error when fetching route \(error.localizedDescription) ")
+            return ResultWithMessage(result: .failure, message: "error when fetching route \(error.localizedDescription) ")
         }
+        return ResultWithMessage(result: .success, message: "")
     }
 
     func previousRouteTaken(for route: Route?) -> [CLLocationCoordinate2D] {

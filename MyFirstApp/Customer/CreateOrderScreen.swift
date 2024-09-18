@@ -96,11 +96,15 @@ struct CreateOrderScreen: View {
 
             let newOrder = Order(orderNumber: orderNumber, pay: randomPay(), customer: customer, pickup: pickup, dropoff: dropoff)
             context.insert(newOrder)
+            newOrder.pickup.order = newOrder
+            newOrder.dropoff.order = newOrder
+
             // don't need to insert p/u and d/o because they are inserted when I insert the order
 
             do {
                 try customer.handleOrderAction(action: CustomerOrderAction.place, order: newOrder)
                 try customer.modelContext?.save()
+                try newOrder.modelContext?.save()
                 try context.save()
                 // used to simulat a 2second api request
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {

@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 enum AvailableOrderSortOrder: String, Identifiable, CaseIterable {
-    case pay, pickupDueAt, dropoffDueAt
+    case pay // , pickupDueAt, dropoffDueAt
 
     var id: Self {
         self
@@ -30,10 +30,10 @@ struct AvailableOrderList: View {
         let sortDescriptors: [SortDescriptor<Order>] = switch sortOrder {
         case .pay:
             [SortDescriptor(\Order.pay)]
-        case .pickupDueAt: // this did not work. Beleive it can only be it's own columns
-            [SortDescriptor(\Order.pickup.dueAt)]
-        case .dropoffDueAt:
-            [SortDescriptor(\Order.dropoff.dueAt)]
+//        case .pickupDueAt: // this did not work. Beleive it can only be it's own columns
+//            [SortDescriptor(\Order.pickup.dueAt)]
+//        case .dropoffDueAt:
+//            [SortDescriptor(\Order.dropoff.dueAt)]
         }
 
         _orders = Query(sort: sortDescriptors)

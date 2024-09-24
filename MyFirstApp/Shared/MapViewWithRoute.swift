@@ -54,19 +54,16 @@ struct MapViewWithRoute: View {
                     .stroke(.orange, lineWidth: 6)
             }
         }
-        //        .onMapCameraChange { context in
-        //            region = context.region
-        //        }
-        //        .onAppear {
-        //            MapManager.removeSearchResults(modelContext)
-        //            updateCameraPosition()
-        //        }
+        .onMapCameraChange { context in
+            region = context.region
+        }
         .mapControls {
             MapUserLocationButton()
         }
         .onAppear {
+            // is this necessary?
             locationManager.locationManager.requestWhenInUseAuthorization()
-            //   updateCameraPosition()
+            updateCameraPosition()
         }.onChange(of: shouldShowRoute) {
             if shouldShowRoute {
                 withAnimation {
@@ -84,20 +81,20 @@ struct MapViewWithRoute: View {
         //        }
     }
 
-//    func updateCameraPosition() {
-//        if let userLocation = locationManager.userLocation {
-//            let userRegion = MKCoordinateRegion(
-//                center: userLocation,
-//                span: MKCoordinateSpan(
-//                    latitudeDelta: 0.15,
-//                    longitudeDelta: 0.15
-//                )
-//            )
-//            withAnimation {
-//                cameraPosition = .region(userRegion)
-//            }
-//        }
-//    }
+    func updateCameraPosition() {
+        if let userLocation = locationManager.userLocation {
+            let userRegion = MKCoordinateRegion(
+                center: userLocation,
+                span: MKCoordinateSpan(
+                    latitudeDelta: 0.15,
+                    longitudeDelta: 0.15
+                )
+            )
+            withAnimation {
+                cameraPosition = .region(userRegion)
+            }
+        }
+    }
 }
 
 // #Preview {
